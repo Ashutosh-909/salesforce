@@ -1,0 +1,36 @@
+# Salesforce Einstein Personalization – Developer Documentation
+
+> Source: [Salesforce Developer Docs](https://developer.salesforce.com/docs/marketing/einstein-personalization/guide/overview.html)
+> Scraped: 2026-03-12
+
+## Table of Contents
+
+1. [Overview](./01-Overview.md)
+2. [Personalize Web Experiences](./02-Personalize-Web-Experiences/)
+   - [Overview](./02-Personalize-Web-Experiences/01-Overview.md)
+   - [Integrate the Salesforce Interactions SDK](./02-Personalize-Web-Experiences/02-Integrate-Salesforce-Interactions-SDK.md)
+   - [Configure the Personalization Module](./02-Personalize-Web-Experiences/03-Configure-Personalization-Module.md)
+   - [Initialize the Personalization Module](./02-Personalize-Web-Experiences/04-Initialize-Personalization-Module.md)
+   - [Define and Configure Transformers](./02-Personalize-Web-Experiences/05-Define-Configure-Transformers.md)
+   - [Integrate with Modern Frontend Frameworks](./02-Personalize-Web-Experiences/06-Integrate-Modern-Frontend-Frameworks.md)
+   - [Request Personalization Through the Sitemap](./02-Personalize-Web-Experiences/07-Request-Personalization-Through-Sitemap.md)
+   - [Example Sitemap](./02-Personalize-Web-Experiences/08-Example-Sitemap.md)
+   - [Track Personalization Engagement](./02-Personalize-Web-Experiences/09-Track-Personalization-Engagement.md)
+3. [Personalize Mobile Experiences](./03-Personalize-Mobile-Experiences/)
+   - [Overview](./03-Personalize-Mobile-Experiences/01-Overview.md)
+   - [iOS Integration](./03-Personalize-Mobile-Experiences/02-iOS-Integration.md)
+   - [Android Integration](./03-Personalize-Mobile-Experiences/03-Android-Integration.md)
+4. [Decisioning API](./04-Decisioning-API/)
+   - [Overview](./04-Decisioning-API/01-Overview.md)
+   - [Request Personalization](./04-Decisioning-API/02-Request-Personalization.md)
+   - [Send an Authenticated Personalization Request](./04-Decisioning-API/03-Authenticated-Request.md)
+   - [Pipeline Diagnostics](./04-Decisioning-API/04-Pipeline-Diagnostics.md)
+5. [Experimentation Assignment API](./05-Experimentation-Assignment-API/)
+   - [Overview](./05-Experimentation-Assignment-API/01-Overview.md)
+   - [Send an Authenticated Experimentation Assignment Request](./05-Experimentation-Assignment-API/02-Authenticated-Request.md)
+   - [Pipeline Diagnostics](./05-Experimentation-Assignment-API/03-Pipeline-Diagnostics.md)
+6. [Personalization Invocable Actions](./06-Personalization-Invocable-Actions/)
+   - [Overview](./06-Personalization-Invocable-Actions/01-Overview.md)
+   - [Get Personalization Decision Invocable Action](./06-Personalization-Invocable-Actions/02-Get-Personalization-Decision.md)
+7. [Personalization Data Model Object Reference](./07-Data-Model-Object-Reference/01-Overview.md)
+8. [Sample Templates](./08-Sample-Templates/01-Overview.md)
