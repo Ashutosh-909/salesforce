@@ -4,6 +4,9 @@
   "installCommand": "npm install",
   "cleanUrls": true,
   "trailingSlash": true,
+  "rewrites": [
+    { "source": "/google2cf17ee9da8d8d3d.html", "destination": "/google2cf17ee9da8d8d3d.html" }
+  ],
   "headers": [
     {
       "source": "/css/(.*)",
