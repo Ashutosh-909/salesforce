@@ -7,7 +7,7 @@
 
 // ── Site Configuration ────────────────────────────────────────────────────
 const SITE_CONFIG = {
-  siteUrl: 'https://yourdomain.com',  // Replace with your actual domain
+  siteUrl: 'https://salesforce-personalization.guide',  // Replace with your actual domain
   siteName: 'Salesforce Personalization Guide',
   siteDescription: 'A step-by-step implementation guide for Salesforce Personalization — from Data Cloud setup to delivering personalized web and mobile experiences.',
   locale: 'en_US',
