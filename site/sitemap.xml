@@ -1,127 +1,127 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://yourdomain.com/</loc>
+    <loc>https://www.salesforce-personalization.guide/</loc>
     <lastmod>2026-03-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://yourdomain.com/setup-permissions/</loc>
+    <loc>https://www.salesforce-personalization.guide/setup-permissions/</loc>
     <lastmod>2026-03-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://yourdomain.com/data-capturing-modeling/</loc>
+    <loc>https://www.salesforce-personalization.guide/data-capturing-modeling/</loc>
     <lastmod>2026-03-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://yourdomain.com/data-capturing-modeling/web-data-capturing/</loc>
+    <loc>https://www.salesforce-personalization.guide/data-capturing-modeling/web-data-capturing/</loc>
     <lastmod>2026-03-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://yourdomain.com/data-capturing-modeling/mobile-data-capturing/</loc>
+    <loc>https://www.salesforce-personalization.guide/data-capturing-modeling/mobile-data-capturing/</loc>
     <lastmod>2026-03-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://yourdomain.com/data-capturing-modeling/dlo-dmo-mapping-ir/</loc>
+    <loc>https://www.salesforce-personalization.guide/data-capturing-modeling/dlo-dmo-mapping-ir/</loc>
     <lastmod>2026-03-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://yourdomain.com/data-capturing-modeling/data-graphs/</loc>
+    <loc>https://www.salesforce-personalization.guide/data-capturing-modeling/data-graphs/</loc>
     <lastmod>2026-03-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://yourdomain.com/data-capturing-modeling/calculated-insights/</loc>
+    <loc>https://www.salesforce-personalization.guide/data-capturing-modeling/calculated-insights/</loc>
     <lastmod>2026-03-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://yourdomain.com/web-implementation/</loc>
+    <loc>https://www.salesforce-personalization.guide/web-implementation/</loc>
     <lastmod>2026-03-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://yourdomain.com/web-implementation/personalization-types/</loc>
+    <loc>https://www.salesforce-personalization.guide/web-implementation/personalization-types/</loc>
     <lastmod>2026-03-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://yourdomain.com/web-implementation/recommenders/</loc>
+    <loc>https://www.salesforce-personalization.guide/web-implementation/recommenders/</loc>
     <lastmod>2026-03-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://yourdomain.com/web-implementation/response-templates/</loc>
+    <loc>https://www.salesforce-personalization.guide/web-implementation/response-templates/</loc>
     <lastmod>2026-03-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://yourdomain.com/web-implementation/personalization-points/</loc>
+    <loc>https://www.salesforce-personalization.guide/web-implementation/personalization-points/</loc>
     <lastmod>2026-03-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://yourdomain.com/web-implementation/decisions/</loc>
+    <loc>https://www.salesforce-personalization.guide/web-implementation/decisions/</loc>
     <lastmod>2026-03-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://yourdomain.com/web-implementation/experiments/</loc>
+    <loc>https://www.salesforce-personalization.guide/web-implementation/experiments/</loc>
     <lastmod>2026-03-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://yourdomain.com/web-implementation/web-templates/</loc>
+    <loc>https://www.salesforce-personalization.guide/web-implementation/web-templates/</loc>
     <lastmod>2026-03-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://yourdomain.com/web-implementation/web-personalization-manager/</loc>
+    <loc>https://www.salesforce-personalization.guide/web-implementation/web-personalization-manager/</loc>
     <lastmod>2026-03-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://yourdomain.com/mobile-implementation/</loc>
+    <loc>https://www.salesforce-personalization.guide/mobile-implementation/</loc>
     <lastmod>2026-03-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://yourdomain.com/personalization-api/</loc>
+    <loc>https://www.salesforce-personalization.guide/personalization-api/</loc>
     <lastmod>2026-03-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://yourdomain.com/experimentation/</loc>
+    <loc>https://www.salesforce-personalization.guide/experimentation/</loc>
     <lastmod>2026-03-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://yourdomain.com/batch-personalization/</loc>
+    <loc>https://www.salesforce-personalization.guide/batch-personalization/</loc>
     <lastmod>2026-03-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
