@@ -20,7 +20,7 @@ require('prismjs/components/prism-sql');
 require('prismjs/components/prism-handlebars');
 require('prismjs/components/prism-markup'); // HTML
 
-const { PAGES, buildContentToUrlMap } = require('./config');
+const { SITE_CONFIG, PAGES, buildContentToUrlMap } = require('./config');
 
 // ── Paths ─────────────────────────────────────────────────────────────────
 const ROOT      = path.resolve(__dirname, '..');
@@ -454,6 +454,17 @@ function buildHomepage(page, pageIndex) {
   // Build CTA button
   const ctaButtonHtml = `<a href="/setup-permissions/" class="btn btn-primary btn-cta">Start Learning: Setup &amp; Permissions →</a>`;
 
+  // SEO metadata for homepage
+  const canonicalUrl = SITE_CONFIG.siteUrl + page.urlPath;
+  const metaDescription = page.description || SITE_CONFIG.siteDescription;
+  const jsonLd = JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    'name': SITE_CONFIG.siteName,
+    'description': metaDescription,
+    'url': canonicalUrl
+  }, null, 2);
+
   // Combine body content (what is + learn + additional)
   let bodyContent = '';
   if (whatIsHtml) bodyContent += whatIsHtml;
@@ -464,6 +475,9 @@ function buildHomepage(page, pageIndex) {
   let html = homepageTemplate
     .replace('{{HERO_TITLE}}', heroTitle)
     .replace('{{HERO_SUBTITLE}}', heroSubtitle)
+    .replace(/\{\{META_DESCRIPTION\}\}/g, escapeHtml(metaDescription))
+    .replace(/\{\{CANONICAL_URL\}\}/g, canonicalUrl)
+    .replace('{{JSON_LD}}', jsonLd)
     .replace('{{CONTENT}}', bodyContent)
     .replace('{{FEATURE_CARDS}}', featureCards)
     .replace('{{CTA_BUTTON}}', ctaButtonHtml);
@@ -572,10 +586,29 @@ function buildContentPage(page, pageIndex) {
   const breadcrumbHtml = generateBreadcrumbs(page.breadcrumb, page.urlPath);
   const prevNextHtml = generatePrevNext(pageIndex);
 
+  // SEO metadata
+  const canonicalUrl = SITE_CONFIG.siteUrl + page.urlPath;
+  const metaDescription = page.description || SITE_CONFIG.siteDescription;
+  const jsonLd = JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    'headline': page.title + ' — Salesforce Personalization Guide',
+    'description': metaDescription,
+    'url': canonicalUrl,
+    'publisher': {
+      '@type': 'Organization',
+      'name': SITE_CONFIG.siteName
+    },
+    'mainEntityOfPage': { '@type': 'WebPage', '@id': canonicalUrl }
+  }, null, 2);
+
   // Assemble into layout template
   let html = layoutTemplate
     .replace(/\{\{TITLE\}\}/g, escapeHtml(page.title))
     .replace(/\{\{ROOT_PATH\}\}/g, rootPath)
+    .replace(/\{\{META_DESCRIPTION\}\}/g, escapeHtml(metaDescription))
+    .replace(/\{\{CANONICAL_URL\}\}/g, canonicalUrl)
+    .replace('{{JSON_LD}}', jsonLd)
     .replace('{{TOC}}', tocHtml)
     .replace('{{BREADCRUMBS}}', breadcrumbHtml)
     .replace('{{CONTENT}}', contentHtml)
@@ -591,6 +624,39 @@ function buildContentPage(page, pageIndex) {
   fs.writeFileSync(outFile, html, 'utf8');
 
   console.log(`  ✓ ${page.urlPath} → site/${urlSegments}/index.html`);
+}
+
+// ══════════════════════════════════════════════════════════════════════════
+//  SEO: SITEMAP & ROBOTS.TXT GENERATION
+// ══════════════════════════════════════════════════════════════════════════
+
+function generateSitemap() {
+  const today = new Date().toISOString().split('T')[0];
+
+  let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
+  xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
+
+  for (const page of PAGES) {
+    const loc = SITE_CONFIG.siteUrl + page.urlPath;
+    const priority = page.isHomepage ? '1.0' : (page.urlPath.split('/').filter(Boolean).length === 1 ? '0.8' : '0.6');
+    xml += `  <url>\n`;
+    xml += `    <loc>${loc}</loc>\n`;
+    xml += `    <lastmod>${today}</lastmod>\n`;
+    xml += `    <changefreq>monthly</changefreq>\n`;
+    xml += `    <priority>${priority}</priority>\n`;
+    xml += `  </url>\n`;
+  }
+
+  xml += '</urlset>\n';
+
+  fs.writeFileSync(path.join(SITE_DIR, 'sitemap.xml'), xml, 'utf8');
+  console.log('  ✓ sitemap.xml');
+}
+
+function generateRobotsTxt() {
+  const content = `User-agent: *\nAllow: /\n\nSitemap: ${SITE_CONFIG.siteUrl}/sitemap.xml\n`;
+  fs.writeFileSync(path.join(SITE_DIR, 'robots.txt'), content, 'utf8');
+  console.log('  ✓ robots.txt');
 }
 
 // ══════════════════════════════════════════════════════════════════════════
@@ -611,6 +677,12 @@ function build() {
       buildContentPage(page, i);
     }
   }
+
+  // Generate sitemap.xml
+  generateSitemap();
+
+  // Generate robots.txt
+  generateRobotsTxt();
 
   console.log(`\n✅ Build complete — ${PAGES.length} pages generated.`);
 }
