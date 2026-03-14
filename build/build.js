@@ -306,7 +306,7 @@ function injectInContentAd(html) {
     <span class="ad-label">Advertisement</span>
     <ins class="adsbygoogle"
          style="display:block"
-         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+         data-ad-client="ca-pub-2226503306776174"
          data-ad-slot="XXXXXXXXXX"
          data-ad-format="auto"
          data-full-width-responsive="true"></ins>

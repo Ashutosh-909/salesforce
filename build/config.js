@@ -16,7 +16,7 @@ const SITE_CONFIG = {
 
 // ── Google AdSense Configuration ──────────────────────────────────────────
 const ADS_CONFIG = {
-  adsensePublisherId: 'ca-pub-XXXXXXXXXXXXXXXX',
+  adsensePublisherId: 'ca-pub-2226503306776174',
   adSlots: {
     header:    'XXXXXXXXXX',
     sidebar:   'XXXXXXXXXX',
