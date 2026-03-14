@@ -5,8 +5,8 @@
 
 /* ---------- CSS Custom Properties (§4.1 Color Palette) ---------- */
 :root {
-  --color-primary:        #0176D3;
-  --color-primary-hover:  #014486;
+  --color-primary:        #002855;
+  --color-primary-hover:  #001A3A;
   --color-accent:         #04844B;
   --color-bg:             #FFFFFF;
   --color-surface:        #F3F3F3;
@@ -30,8 +30,8 @@
   --callout-important-bg: #FFFBF0;
   --callout-warning-border: #C23934;
   --callout-warning-bg:   #FFF0F0;
-  --callout-note-border:  #0176D3;
-  --callout-note-bg:      #F0F7FF;
+  --callout-note-border:  #002855;
+  --callout-note-bg:      #EDF2F8;
   --callout-validation-border: #7526C2;
   --callout-validation-bg: #F5F0FF;
 
@@ -390,7 +390,7 @@ tbody tr:nth-child(odd)  { background: var(--color-bg); }
   border-radius: 0 4px 4px 0;
 }
 .toc a:hover { color: var(--color-primary); background: var(--color-surface); text-decoration: none; }
-.toc a.active { color: var(--color-primary); border-left-color: var(--color-primary); font-weight: 600; background: #EBF5FF; }
+.toc a.active { color: var(--color-primary); border-left-color: var(--color-primary); font-weight: 600; background: #E8EEF5; }
 
 /* Indent H3 items in TOC */
 .toc .toc-h3 { padding-left: 22px; font-size: 12px; }
@@ -470,7 +470,7 @@ tbody tr:nth-child(odd)  { background: var(--color-bg); }
   transition: border-color 0.2s, box-shadow 0.2s;
   max-width: 48%;
 }
-.prev-next-btn:hover { border-color: var(--color-primary); box-shadow: 0 2px 8px rgba(1,118,211,0.12); text-decoration: none; color: var(--color-text); }
+.prev-next-btn:hover { border-color: var(--color-primary); box-shadow: 0 2px 8px rgba(0,40,85,0.12); text-decoration: none; color: var(--color-text); }
 
 .prev-next-btn .pn-direction {
   font-size: 12px;
@@ -661,7 +661,7 @@ tbody tr:nth-child(odd)  { background: var(--color-bg); }
   padding: 24px;
   transition: box-shadow 0.2s, border-color 0.2s;
 }
-.feature-card:hover { border-color: var(--color-primary); box-shadow: 0 4px 12px rgba(1,118,211,0.1); }
+.feature-card:hover { border-color: var(--color-primary); box-shadow: 0 4px 12px rgba(0,40,85,0.1); }
 
 .feature-icon {
   font-size: 28px;
