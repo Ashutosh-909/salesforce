@@ -674,7 +674,13 @@ function build() {
   const buildAssets = path.join(BUILD_DIR, 'assets');
   if (fs.existsSync(buildAssets)) {
     for (const file of fs.readdirSync(buildAssets)) {
-      fs.copyFileSync(path.join(buildAssets, file), path.join(assetsDir, file));
+      const src = path.join(buildAssets, file);
+      // Copy Google verification files and similar to site root
+      if (file.startsWith('google') && file.endsWith('.html')) {
+        fs.copyFileSync(src, path.join(SITE_DIR, file));
+      } else {
+        fs.copyFileSync(src, path.join(assetsDir, file));
+      }
     }
   }
 
