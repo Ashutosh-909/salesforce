@@ -42,10 +42,25 @@
   <script type="application/ld+json">
   {
   "@context": "https://schema.org",
-  "@type": "WebSite",
-  "name": "Salesforce Personalization Guide",
-  "description": "A step-by-step guide for beginners to implement Salesforce Personalization — from Data Cloud setup to delivering personalized web and mobile experiences.",
-  "url": "https://www.salesforce-personalization.guide/"
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "name": "Salesforce Personalization Guide",
+      "description": "A step-by-step guide for beginners to implement Salesforce Personalization — from Data Cloud setup to delivering personalized web and mobile experiences.",
+      "url": "https://www.salesforce-personalization.guide/"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.salesforce-personalization.guide/"
+        }
+      ]
+    }
+  ]
 }
   </script>
 </head>

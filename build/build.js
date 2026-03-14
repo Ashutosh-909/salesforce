@@ -220,6 +220,71 @@ function generateTOC(html) {
 }
 
 /**
+ * Generate JSON-LD structured data for a page.
+ * Includes BreadcrumbList + Article (content pages) or WebSite (homepage).
+ */
+function generateJsonLd(page) {
+  const canonicalUrl = SITE_CONFIG.siteUrl + page.urlPath;
+  const metaDescription = page.description || SITE_CONFIG.siteDescription;
+
+  // Build BreadcrumbList schema
+  const breadcrumbItems = (page.breadcrumb || ['Home']).map((segment, i) => ({
+    '@type': 'ListItem',
+    'position': i + 1,
+    'name': segment,
+    'item': SITE_CONFIG.siteUrl + breadcrumbSegmentToUrl(segment)
+  }));
+  // Last item should use the page's own URL
+  if (breadcrumbItems.length > 0) {
+    breadcrumbItems[breadcrumbItems.length - 1].item = canonicalUrl;
+  }
+
+  const breadcrumbSchema = {
+    '@type': 'BreadcrumbList',
+    'itemListElement': breadcrumbItems
+  };
+
+  if (page.isHomepage) {
+    return JSON.stringify({
+      '@context': 'https://schema.org',
+      '@graph': [
+        {
+          '@type': 'WebSite',
+          'name': SITE_CONFIG.siteName,
+          'description': metaDescription,
+          'url': canonicalUrl
+        },
+        breadcrumbSchema
+      ]
+    }, null, 2);
+  }
+
+  return JSON.stringify({
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'Article',
+        'headline': page.title,
+        'description': metaDescription,
+        'url': canonicalUrl,
+        'datePublished': '2026-03-01',
+        'dateModified': new Date().toISOString().split('T')[0],
+        'author': {
+          '@type': 'Organization',
+          'name': SITE_CONFIG.siteName
+        },
+        'publisher': {
+          '@type': 'Organization',
+          'name': SITE_CONFIG.siteName
+        },
+        'mainEntityOfPage': { '@type': 'WebPage', '@id': canonicalUrl }
+      },
+      breadcrumbSchema
+    ]
+  }, null, 2);
+}
+
+/**
  * Generate breadcrumb HTML from breadcrumb array.
  * Each segment except the last is a link.
  */
@@ -457,13 +522,7 @@ function buildHomepage(page, pageIndex) {
   // SEO metadata for homepage
   const canonicalUrl = SITE_CONFIG.siteUrl + page.urlPath;
   const metaDescription = page.description || SITE_CONFIG.siteDescription;
-  const jsonLd = JSON.stringify({
-    '@context': 'https://schema.org',
-    '@type': 'WebSite',
-    'name': SITE_CONFIG.siteName,
-    'description': metaDescription,
-    'url': canonicalUrl
-  }, null, 2);
+  const jsonLd = generateJsonLd(page);
 
   // Combine body content (what is + learn + additional)
   let bodyContent = '';
@@ -589,18 +648,7 @@ function buildContentPage(page, pageIndex) {
   // SEO metadata
   const canonicalUrl = SITE_CONFIG.siteUrl + page.urlPath;
   const metaDescription = page.description || SITE_CONFIG.siteDescription;
-  const jsonLd = JSON.stringify({
-    '@context': 'https://schema.org',
-    '@type': 'Article',
-    'headline': page.title + ' — Salesforce Personalization Guide',
-    'description': metaDescription,
-    'url': canonicalUrl,
-    'publisher': {
-      '@type': 'Organization',
-      'name': SITE_CONFIG.siteName
-    },
-    'mainEntityOfPage': { '@type': 'WebPage', '@id': canonicalUrl }
-  }, null, 2);
+  const jsonLd = generateJsonLd(page);
 
   // Assemble into layout template
   let html = layoutTemplate
