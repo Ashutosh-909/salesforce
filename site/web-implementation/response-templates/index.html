@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Response Templates — Salesforce Personalization Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/style.css">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body>
+
+  <!-- ==================== TOP NAV BAR ==================== -->
+  <nav class="navbar" id="navbar">
+    <div class="navbar-inner">
+      <a href="../../" class="navbar-brand">Salesforce Personalization Guide</a>
+
+      <button class="hamburger" id="hamburger" aria-label="Toggle navigation" aria-expanded="false">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+      </button>
+
+      <div class="navbar-menu" id="navbar-menu">
+        <ul class="nav-list">
+          <li class="nav-item"><a href="../../" class="nav-link">Home</a></li>
+          <li class="nav-item"><a href="../../setup-permissions/" class="nav-link">Setup &amp; Permissions</a></li>
+
+          <li class="nav-item has-dropdown">
+            <a href="../../data-capturing-modeling/" class="nav-link dropdown-toggle">Data Capturing &amp; Modeling <span class="dropdown-arrow">▾</span></a>
+            <ul class="dropdown-menu">
+              <li><a href="../../data-capturing-modeling/">Overview</a></li>
+              <li><a href="../../data-capturing-modeling/web-data-capturing/">Web Data Capturing</a></li>
+              <li><a href="../../data-capturing-modeling/mobile-data-capturing/">Mobile Data Capturing</a></li>
+              <li><a href="../../data-capturing-modeling/dlo-dmo-mapping-ir/">DLO-DMO Mapping &amp; IR</a></li>
+              <li><a href="../../data-capturing-modeling/data-graphs/">Data Graphs</a></li>
+              <li><a href="../../data-capturing-modeling/calculated-insights/">Calculated Insights</a></li>
+            </ul>
+          </li>
+
+          <li class="nav-item has-dropdown">
+            <a href="../../web-implementation/" class="nav-link dropdown-toggle">Web Implementation <span class="dropdown-arrow">▾</span></a>
+            <ul class="dropdown-menu">
+              <li><a href="../../web-implementation/">Overview</a></li>
+              <li><a href="../../web-implementation/personalization-types/">Personalization Types</a></li>
+              <li><a href="../../web-implementation/recommenders/">Recommenders</a></li>
+              <li><a href="../../web-implementation/response-templates/">Response Templates</a></li>
+              <li><a href="../../web-implementation/personalization-points/">Personalization Points</a></li>
+              <li><a href="../../web-implementation/decisions/">Decisions</a></li>
+              <li><a href="../../web-implementation/experiments/">Experiments</a></li>
+              <li><a href="../../web-implementation/web-templates/">Web Templates</a></li>
+              <li><a href="../../web-implementation/web-personalization-manager/">Web Personalization Manager</a></li>
+            </ul>
+          </li>
+
+          <li class="nav-item"><a href="../../mobile-implementation/" class="nav-link">Mobile Implementation</a></li>
+          <li class="nav-item"><a href="../../personalization-api/" class="nav-link">Personalization API</a></li>
+          <li class="nav-item"><a href="../../experimentation/" class="nav-link">Experimentation</a></li>
+          <li class="nav-item"><a href="../../batch-personalization/" class="nav-link">Batch Personalization</a></li>
+        </ul>
+
+        <a href="https://buymeacoffee.com/YOUR_USERNAME" target="_blank" rel="noopener noreferrer" class="donate-btn donate-btn-nav">
+          <span class="donate-btn-label">Buy Me a Latte ☕</span>
+          <span class="donate-btn-emoji">☕</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ==================== HEADER AD ==================== -->
+  <div class="ad-container ad-header">
+    <span class="ad-label">Advertisement</span>
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+         data-ad-slot="XXXXXXXXXX"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+
+  <!-- ==================== PAGE LAYOUT ==================== -->
+  <div class="page-wrapper">
+
+    <!-- ---- SIDEBAR ---- -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-inner">
+        <nav class="toc" id="toc" aria-label="Table of Contents">
+          <h3 class="toc-title">On This Page</h3>
+          <ul>
+  <li><a href="#how-response-templates-work">How Response Templates Work</a></li>
+  <li><a href="#manual-content-response-templates">Manual Content Response Templates</a></li>
+  <li class="toc-h3"><a href="#how-it-works-step-by-step">How It Works — Step by Step</a></li>
+  <li class="toc-h3"><a href="#example">Example</a></li>
+  <li class="toc-h3"><a href="#decision-response-example">Decision Response Example</a></li>
+  <li><a href="#recommendations-response-templates">Recommendations Response Templates</a></li>
+  <li class="toc-h3"><a href="#how-it-works-step-by-step-1">How It Works — Step by Step</a></li>
+  <li class="toc-h3"><a href="#item-attributes-tab-what-each-column-means">Item Attributes Tab — What Each Column Means</a></li>
+  <li class="toc-h3"><a href="#example-1">Example</a></li>
+  <li class="toc-h3"><a href="#decision-response-example-1">Decision Response Example</a></li>
+  <li><a href="#choosing-which-fields-to-expose">Choosing Which Fields to Expose</a></li>
+  <li><a href="#applying-a-response-template-to-a-personalization-point">Applying a Response Template to a Personalization Point</a></li>
+</ul>
+        </nav>
+
+        <!-- Sidebar Donation Card -->
+        <div class="donate-card">
+          <span class="donate-card-emoji">☕</span>
+          <p class="donate-card-heading">Enjoying this guide?</p>
+          <a href="https://buymeacoffee.com/YOUR_USERNAME" target="_blank" rel="noopener noreferrer" class="donate-btn donate-btn-sidebar">Buy Me a Latte</a>
+        </div>
+
+        <!-- Sidebar Ad -->
+        <div class="ad-container ad-sidebar">
+          <span class="ad-label">Advertisement</span>
+          <ins class="adsbygoogle"
+               style="display:block"
+               data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+               data-ad-slot="XXXXXXXXXX"
+               data-ad-format="auto"
+               data-full-width-responsive="true"></ins>
+          <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ---- MAIN CONTENT ---- -->
+    <main class="content" id="content">
+      <!-- Breadcrumbs -->
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <a href="/">Home</a><span class="breadcrumb-sep"> &gt; </span><a href="/web-implementation/">Web Implementation</a><span class="breadcrumb-sep"> &gt; </span><span class="breadcrumb-current">Response Templates</span>
+      </nav>
+
+      <!-- Page Content (H1 + body from Markdown) -->
+      <article class="article">
+        <h1 id="response-templates" tabindex="-1">Response Templates</h1>
+<p>A <strong>response template</strong> defines the configuration options available to marketers when building a personalization decision and ensures that all decision responses for a given personalization point return data in a <strong>consistent format</strong>.</p>
+<p>Think of a response template as the contract between what a business user configures and what the front-end receives at run-time.</p>
+<hr>
+<h2 id="how-response-templates-work" tabindex="-1">How Response Templates Work</h2>
+<p>Each response template is associated with one of the two <a href="/web-implementation/personalization-types/">personalization types</a>:</p>
+<ul>
+<li><strong>Manual Content</strong> — Template defines string entry fields</li>
+<li><strong>Recommendations</strong> — Template defines string entry fields <em>plus</em> specifies which DMO fields to return</li>
+</ul>
+<p>Once created, a response template is selected on a <a href="/web-implementation/personalization-points/">personalization point</a>. It then applies automatically to all decisions and experiment cohorts under that point.</p>
+<div class="callout callout-warning"><p><span class="callout-label">🚨 Warning:</span> Once a response template is created, it is <strong>not currently editable</strong>. Plan your template fields carefully before creation. Additive edits are under roadmap consideration.</p></div>
+<hr>
+<h2 id="manual-content-response-templates" tabindex="-1">Manual Content Response Templates</h2>
+<p>Manual Content response templates are straightforward. A business user defines a set of <strong>personalization attributes</strong> — string entry text fields — on the template. These attributes then appear on the personalization decision as input fields.</p>
+<h3 id="how-it-works-step-by-step" tabindex="-1">How It Works — Step by Step</h3>
+<ol>
+<li>Navigate to the <strong>Personalization</strong> app → <strong>Response Templates</strong></li>
+<li>Click <strong>New Response Template</strong></li>
+<li>Select <strong>Manual Content</strong> as the personalization type</li>
+<li>Define your <strong>personalization attributes</strong> — each attribute becomes a string entry field on the decision</li>
+</ol>
+<h3 id="example" tabindex="-1">Example</h3>
+<p>Suppose you create a Manual Content response template for a <strong>hero banner</strong> with these attributes:</p>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Attribute Name</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Header</code></td>
+<td>The main headline text</td>
+</tr>
+<tr>
+<td><code>Subheader</code></td>
+<td>Secondary text below the headline</td>
+</tr>
+<tr>
+<td><code>BackgroundImageUrl</code></td>
+<td>URL of the background image</td>
+</tr>
+<tr>
+<td><code>CallToActionText</code></td>
+<td>Button label (e.g., &quot;Shop Now&quot;)</td>
+</tr>
+<tr>
+<td><code>CallToActionUrl</code></td>
+<td>URL the button links to</td>
+</tr>
+</tbody>
+</table></div>
+<p>When a business user creates a decision on a personalization point using this template, they see five text fields where they type in the values. Those values are returned in the decision response at run-time.</p>
+<h3 id="decision-response-example" tabindex="-1">Decision Response Example</h3>
+<pre><span class="code-lang">json</span><button class="copy-btn" aria-label="Copy code">Copy</button><code class="language-json">{
+  &quot;personalizations&quot;: [
+    {
+      &quot;personalizationId&quot;: &quot;a1b2c3d4-...&quot;,
+      &quot;personalizationPointName&quot;: &quot;home_hero&quot;,
+      &quot;attributes&quot;: {
+        &quot;Header&quot;: &quot;Spring Collection Is Here&quot;,
+        &quot;Subheader&quot;: &quot;Discover the latest outdoor gear&quot;,
+        &quot;BackgroundImageUrl&quot;: &quot;https://example.com/images/spring-hero.jpg&quot;,
+        &quot;CallToActionText&quot;: &quot;Shop Now&quot;,
+        &quot;CallToActionUrl&quot;: &quot;/collections/spring&quot;
+      },
+      &quot;data&quot;: []
+    }
+  ]
+}
+</code></pre>
+<div class="callout callout-tip"><p><span class="callout-label">💡 Tip:</span> Manual Content templates are excellent for early implementation. Since they don't require recommenders or item DMOs, you can ship personalized banners, infobars, and pop-ups quickly.</p></div>
+<hr>
+<h2 id="recommendations-response-templates" tabindex="-1">Recommendations Response Templates</h2>
+<p>Recommendations response templates have an additional step compared to Manual Content. In addition to defining personalization attributes, you must:</p>
+<ol>
+<li><strong>Select a DMO</strong> — The Data Model Object that this template is built for</li>
+<li><strong>Choose which DMO fields</strong> to return in the decision response</li>
+</ol>
+<h3 id="how-it-works-step-by-step-1" tabindex="-1">How It Works — Step by Step</h3>
+<ol>
+<li>Navigate to the <strong>Personalization</strong> app → <strong>Response Templates</strong></li>
+<li>Click <strong>New Response Template</strong></li>
+<li>Select <strong>Recommendations</strong> as the personalization type</li>
+<li>Define any <strong>personalization attributes</strong> (e.g., <code>introText</code> = &quot;Recommended For You&quot;)</li>
+<li>Go to the <strong>Item Attributes</strong> tab</li>
+<li>Select the <strong>Data Model Object</strong> (e.g., Goods Product, Knowledge Article Version)</li>
+<li>Move fields from <strong>Available DMO Fields</strong> to <strong>Selected DMO Fields</strong></li>
+<li>Save the template</li>
+</ol>
+<h3 id="item-attributes-tab-what-each-column-means" tabindex="-1">Item Attributes Tab — What Each Column Means</h3>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Data Model Object</strong></td>
+<td>The DMO the template is built for. When this template is selected on a personalization point, only recommenders built against an item DG rooted on this DMO will be available.</td>
+</tr>
+<tr>
+<td><strong>Available DMO Fields</strong></td>
+<td>All mapped fields on the DMO. Select the ones you want returned in the decision response.</td>
+</tr>
+<tr>
+<td><strong>Selected DMO Fields</strong></td>
+<td>Fields that will be included in the response. The primary key is selected by default.</td>
+</tr>
+</tbody>
+</table></div>
+<div class="callout callout-important"><p><span class="callout-label">⚠️ Important:</span> Only DMOs that have an <strong>item data graph</strong> built on top of them are available for selection. Recommenders require item data graphs for creation.</p></div>
+<div class="callout callout-important"><p><span class="callout-label">⚠️ Important:</span> For a DMO field to actually appear in a decision response, it must be <strong>both</strong> selected on the response template <strong>and</strong> included as an attribute on the item data graph. If a field is selected here but not on the DG, it won't be returned.</p></div>
+<h3 id="example-1" tabindex="-1">Example</h3>
+<p>For a <strong>Goods Product</strong> recommendations template, you might select:</p>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Selected DMO Field</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ssot__Id__c</code></td>
+<td>Product ID (selected by default)</td>
+</tr>
+<tr>
+<td><code>ssot__Name__c</code></td>
+<td>Product name</td>
+</tr>
+<tr>
+<td><code>ImageUrl__c</code></td>
+<td>Product image URL</td>
+</tr>
+<tr>
+<td><code>UnitPrice__c</code></td>
+<td>Product price</td>
+</tr>
+<tr>
+<td><code>PurchaseUrl__c</code></td>
+<td>Link to the product detail page</td>
+</tr>
+<tr>
+<td><code>ssot__PrimaryProductCategory__c</code></td>
+<td>Product category</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="decision-response-example-1" tabindex="-1">Decision Response Example</h3>
+<pre><span class="code-lang">json</span><button class="copy-btn" aria-label="Copy code">Copy</button><code class="language-json">{
+  &quot;personalizations&quot;: [
+    {
+      &quot;personalizationId&quot;: &quot;96c4a971-...&quot;,
+      &quot;personalizationPointName&quot;: &quot;home_recommendations&quot;,
+      &quot;attributes&quot;: {
+        &quot;introText&quot;: &quot;Recommended For You&quot;
+      },
+      &quot;data&quot;: [
+        {
+          &quot;ssot__Id__c&quot;: &quot;6010042&quot;,
+          &quot;ssot__Name__c&quot;: &quot;GoBrew Connected Coffee Machine&quot;,
+          &quot;ImageUrl__c&quot;: &quot;https://example.com/images/go-brew.jpg&quot;,
+          &quot;UnitPrice__c&quot;: &quot;299.99&quot;,
+          &quot;PurchaseUrl__c&quot;: &quot;/products/gobrew-6010042&quot;,
+          &quot;ssot__PrimaryProductCategory__c&quot;: &quot;Coffee Machines&quot;,
+          &quot;personalizationContentId&quot;: &quot;96c4a971-...:0&quot;
+        },
+        {
+          &quot;ssot__Id__c&quot;: &quot;6010089&quot;,
+          &quot;ssot__Name__c&quot;: &quot;Alpine Pro Hiking Boots&quot;,
+          &quot;ImageUrl__c&quot;: &quot;https://example.com/images/alpine-boots.jpg&quot;,
+          &quot;UnitPrice__c&quot;: &quot;189.99&quot;,
+          &quot;PurchaseUrl__c&quot;: &quot;/products/alpine-boots-6010089&quot;,
+          &quot;ssot__PrimaryProductCategory__c&quot;: &quot;Footwear&quot;,
+          &quot;personalizationContentId&quot;: &quot;96c4a971-...:1&quot;
+        }
+      ]
+    }
+  ]
+}
+</code></pre>
+<div class="callout callout-note"><p><span class="callout-label">📝 Note:</span> Each item in the <code>data</code> array includes a <code>personalizationContentId</code>. This value connects engagement tracking (views, clicks) back to a specific recommended item in the personalization log for attribution analytics.</p></div>
+<hr>
+
+  <div class="ad-container ad-in-content">
+    <span class="ad-label">Advertisement</span>
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+         data-ad-slot="XXXXXXXXXX"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+<h2 id="choosing-which-fields-to-expose" tabindex="-1">Choosing Which Fields to Expose</h2>
+<p>When selecting DMO fields for a Recommendations template, think carefully about what data your front-end needs to render the experience:</p>
+<p><strong>Include:</strong></p>
+<ul>
+<li>Item name, image URL, description — for rendering</li>
+<li>Price, category, rating — for display</li>
+<li>ID, purchase URL — for navigation and tracking</li>
+</ul>
+<p><strong>Avoid:</strong></p>
+<ul>
+<li>Internal cost, margin, or profit data — sensitive information exposed to the client</li>
+<li>System fields not needed for rendering — keeps the response payload lean</li>
+</ul>
+<hr>
+<h2 id="applying-a-response-template-to-a-personalization-point" tabindex="-1">Applying a Response Template to a Personalization Point</h2>
+<p>Once your response templates are created, you apply them when creating a <a href="/web-implementation/personalization-points/">personalization point</a>:</p>
+<ol>
+<li>On the personalization point creation modal, select the <strong>personalization type</strong> (Manual Content or Recommendations)</li>
+<li>The list of available response templates is filtered to show only templates matching the selected data space and personalization type</li>
+<li>Select the appropriate response template</li>
+<li>The template is automatically applied to all decisions and experiment cohorts on that point</li>
+</ol>
+<hr>
+<p><strong>Next:</strong> <a href="/web-implementation/personalization-points/">Personalization Points</a> — Learn how to create the decision endpoints that map to parts of your experience.</p>
+
+      </article>
+
+      <!-- Previous / Next Navigation -->
+      <nav class="prev-next" aria-label="Page navigation">
+        <a href="/web-implementation/recommenders/" class="prev-next-btn pn-prev">
+      <span class="pn-direction">← Previous</span>
+      <span class="pn-title">Recommenders</span>
+    </a><a href="/web-implementation/personalization-points/" class="prev-next-btn pn-next">
+      <span class="pn-direction">Next →</span>
+      <span class="pn-title">Personalization Points</span>
+    </a>
+      </nav>
+
+      <!-- End-of-page Donation CTA -->
+      <div class="donate-cta">
+        <p>Found this guide helpful?</p>
+        <a href="https://buymeacoffee.com/YOUR_USERNAME" target="_blank" rel="noopener noreferrer" class="donate-btn donate-btn-cta">Buy Me a Latte ☕</a>
+      </div>
+    </main>
+  </div>
+
+  <!-- ==================== FOOTER AD ==================== -->
+  <div class="ad-container ad-footer">
+    <span class="ad-label">Advertisement</span>
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+         data-ad-slot="XXXXXXXXXX"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p class="footer-title">Salesforce Personalization Implementation Guide</p>
+      <p class="footer-subtitle">Based on documentation as of March 2026</p>
+      <p class="footer-disclaimer">This is an educational resource. Verify all information against the latest <a href="https://help.salesforce.com/" target="_blank" rel="noopener noreferrer">Salesforce documentation</a>. Salesforce releases updates three times per year.</p>
+      <p class="footer-donate">
+        <a href="https://buymeacoffee.com/YOUR_USERNAME" target="_blank" rel="noopener noreferrer">Support this project — Buy Me a Latte ☕</a>
+      </p>
+    </div>
+  </footer>
+
+  <script src="../../js/main.js"></script>
+  <script src="../../js/copy-code.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (typeof mermaid !== 'undefined') {
+        mermaid.initialize({ startOnLoad: false, theme: 'default' });
+        document.querySelectorAll('pre > code.language-mermaid').forEach(function(el) {
+          var pre = el.parentElement;
+          var container = document.createElement('div');
+          container.className = 'mermaid';
+          container.textContent = el.textContent;
+          pre.parentNode.replaceChild(container, pre);
+        });
+        mermaid.run();
+      }
+    });
+  </script>
+</body>
+</html>

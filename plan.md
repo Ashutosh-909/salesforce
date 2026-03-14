@@ -1,403 +1,229 @@
-# Content Authoring Plan — Salesforce Personalization Implementation Guide
+# Website Build Plan — Salesforce Personalization Guide
 
-> **Purpose:** Step-by-step plan for the **website-author** agent to read all source documentation, then produce Markdown content files for every page of the guide, and finally create a **handoff document** for the **website-builder** agent.
+> **Purpose:** Step-by-step plan for the **webdeveloper** agent to build a complete, production-ready static website from the Markdown content files and the handoff.md specification.
 >
-> **Scope:** This agent produces **text content only** (Markdown). No HTML, CSS, or JavaScript. The website-builder agent handles all website implementation.
+> **Approach:** Plain HTML/CSS/JS static site with a Node.js build script that reads Markdown content files, applies a shared HTML layout template, and outputs 21 fully rendered pages to `site/`.
+>
+> **Date:** March 2026
 
 ---
 
-## Phase 0: Read & Internalize All Source Material
+## Phase 0 — Project Scaffolding
 
-Before writing any content, read every source file end-to-end. This builds the knowledge base needed to author accurate, cross-referenced content.
-
-
-### 0.2 — Read the Core Implementation Document
-
-| Step | File | What to Extract |
-|------|------|-----------------|
-| 0.2.1 | `DetailedImplementationDoc/Doc.md` (~1,900 lines) | Read the **entire** file. Extract: implementation personas, blueprint guidance, Web SDK anatomy, sitemap/schema code examples, data stream deployment steps, DLO-to-DMO mapping tables, identity resolution config, profile & item data graph setup, personalization types (manual content vs. recommendations), recommender types (rules-based vs. objective-based), engagement signals & metrics, response templates, personalization points/decisions/experiments, web templates (Handlebars transformers), WPM workflow, measurement/attribution/analytics |
-
-### 0.3 — Read All Developer Docs
-
-| Step | File | What to Extract |
-|------|------|-----------------|
-| 0.3.1 | `DeveloperDocs/README.md` | Table of contents, section structure |
-| 0.3.2 | `DeveloperDocs/01-Overview.md` | How Personalization works with Data Cloud, data flow (5 steps), key concepts |
-| 0.3.3 | `DeveloperDocs/02-Personalize-Web-Experiences/01-Overview.md` | SDK components, namespace structure, sub-topic list |
-| 0.3.4 | `DeveloperDocs/02-Personalize-Web-Experiences/02-Integrate-Salesforce-Interactions-SDK.md` | 7-step integration guide, data space creation, website connector, schema upload, SDK script tag, sitemap creation, data stream deploy, DMO mapping tables |
-| 0.3.5 | `DeveloperDocs/02-Personalize-Web-Experiences/03-Configure-Personalization-Module.md` | Personalization module config, template management, flicker defense, engagement destinations |
-| 0.3.6 | `DeveloperDocs/02-Personalize-Web-Experiences/04-Initialize-Personalization-Module.md` | `Personalization.Config.initialize()` code example, four config options, initialization order |
-| 0.3.7 | `DeveloperDocs/02-Personalize-Web-Experiences/05-Define-Configure-Transformers.md` | Handlebars transformer structure, code block |
-| 0.3.8 | `DeveloperDocs/02-Personalize-Web-Experiences/06-Integrate-Modern-Frontend-Frameworks.md` | Content zone handlers for React/Vue/Angular, `ContentZoneHandler.set()` API |
-| 0.3.9 | `DeveloperDocs/02-Personalize-Web-Experiences/07-Request-Personalization-Through-Sitemap.md` | `Personalization.fetch()` method, data space config, Promise-based fetch pattern |
-
-### 0.4 — Note Content Gaps (Placeholder Sections)
-
-These directories are **empty**. Content must be authored based on `Doc.md`, official Salesforce docs referenced therein, and expert knowledge. Mark authored content with a `> **🔍 Needs Validation:**` callout.
-
-| Directory | Topic | Authoring Approach |
-|-----------|-------|-------------------|
-| `DeveloperDocs/03-Personalize-Mobile-Experiences/` | iOS & Android SDK | Base on web SDK patterns from `Doc.md`; adapt for native mobile. Reference official Salesforce Mobile SDK docs. |
-| `DeveloperDocs/04-Decisioning-API/` | Decisioning API | Use API details from `Doc.md` + `07-Request-Personalization-Through-Sitemap.md` fetch pattern. |
-| `DeveloperDocs/05-Experimentation-Assignment-API/` | Experimentation API | Use experiment config details from `Doc.md` experiments section. |
-| `DeveloperDocs/06-Personalization-Invocable-Actions/` | Invocable Actions | Use invocable action references from `Doc.md`. |
-| `DeveloperDocs/07-Data-Model-Object-Reference/` | DMO Reference | Use DMO names/fields from mapping tables in `Doc.md` and `02-Integrate-Salesforce-Interactions-SDK.md`. |
-| `DeveloperDocs/08-Sample-Templates/` | Handlebars Templates | Use transformer examples from `Doc.md` and `05-Define-Configure-Transformers.md`. |
+| # | Task | Details |
+|---|---|---|
+| 0.1 | Create `site/` output directory structure | Mirror the URL paths from handoff.md §1 (21 directories, each with `index.html`). |
+| 0.2 | Initialize `package.json` | Minimal — only dev dependencies for the build script. |
+| 0.3 | Install build dependencies | `markdown-it` (MD parser), `markdown-it-anchor` (heading IDs), `prismjs` (syntax highlighting), `glob` (file matching). |
+| 0.4 | Create directory layout | `build/` (build script + templates), `site/css/`, `site/js/`, `site/assets/`. |
 
 ---
 
-## Phase 1: Write Homepage Content
+## Phase 1 — Shared Layout & CSS
 
-### 1.1 — Create `content/homepage.md`
-
-Write the homepage content as a Markdown file including:
-
-1. **Hero heading:** *"Learn Salesforce Personalization — A Hands-On Implementation Guide"* — plus a subheading explaining this is a step-by-step guide for beginners.
-2. **What is Salesforce Personalization?** — Plain-English explanation:
-   - Customer 360 application built on Data Cloud
-   - Delivers personalized experiences (product recommendations, targeted content) across web, mobile, email, and agentic channels
-   - Uses real-time behavioral data, unified customer profiles, data graphs, calculated insights, and ML-driven recommendations
-3. **Salient Features** — Present all 10 capabilities from the agent definition as a list or grouped descriptions:
-   - Real-time data ingestion via Web SDK and Mobile SDK
-   - Unified customer profiles through Identity Resolution
-   - Profile and Item Data Graphs for fast decisioning
-   - Manual Content and ML-powered Recommendations (rules-based and objective-based)
-   - Web Personalization Manager (WYSIWYG, no-code experience builder)
-   - Experimentation with A/B testing and traffic allocation
-   - Attribution analytics and Pipeline Intelligence dashboards
-   - Decisioning API for headless/server-side personalization
-   - Batch personalization for offline/scheduled use cases
-   - Agentforce integration via Invocable Actions
-4. **"Start Learning" call-to-action** — Text pointing readers to the Setup & Permissions section.
-
-**Source files:** `agent.md` (homepage section), `DeveloperDocs/01-Overview.md` (data flow), `DetailedImplementationDoc/Doc.md` (overview).
+| # | Task | Spec Reference |
+|---|---|---|
+| 1.1 | **HTML layout template** (`build/layout.html`) | Includes: `<head>` with AdSense script, nav bar, header ad slot, sidebar (TOC + donation card + sidebar ad), breadcrumbs, `<main>` content area, prev/next buttons, end-of-page donation CTA, footer ad, footer. Placeholder tokens: `{{TITLE}}`, `{{BREADCRUMBS}}`, `{{TOC}}`, `{{CONTENT}}`, `{{PREV_NEXT}}`, etc. |
+| 1.2 | **Homepage layout template** (`build/homepage-layout.html`) | Variant of layout.html: hero section, feature card grid, CTA button — no sidebar TOC. §7. |
+| 1.3 | **CSS stylesheet** (`site/css/style.css`) | Full stylesheet implementing §4.1–§4.7: colors, typography, nav bar (`#0176D3`, sticky, 56px), sidebar (260px, sticky), breadcrumbs, code blocks (dark theme, border-radius 6px, 16px padding, language label, copy button area), tables (header `#F3F3F3`, zebra striping, borders), callout boxes (5 types — tip/important/warning/note/needs-validation with colored borders/backgrounds), prev/next card buttons, footer (`#181818` bg), responsive breakpoints (≥1200, 768–1199, <768), hamburger menu, donation button (`#FF813F` pill), sidebar donation card, ad containers. |
+| 1.4 | **Google Fonts / Inter** | Add `<link>` for Inter and JetBrains Mono fonts from Google Fonts CDN. |
 
 ---
 
-## Phase 2: Write Section 1 — Setup & Permissions
+## Phase 2 — JavaScript Interactivity
 
-### 2.1 — Create `content/setup-permissions.md`
-
-**Source files:** `DetailedImplementationDoc/Doc.md` → "Salesforce Administrator" section, "Defining an Implementation Blueprint" section; `DeveloperDocs/02-Personalize-Web-Experiences/02-Integrate-Salesforce-Interactions-SDK.md` → "Create a Data Space" steps.
-
-**Content to write:**
-
-1. **Required Licenses** — Data Cloud, Personalization, Data Spaces add-on (if multi-space)
-2. **Permission Set Assignment** — Personalization Admin PSL, Data Cloud Admin, creating scoped permission sets for day-to-day users
-3. **Personalization Datakit Deployment** — Navigate to Setup → Personalization, deploy datakit, deploy Pipeline Intelligence CIs
-4. **Data Space Creation** — Step-by-step from SDK integration doc
-5. **Implementation Blueprint Guidance** — Identify target site, list/prioritize use cases, map data requirements, plan IR identifiers, define rollout schedule
+| # | Task | Details |
+|---|---|---|
+| 2.1 | **`site/js/main.js`** | Hamburger menu toggle, dropdown nav (hover on desktop, tap on mobile), scroll spy for sidebar TOC active state, smooth scroll on TOC click. |
+| 2.2 | **`site/js/copy-code.js`** | Attach click handler to every `.copy-btn` inside code blocks → copy `<code>` text to clipboard, show "Copied!" feedback. |
+| 2.3 | **Mermaid.js** | Include Mermaid CDN script in `<head>`. Initialize on `DOMContentLoaded` to render any `<pre><code class="language-mermaid">` blocks as SVG diagrams. |
+| 2.4 | **Prism.js CSS** | Include Prism dark theme CSS for code block syntax highlighting. Build script applies Prism classes server-side. |
 
 ---
 
-## Phase 3: Write Section 2 — Data Capturing & Modeling (6 files)
+## Phase 3 — Build Script (`build/build.js`)
 
-### 3.1 — Create `content/data-capturing-modeling/overview.md`
+The core Node.js build script that reads content and generates HTML pages.
 
-Brief overview introducing the data pipeline: Website/Mobile → SDK → Data Cloud → DLO → DMO → IR → Data Graph → Personalization. Link to all 5 sub-sections.
-
-**Source:** `DeveloperDocs/01-Overview.md` (data flow), `DetailedImplementationDoc/Doc.md` (overview + lego blocks).
-
-### 3.2 — Create `content/data-capturing-modeling/web-data-capturing.md` (Section 2A)
-
-**Source:** `DeveloperDocs/02-Personalize-Web-Experiences/02-Integrate-Salesforce-Interactions-SDK.md` (primary), `DetailedImplementationDoc/Doc.md` → "Sitemaps & Web Schemas".
-
-**Content:**
-1. Create a Website Connector — step-by-step
-2. Upload Web Event Schema — download recommended JSON, upload, review
-3. Install Interactions SDK — CDN script, add to `<head>`, initialize with `SalesforceInteractions.init`
-4. Build a Sitemap — with code examples covering:
-   - Consent management (`consents` array)
-   - Page types (`isMatch`, interaction with `eventType`)
-   - Content zones (name + CSS selector)
-   - Engagement vs. profile events, event type splitting
-   - Standard vs. custom interaction names
-   - Best practices
-5. Web Schema Configuration — JSON schema structure
-6. Deploy Website Data Streams — create data streams, select events, choose data space, Partial refresh mode
-7. Map DLOs to DMOs — full mapping tables (Product Browse, Shopping Cart, Product Order, Contact Point Email/Phone, Identity, Party Identification)
-
-### 3.3 — Create `content/data-capturing-modeling/mobile-data-capturing.md` (Section 2B)
-
-**Source:** `DetailedImplementationDoc/Doc.md` (mobile references), web SDK patterns adapted for mobile.
-
-**Content:** *(Authored from limited sources — mark with `🔍 Needs Validation` callouts)*
-1. Create Mobile App Connector
-2. Upload Mobile Event Schema
-3. iOS SDK Integration — CocoaPods/SPM, initialization, event sending
-4. Android SDK Integration — Gradle, initialization, event sending
-5. Mobile Sitemap Equivalent
-6. Deploy Mobile Data Streams
-
-### 3.4 — Create `content/data-capturing-modeling/dlo-dmo-mapping-ir.md` (Section 2C)
-
-**Source:** `DetailedImplementationDoc/Doc.md` → DLO/DMO section + "Configuring Identity Resolution"; `DeveloperDocs/02-Personalize-Web-Experiences/02-Integrate-Salesforce-Interactions-SDK.md` → mapping tables.
-
-**Content:**
-1. Understanding DLOs and DMOs — what they are, why mapping matters
-2. Progressive Mapping Strategy — split by event type, auto-mapping via `masterLabel`
-3. Identity Resolution — why it matters, plan identifiers, create IR ruleset, exact match vs. normalized vs. fuzzy, deploy ruleset
-
-### 3.5 — Create `content/data-capturing-modeling/data-graphs.md` (Section 2D)
-
-**Source:** `DetailedImplementationDoc/Doc.md` → "Profile Data Graphs" + "Item Data Graphs".
-
-**Content:**
-1. Profile Data Graph (Real-Time) — root on Unified Individual, enable caching, add engagement objects, segments, CIs, hot-store vs. pre-fetch vs. lakehouse
-2. Item Data Graph (Standard) — root on business object DMO, add related objects, select fields
-3. DG Refresh Cycles — 30-min for RT DGs
-4. Viewing Data — Data Explorer debugging, DG lookup flow
-
-### 3.6 — Create `content/data-capturing-modeling/calculated-insights.md` (Section 2E)
-
-**Source:** `DetailedImplementationDoc/Doc.md` → CI references throughout personalization building blocks.
-
-**Content:**
-1. What CIs are — multidimensional metrics
-2. CI for Rules-Based Recommenders — top sellers, most viewed, co-browse, co-buy
-3. CI for Targeting & Filtering
-4. Adding CIs to Data Graphs
+| # | Task | Details |
+|---|---|---|
+| 3.1 | **Page registry** (`build/config.js`) | Hardcode the 21-page registry from §1 as a JS array: `{ contentFile, urlPath, title, parentNav, breadcrumb, prevPage, nextPage }`. Also define `ADS_CONFIG` and `DONATION_CONFIG`. |
+| 3.2 | **Markdown parsing pipeline** | For each page: read `.md` → parse with `markdown-it` (with plugins for tables, fenced code, anchors) → apply Prism.js highlighting on server side for language-tagged code blocks. |
+| 3.3 | **Callout transformation** | Post-process HTML: detect `<blockquote>` elements whose first child contains bold text matching `💡 Tip:`, `⚠️ Important:`, `🚨 Warning:`, `📝 Note:`, or `🔍 Needs Validation:` → replace with styled `<div class="callout callout-{type}">`. |
+| 3.4 | **Cross-reference link rewriting** | Regex-replace `href="...*.md"` relative links → map to URL paths from the page registry (§5.2). Handle `../` paths by resolving relative to the source file's directory. |
+| 3.5 | **External link processing** | Find all `<a href="https://...">` → add `target="_blank" rel="noopener noreferrer"` (§5.6). |
+| 3.6 | **TOC generation** | Extract H2/H3 headings from parsed HTML → generate sidebar TOC HTML with `<a href="#heading-id">` links. |
+| 3.7 | **Breadcrumb generation** | From page registry breadcrumb data → generate `<nav class="breadcrumbs">` HTML with links for each segment except the last. |
+| 3.8 | **Prev/Next generation** | From reading order (§3) → generate prev/next card HTML with arrow icons and page titles. |
+| 3.9 | **In-content ad injection** | Count H2 headings in content. If ≥ 4, inject ad container `<div>` after the 3rd `<h2>` section. |
+| 3.10 | **Template assembly** | Insert all generated fragments (TOC, breadcrumbs, content, prev/next, ads) into the layout template. Write to `site/{urlPath}/index.html`. |
+| 3.11 | **Homepage special build** | Parse `homepage.md` differently: extract hero content (first H1 + intro), feature cards from "Salient Features" section, CTA button → inject into homepage layout template. Write to `site/index.html`. |
 
 ---
 
-## Phase 4: Write Section 3 — Web Implementation (9 files)
+## Phase 4 — Ad & Donation Integration
 
-### 4.1 — Create `content/web-implementation/overview.md`
-
-Brief overview of the personalization building blocks. Link to all 8 sub-sections (3A–3H).
-
-**Source:** `DetailedImplementationDoc/Doc.md` → "Personalization Building Blocks" intro.
-
-### 4.2 — Create `content/web-implementation/personalization-types.md` (Section 3A)
-
-**Source:** `DetailedImplementationDoc/Doc.md` → "Personalization Types".
-
-**Content:** Manual Content vs. Recommendations — when to use each, prerequisites.
-
-### 4.3 — Create `content/web-implementation/recommenders.md` (Section 3B)
-
-**Source:** `DetailedImplementationDoc/Doc.md` → "Recommenders" section.
-
-**Content:** Rules-based (CI-powered), Objective-based (ML), Engagement Signals, Engagement Signal Metrics, Recommender Filters (decision context, static, profile DG), Recommender Training (24-hr cycle, 3 engagement rows minimum).
-
-### 4.4 — Create `content/web-implementation/response-templates.md` (Section 3C)
-
-**Source:** `DetailedImplementationDoc/Doc.md` → "Response Templates".
-
-**Content:** Manual Content Templates, Recommendations Templates, applying to Personalization Points.
-
-### 4.5 — Create `content/web-implementation/personalization-points.md` (Section 3D)
-
-**Source:** `DetailedImplementationDoc/Doc.md` → "Personalization Points".
-
-**Content:** Creating a Personalization Point, configuration options, reusability across channels.
-
-### 4.6 — Create `content/web-implementation/decisions.md` (Section 3E)
-
-**Source:** `DetailedImplementationDoc/Doc.md` → "Decisions".
-
-**Content:** Decision config (priority, targeting rules, attributes, recommender), up to 25 per point, targeting rules (profile DG, segments, CIs, contextual).
-
-### 4.7 — Create `content/web-implementation/experiments.md` (Section 3F)
-
-**Source:** `DetailedImplementationDoc/Doc.md` → "Experiments".
-
-**Content:** Creating an experiment, primary/secondary metrics, cohorts, control cohort, lifecycle (90-day window, archive vs. delete).
-
-### 4.8 — Create `content/web-implementation/web-templates.md` (Section 3G)
-
-**Source:** `DetailedImplementationDoc/Doc.md` → "Web Templates (Transformers)"; `DeveloperDocs/02-Personalize-Web-Experiences/05-Define-Configure-Transformers.md`; `06-Integrate-Modern-Frontend-Frameworks.md`.
-
-**Content:** Handlebars transformer structure, substitution definitions, example templates (SimpleRecs, SimpleHero, SimpleOverlay), content zone handlers for React.
-
-### 4.9 — Create `content/web-implementation/web-personalization-manager.md` (Section 3H)
-
-**Source:** `DetailedImplementationDoc/Doc.md` → "Web Personalization Manager".
-
-**Content:** Accessing WPM (`?sf_personalization_wpm`), adding experiences, When/Where config, engagement tracking, preview, publish.
+| # | Task | Details |
+|---|---|---|
+| 4.1 | **Ads config** | Define `ADS_CONFIG` object with placeholder publisher ID (`ca-pub-XXXXXXXXXXXXXXXX`) and slot IDs. Include AdSense `<script>` in HTML `<head>`. |
+| 4.2 | **Header ad** | Leaderboard ad container below sticky nav, above breadcrumbs. Not in homepage hero. |
+| 4.3 | **Sidebar ad** | Medium rectangle ad below TOC and donation card. Desktop only (≥1200px). |
+| 4.4 | **In-content ad** | Injected after 3rd H2 on long pages (handled in build script §3.9). |
+| 4.5 | **Footer ad** | Leaderboard ad above footer, below prev/next buttons. |
+| 4.6 | **"Advertisement" labels** | Each ad container gets a centered, muted label (`#706E6B`, 12px) above the ad unit. |
+| 4.7 | **Donation config** | Define `DONATION_CONFIG` with placeholder URL (`https://buymeacoffee.com/YOUR_USERNAME`). |
+| 4.8 | **Nav bar donation button** | `#FF813F` pill button, right side of nav. Full "Buy Me a Latte ☕" label on desktop, ☕ only on mobile. |
+| 4.9 | **Sidebar donation card** | Warm card (`#FFF8F0` bg, `#FFD6B3` border) below TOC: "Enjoying this guide?" + "Buy Me a Latte" button. Desktop only. |
+| 4.10 | **End-of-page CTA** | Centered banner below prev/next: "Found this guide helpful? Buy Me a Latte ☕". |
+| 4.11 | **Footer donation link** | Text link in footer: "Support this project — Buy Me a Latte ☕". |
 
 ---
 
-## Phase 5: Write Section 4 — Mobile Implementation
+## Phase 5 — Page-by-Page Build & Verification
 
-### 5.1 — Create `content/mobile-implementation.md`
+Build all 21 pages and verify each renders correctly:
 
-**Source:** `DetailedImplementationDoc/Doc.md` (mobile references), authored content.
-
-**Content:** *(Authored — mark with `🔍 Needs Validation` callouts)*
-1. Mobile SDK Setup Recap (cross-reference Section 2B)
-2. Requesting Personalization in Mobile — Decisioning API from mobile SDK
-3. Rendering Responses — native UI (SwiftUI/UIKit, Jetpack Compose/XML)
-4. Tracking Engagement — impression/click events via mobile SDK
-5. Mobile-Specific Considerations — offline, deep linking, push notification triggers
-
----
-
-## Phase 6: Write Section 5 — Personalization API
-
-### 6.1 — Create `content/personalization-api.md`
-
-**Source:** `DetailedImplementationDoc/Doc.md` (personalization points, run-time flow); `DeveloperDocs/02-Personalize-Web-Experiences/07-Request-Personalization-Through-Sitemap.md`.
-
-**Content:** *(Partially authored — mark with `🔍 Needs Validation` where applicable)*
-1. API Overview
-2. Authentication — OAuth token flow (emphasize security, no real credentials in examples)
-3. Request Structure — individual ID, point names, context data
-4. Fetching via Web SDK — `SalesforceInteractions.Personalization.fetch()` with Promise handling
-5. Server-Side Request — REST endpoint, request/response JSON
-6. Response Structure — `personalizations` array with `personalizationId`, `data`, `attributes`
-7. Pipeline Diagnostics
-8. Data Space Configuration
+| # | Content File | URL Path |
+|---|---|---|
+| 5.1 | `content/homepage.md` | `/` (special rendering) |
+| 5.2 | `content/setup-permissions.md` | `/setup-permissions/` |
+| 5.3 | `content/data-capturing-modeling/overview.md` | `/data-capturing-modeling/` |
+| 5.4 | `content/data-capturing-modeling/web-data-capturing.md` | `/data-capturing-modeling/web-data-capturing/` |
+| 5.5 | `content/data-capturing-modeling/mobile-data-capturing.md` | `/data-capturing-modeling/mobile-data-capturing/` |
+| 5.6 | `content/data-capturing-modeling/dlo-dmo-mapping-ir.md` | `/data-capturing-modeling/dlo-dmo-mapping-ir/` |
+| 5.7 | `content/data-capturing-modeling/data-graphs.md` | `/data-capturing-modeling/data-graphs/` |
+| 5.8 | `content/data-capturing-modeling/calculated-insights.md` | `/data-capturing-modeling/calculated-insights/` |
+| 5.9 | `content/web-implementation/overview.md` | `/web-implementation/` |
+| 5.10 | `content/web-implementation/personalization-types.md` | `/web-implementation/personalization-types/` |
+| 5.11 | `content/web-implementation/recommenders.md` | `/web-implementation/recommenders/` |
+| 5.12 | `content/web-implementation/response-templates.md` | `/web-implementation/response-templates/` |
+| 5.13 | `content/web-implementation/personalization-points.md` | `/web-implementation/personalization-points/` |
+| 5.14 | `content/web-implementation/decisions.md` | `/web-implementation/decisions/` |
+| 5.15 | `content/web-implementation/experiments.md` | `/web-implementation/experiments/` |
+| 5.16 | `content/web-implementation/web-templates.md` | `/web-implementation/web-templates/` |
+| 5.17 | `content/web-implementation/web-personalization-manager.md` | `/web-implementation/web-personalization-manager/` |
+| 5.18 | `content/mobile-implementation.md` | `/mobile-implementation/` |
+| 5.19 | `content/personalization-api.md` | `/personalization-api/` |
+| 5.20 | `content/experimentation.md` | `/experimentation/` |
+| 5.21 | `content/batch-personalization.md` | `/batch-personalization/` |
 
 ---
 
-## Phase 7: Write Section 6 — Experimentation
+## Phase 6 — Quality Assurance
 
-### 7.1 — Create `content/experimentation.md`
-
-**Source:** `DetailedImplementationDoc/Doc.md` → "Experiments" + "Measuring" sections.
-
-**Content:**
-1. What is Experimentation?
-2. Prerequisites — active personalization point, engagement signals & metrics configured
-3. Creating an Experiment — point, metrics, targeting, cohorts, control
-4. Runtime Behavior — highest priority, random assignment
-5. Viewing Analytics — 24-hr delay, Experiments tab
-6. Lifecycle Management — 90-day cap, archive vs. delete
-
----
-
-## Phase 8: Write Section 7 — Batch Personalization
-
-### 8.1 — Create `content/batch-personalization.md`
-
-**Source:** `DetailedImplementationDoc/Doc.md` (batch/invocable action references).
-
-**Content:** *(Authored — mark with `🔍 Needs Validation` callouts)*
-1. What is Batch Personalization?
-2. Use Cases — email, push, CRM next-best-action
-3. Configuration — jobs, segments, recommenders
-4. Invocable Actions — "Get Personalization Decision" in Flow/Agentforce
-5. Output & Consumption — stored results, downstream systems
+| # | Check | How |
+|---|---|---|
+| 6.1 | All 21 pages exist | Verify `site/*/index.html` count = 21 (including root `index.html`). |
+| 6.2 | Nav bar | Sticky, `#0176D3`, correct links, dropdowns work. |
+| 6.3 | Hamburger menu | Visible < 768px, toggles nav items. |
+| 6.4 | Sidebar TOC | Generated from H2/H3, scroll spy active class, hidden on mobile. |
+| 6.5 | Breadcrumbs | Correct trail per §1, links work, last segment is plain text. |
+| 6.6 | Prev/Next buttons | Correct reading order per §3, first page has no prev, last page has no next. |
+| 6.7 | Homepage | Hero section, feature card grid, CTA button linking to `/setup-permissions/`. |
+| 6.8 | Code blocks | Dark background, syntax highlighting, language label, copy button, horizontal scroll. |
+| 6.9 | Callouts | All 5 types render with correct colors, borders, backgrounds, icons. |
+| 6.10 | Tables | Header bg, zebra striping, borders, horizontal scroll on mobile. |
+| 6.11 | Cross-reference links | All `.md` links rewritten to URL paths, no broken links. |
+| 6.12 | External links | Open in new tab with `rel="noopener noreferrer"`. |
+| 6.13 | Inline code | Light bg, padding, border-radius, monospace font. |
+| 6.14 | Color palette | Matches §4.1 exactly. |
+| 6.15 | Typography | Font stack, sizes, weights, line heights match §4.2. |
+| 6.16 | Footer | Correct text, disclaimer, donation link, `#181818` bg. |
+| 6.17 | Responsive | 3 breakpoints tested (≥1200, 768–1199, <768). |
+| 6.18 | Ads | AdSense script in head, 4 ad placements correct, "Advertisement" labels. |
+| 6.19 | Donation elements | Nav button, sidebar card, end-of-page CTA, footer link — all present, correct styling. |
+| 6.20 | Mermaid diagrams | Render if any content uses ` ```mermaid ` blocks. |
+| 6.21 | Valid HTML | No unclosed tags, well-formed documents. |
+| 6.22 | Static deployment | Serve `site/` with any static server — all pages load correctly. |
 
 ---
 
-## Phase 9: Create the Handoff Document
+## Technology Choices
 
-### 9.1 — Create `handoff.md`
+| Concern | Choice | Rationale |
+|---|---|---|
+| Markdown parser | `markdown-it` + plugins | Robust, extensible, supports GFM tables, fenced code, footnotes. |
+| Syntax highlighting | `prismjs` (server-side via `markdown-it-prism` or manual integration) | Lightweight, dark theme available, supports all required languages. |
+| Diagrams | Mermaid.js CDN (client-side) | No build-time dependency; renders in-browser. |
+| Fonts | Google Fonts CDN (Inter, JetBrains Mono) | Fast, reliable, no self-hosting needed. |
+| Search | Deferred (optional Phase 7) | Lunr.js or Pagefind can be added later. |
 
-After all content files are complete, produce the handoff document at the project root. This is the contract for the **website-builder** agent. Include:
+---
 
-#### Section 1: Site Map & Page Registry
+## File Structure (Build Artifacts)
 
-A table listing every content file with its:
-- Source Markdown file path (e.g., `content/homepage.md`)
-- Target URL path (e.g., `/`)
-- Page title (e.g., "Home")
-- Parent navigation item
-- Breadcrumb trail (e.g., `Home > Data Capturing & Modeling > Web Data Capturing`)
-
-#### Section 2: Navigation Structure
-
-Full nav bar definition with dropdowns:
 ```
-Home → /
-Setup & Permissions → /setup-permissions/
-Data Capturing & Modeling → (dropdown with 6 items)
-Web Implementation → (dropdown with 9 items)
-Mobile Implementation → /mobile-implementation/
-Personalization API → /personalization-api/
-Experimentation → /experimentation/
-Batch Personalization → /batch-personalization/
+salesforce/
+├── package.json
+├── build/
+│   ├── build.js              # Main build script
+│   ├── config.js             # Ads config, donation config, page registry
+│   ├── layout.html           # Shared page layout template
+│   └── homepage-layout.html  # Homepage layout template
+├── content/                  # (read-only input — 21 .md files)
+├── site/                     # (generated output)
+│   ├── index.html
+│   ├── css/
+│   │   └── style.css
+│   ├── js/
+│   │   ├── main.js
+│   │   └── copy-code.js
+│   ├── assets/
+│   ├── setup-permissions/
+│   │   └── index.html
+│   ├── data-capturing-modeling/
+│   │   ├── index.html
+│   │   ├── web-data-capturing/
+│   │   │   └── index.html
+│   │   ├── mobile-data-capturing/
+│   │   │   └── index.html
+│   │   ├── dlo-dmo-mapping-ir/
+│   │   │   └── index.html
+│   │   ├── data-graphs/
+│   │   │   └── index.html
+│   │   └── calculated-insights/
+│   │       └── index.html
+│   ├── web-implementation/
+│   │   ├── index.html
+│   │   ├── personalization-types/
+│   │   │   └── index.html
+│   │   ├── recommenders/
+│   │   │   └── index.html
+│   │   ├── response-templates/
+│   │   │   └── index.html
+│   │   ├── personalization-points/
+│   │   │   └── index.html
+│   │   ├── decisions/
+│   │   │   └── index.html
+│   │   ├── experiments/
+│   │   │   └── index.html
+│   │   ├── web-templates/
+│   │   │   └── index.html
+│   │   └── web-personalization-manager/
+│   │       └── index.html
+│   ├── mobile-implementation/
+│   │   └── index.html
+│   ├── personalization-api/
+│   │   └── index.html
+│   ├── experimentation/
+│   │   └── index.html
+│   └── batch-personalization/
+│       └── index.html
+├── handoff.md
+└── plan.md
 ```
-
-#### Section 3: Page Reading Order (Previous/Next)
-
-Linear sequence for Previous/Next navigation:
-```
-Home → Setup & Permissions → Data Capturing Overview → Web Data Capturing →
-Mobile Data Capturing → DLO-DMO Mapping & IR → Data Graphs → Calculated Insights →
-Web Implementation Overview → Personalization Types → Recommenders → Response Templates →
-Personalization Points → Decisions → Experiments → Web Templates → WPM →
-Mobile Implementation → Personalization API → Experimentation → Batch Personalization
-```
-
-#### Section 4: Design Guidelines for Website-Builder
-
-Pass through the visual design specs from `agent.md`:
-- Color palette (Astro blue `#0176D3`, white, grays, teal `#04844B`)
-- Typography (sans-serif stack, 16px body, hierarchical headings)
-- Code blocks (syntax-highlighted, dark bg, language labels)
-- Tables (zebra-striped, responsive)
-- Callout rendering rules (map Markdown callout syntax → styled boxes with colored left borders)
-- Layout (sticky nav, sidebar TOC, breadcrumbs, Previous/Next, mobile responsive)
-- Diagram rendering (handle Mermaid or ASCII diagrams in content)
-
-#### Section 5: Content Conventions Reference
-
-Document the Markdown conventions used across all content files:
-- Callout syntax: `> **💡 Tip:** ...`, `> **⚠️ Important:** ...`, `> **🚨 Warning:** ...`, `> **📝 Note:** ...`, `> **🔍 Needs Validation:** ...`
-- Cross-reference format: standard Markdown links to other content files
-- Code block language tags used: `javascript`, `json`, `html`, `swift`, `kotlin`, `bash`
-- Table format: standard Markdown tables
-- Heading hierarchy: `#` = page title, `##` = major section, `###` = subsection, `####` = sub-subsection
-
----
-
-## Phase 10: Quality Pass
-
-After all content files and the handoff doc are created, review:
-
-### 10.1 — Cross-References
-- Verify all Markdown links between content files use correct relative paths.
-- Every "See [Page Name](path)" reference resolves to an actual content file.
-
-### 10.2 — Code Example Accuracy
-- All JavaScript code examples use `SalesforceInteractions` namespace correctly.
-- Sitemap code examples match patterns from `Doc.md` and SDK docs.
-- JSON examples are valid JSON.
-- Handlebars template examples are syntactically correct.
-
-### 10.3 — Callout Audit
-- Every authored/placeholder section has a `🔍 Needs Validation` callout.
-- Appropriate Tip/Important/Warning callouts placed throughout:
-  - **Important** before irreversible steps (deploy datakit, deploy IR ruleset)
-  - **Warning** for common pitfalls (initialization order, schema before data streams)
-  - **Tip** for best practices (progressive mapping, simple use cases first)
-
-### 10.4 — Acronym Definitions
-- On first use in each content file, define: DLO, DMO, IR, CI, DG, WPM, SDK, PSL
-
-### 10.5 — External Links
-- Preserve all Salesforce Help and Developer Doc links from source material.
-- Add "Learn More" references linking to official docs where appropriate.
-
-### 10.6 — Handoff Completeness
-- Verify the handoff doc lists every content file that was created.
-- Verify the reading order covers all pages.
-- Verify nav structure includes all pages.
 
 ---
 
 ## Execution Order Summary
 
-| Phase | Deliverables | Depends On |
-|-------|-------------|------------|
-| **0** | Read all source files | — |
-| **1** | `content/homepage.md` | Phase 0 |
-| **2** | `content/setup-permissions.md` | Phase 0 |
-| **3** | `content/data-capturing-modeling/` (6 `.md` files) | Phase 0 |
-| **4** | `content/web-implementation/` (9 `.md` files) | Phase 0 |
-| **5** | `content/mobile-implementation.md` | Phase 0 |
-| **6** | `content/personalization-api.md` | Phase 0 |
-| **7** | `content/experimentation.md` | Phase 0 |
-| **8** | `content/batch-personalization.md` | Phase 0 |
-| **9** | `handoff.md` | Phases 1–8 |
-| **10** | Quality pass across all files | Phases 1–9 |
-
-**Total content files to create:** 20 Markdown files + 1 handoff document = **21 files**
-
----
+1. **Phase 0** — Scaffolding: `package.json`, install deps, create directories.
+2. **Phase 1** — Layout templates + CSS.
+3. **Phase 2** — Client-side JS (nav, scroll spy, copy button, Mermaid init).
+4. **Phase 3** — Build script: MD parsing, callout transform, link rewriting, TOC gen, template assembly.
+5. **Phase 4** — Ads & donation integration into templates.
+6. **Phase 5** — Run build, generate all 21 pages.
+7. **Phase 6** — QA pass against checklist.
 
 ## File Checklist
 

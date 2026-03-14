@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Personalization Points — Salesforce Personalization Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/style.css">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body>
+
+  <!-- ==================== TOP NAV BAR ==================== -->
+  <nav class="navbar" id="navbar">
+    <div class="navbar-inner">
+      <a href="../../" class="navbar-brand">Salesforce Personalization Guide</a>
+
+      <button class="hamburger" id="hamburger" aria-label="Toggle navigation" aria-expanded="false">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+      </button>
+
+      <div class="navbar-menu" id="navbar-menu">
+        <ul class="nav-list">
+          <li class="nav-item"><a href="../../" class="nav-link">Home</a></li>
+          <li class="nav-item"><a href="../../setup-permissions/" class="nav-link">Setup &amp; Permissions</a></li>
+
+          <li class="nav-item has-dropdown">
+            <a href="../../data-capturing-modeling/" class="nav-link dropdown-toggle">Data Capturing &amp; Modeling <span class="dropdown-arrow">▾</span></a>
+            <ul class="dropdown-menu">
+              <li><a href="../../data-capturing-modeling/">Overview</a></li>
+              <li><a href="../../data-capturing-modeling/web-data-capturing/">Web Data Capturing</a></li>
+              <li><a href="../../data-capturing-modeling/mobile-data-capturing/">Mobile Data Capturing</a></li>
+              <li><a href="../../data-capturing-modeling/dlo-dmo-mapping-ir/">DLO-DMO Mapping &amp; IR</a></li>
+              <li><a href="../../data-capturing-modeling/data-graphs/">Data Graphs</a></li>
+              <li><a href="../../data-capturing-modeling/calculated-insights/">Calculated Insights</a></li>
+            </ul>
+          </li>
+
+          <li class="nav-item has-dropdown">
+            <a href="../../web-implementation/" class="nav-link dropdown-toggle">Web Implementation <span class="dropdown-arrow">▾</span></a>
+            <ul class="dropdown-menu">
+              <li><a href="../../web-implementation/">Overview</a></li>
+              <li><a href="../../web-implementation/personalization-types/">Personalization Types</a></li>
+              <li><a href="../../web-implementation/recommenders/">Recommenders</a></li>
+              <li><a href="../../web-implementation/response-templates/">Response Templates</a></li>
+              <li><a href="../../web-implementation/personalization-points/">Personalization Points</a></li>
+              <li><a href="../../web-implementation/decisions/">Decisions</a></li>
+              <li><a href="../../web-implementation/experiments/">Experiments</a></li>
+              <li><a href="../../web-implementation/web-templates/">Web Templates</a></li>
+              <li><a href="../../web-implementation/web-personalization-manager/">Web Personalization Manager</a></li>
+            </ul>
+          </li>
+
+          <li class="nav-item"><a href="../../mobile-implementation/" class="nav-link">Mobile Implementation</a></li>
+          <li class="nav-item"><a href="../../personalization-api/" class="nav-link">Personalization API</a></li>
+          <li class="nav-item"><a href="../../experimentation/" class="nav-link">Experimentation</a></li>
+          <li class="nav-item"><a href="../../batch-personalization/" class="nav-link">Batch Personalization</a></li>
+        </ul>
+
+        <a href="https://buymeacoffee.com/YOUR_USERNAME" target="_blank" rel="noopener noreferrer" class="donate-btn donate-btn-nav">
+          <span class="donate-btn-label">Buy Me a Latte ☕</span>
+          <span class="donate-btn-emoji">☕</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ==================== HEADER AD ==================== -->
+  <div class="ad-container ad-header">
+    <span class="ad-label">Advertisement</span>
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+         data-ad-slot="XXXXXXXXXX"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+
+  <!-- ==================== PAGE LAYOUT ==================== -->
+  <div class="page-wrapper">
+
+    <!-- ---- SIDEBAR ---- -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-inner">
+        <nav class="toc" id="toc" aria-label="Table of Contents">
+          <h3 class="toc-title">On This Page</h3>
+          <ul>
+  <li><a href="#creating-a-personalization-point">Creating a Personalization Point</a></li>
+  <li class="toc-h3"><a href="#configuration-options">Configuration Options</a></li>
+  <li class="toc-h3"><a href="#step-by-step">Step-by-Step</a></li>
+  <li><a href="#how-the-profile-data-graph-affects-the-point">How the Profile Data Graph Affects the Point</a></li>
+  <li class="toc-h3"><a href="#recommender-availability">Recommender Availability</a></li>
+  <li class="toc-h3"><a href="#targeting-rules">Targeting Rules</a></li>
+  <li class="toc-h3"><a href="#request-behavior">Request Behavior</a></li>
+  <li><a href="#reusability-across-channels">Reusability Across Channels</a></li>
+  <li><a href="#decision-credits">Decision Credits</a></li>
+  <li><a href="#what-happens-next">What Happens Next</a></li>
+</ul>
+        </nav>
+
+        <!-- Sidebar Donation Card -->
+        <div class="donate-card">
+          <span class="donate-card-emoji">☕</span>
+          <p class="donate-card-heading">Enjoying this guide?</p>
+          <a href="https://buymeacoffee.com/YOUR_USERNAME" target="_blank" rel="noopener noreferrer" class="donate-btn donate-btn-sidebar">Buy Me a Latte</a>
+        </div>
+
+        <!-- Sidebar Ad -->
+        <div class="ad-container ad-sidebar">
+          <span class="ad-label">Advertisement</span>
+          <ins class="adsbygoogle"
+               style="display:block"
+               data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+               data-ad-slot="XXXXXXXXXX"
+               data-ad-format="auto"
+               data-full-width-responsive="true"></ins>
+          <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ---- MAIN CONTENT ---- -->
+    <main class="content" id="content">
+      <!-- Breadcrumbs -->
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <a href="/">Home</a><span class="breadcrumb-sep"> &gt; </span><a href="/web-implementation/">Web Implementation</a><span class="breadcrumb-sep"> &gt; </span><span class="breadcrumb-current">Personalization Points</span>
+      </nav>
+
+      <!-- Page Content (H1 + body from Markdown) -->
+      <article class="article">
+        <h1 id="personalization-points" tabindex="-1">Personalization Points</h1>
+<p>A <strong>personalization point</strong> maps to a part of an experience that is eligible for a decision. It is the value included in a personalization decision request — alongside an individual ID — when a request is made to the Personalization decisioning pipeline.</p>
+<p>Examples of personalization points include:</p>
+<ul>
+<li>Homepage hero banner</li>
+<li>Homepage recommendations bar</li>
+<li>Product Detail Page (PDP) recommendations bar</li>
+<li>Pop-up overlay</li>
+<li>Sidebar article suggestions</li>
+</ul>
+<hr>
+<h2 id="creating-a-personalization-point" tabindex="-1">Creating a Personalization Point</h2>
+<p>Navigate to the <strong>Personalization</strong> app → <strong>Personalization Points</strong> → <strong>New Personalization Point</strong>.</p>
+<h3 id="configuration-options" tabindex="-1">Configuration Options</h3>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Name</strong></td>
+<td>A unique, descriptive name for the point (e.g., <code>home_hero</code>, <code>pdp_recommendations</code>)</td>
+</tr>
+<tr>
+<td><strong>Data Space</strong></td>
+<td>Everything in Data Cloud is data-space scoped. The selected data space determines which profile data graphs and response templates are available.</td>
+</tr>
+<tr>
+<td><strong>Data Graph</strong></td>
+<td>The profile data graph to use for this point. This impacts: (1) which recommenders are available on decisions, (2) which data points are available for targeting rules.</td>
+</tr>
+<tr>
+<td><strong>Personalization Type</strong></td>
+<td>Either <strong>Manual Content</strong> or <strong>Recommendations</strong> (see <a href="/web-implementation/personalization-types/">Personalization Types</a>)</td>
+</tr>
+<tr>
+<td><strong>Response Template</strong></td>
+<td>Defines the shape of the decision response. Only templates matching the selected data space and personalization type are shown. (See <a href="/web-implementation/response-templates/">Response Templates</a>)</td>
+</tr>
+<tr>
+<td><strong>Source</strong></td>
+<td>Non-editable field that indicates where the point was created from. For points created via the email builder in Marketing Cloud Growth or Advanced, the source reads &quot;CMS Content&quot;.</td>
+</tr>
+<tr>
+<td><strong>Authentication</strong></td>
+<td>Optional. Mark a point as requiring authentication. Requests against this point must use Personalization's authenticated decisioning API with proper credentials.</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="step-by-step" tabindex="-1">Step-by-Step</h3>
+<ol>
+<li>Click <strong>New Personalization Point</strong></li>
+<li>Enter a <strong>name</strong> — use a machine-friendly format like <code>home_recommendations</code></li>
+<li>Select the <strong>data space</strong></li>
+<li>Select the <strong>profile data graph</strong> — this connects the point to the real-time profile data used for targeting and recommender input</li>
+<li>Choose the <strong>personalization type</strong> — Manual Content or Recommendations</li>
+<li>Select the <strong>response template</strong> — the template determines what configuration options appear on decisions and what data is returned in responses</li>
+<li>Optionally enable <strong>authentication</strong> if this point should only be accessed via authenticated API calls</li>
+<li>Save</li>
+</ol>
+<div class="callout callout-important"><p><span class="callout-label">⚠️ Important:</span> After creating a personalization point, you must configure at least one <strong>decision</strong> or <strong>experiment</strong> on it before it can return a response when requested. A point with no decisions or experiments returns a blank response.</p></div>
+<hr>
+<h2 id="how-the-profile-data-graph-affects-the-point" tabindex="-1">How the Profile Data Graph Affects the Point</h2>
+<p>The profile data graph you select has cascading effects on the entire personalization point:</p>
+<h3 id="recommender-availability" tabindex="-1">Recommender Availability</h3>
+<p>Only recommenders configured with the <strong>same profile DG</strong> and returning the <strong>same DMO</strong> as the response template are selectable on decisions.</p>
+<h3 id="targeting-rules" tabindex="-1">Targeting Rules</h3>
+<p>Any data point from the selected profile data graph is available for use in decision targeting logic:</p>
+<ul>
+<li>Direct attributes on the Unified Individual</li>
+<li>Related object attributes (engagements, contact points)</li>
+<li>Calculated Insights</li>
+<li>Segment memberships</li>
+</ul>
+<h3 id="request-behavior" tabindex="-1">Request Behavior</h3>
+<p>When a personalization request includes multiple personalization points, Personalization assumes that <strong>all points in the request use the same profile DG</strong>. If one point uses a different DG than a point listed earlier in the request, it will be skipped.</p>
+<div class="callout callout-note"><p><span class="callout-label">📝 Note:</span> This means you should plan your personalization points so that points requested together share the same profile data graph.</p></div>
+<hr>
+<h2 id="reusability-across-channels" tabindex="-1">Reusability Across Channels</h2>
+<p>A personalization point is <strong>reusable across channels</strong>. Any channel that can call the Personalization decisioning API can request a decision for any personalization point. This includes:</p>
+<ul>
+<li><strong>Web</strong> — via the Salesforce Interactions SDK (<code>SalesforceInteractions.Personalization.fetch()</code>)</li>
+<li><strong>Mobile</strong> — via the Mobile SDK or direct API call</li>
+<li><strong>Email</strong> — via Marketing Cloud Growth / Advanced email builder</li>
+<li><strong>Server-side</strong> — via direct REST API calls</li>
+<li><strong>Agentforce</strong> — via Invocable Actions in Flow</li>
+</ul>
+<p>Channel-specific experience wrappers and templates (like web templates or mobile UI components) control <strong>when</strong> requests are made, <strong>where</strong> decision responses are rendered, and <strong>how</strong> content is displayed. But the underlying personalization point, decisions, and recommenders are shared.</p>
+<div class="callout callout-tip"><p><span class="callout-label">💡 Tip:</span> Design your personalization points around the <strong>type of experience</strong> (hero banner, recommendations bar, popup), not the specific channel. This maximizes reusability and reduces configuration overhead.</p></div>
+<hr>
+
+  <div class="ad-container ad-in-content">
+    <span class="ad-label">Advertisement</span>
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+         data-ad-slot="XXXXXXXXXX"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+<h2 id="decision-credits" tabindex="-1">Decision Credits</h2>
+<p>Each decision that Personalization makes consumes <strong>1 decision credit</strong>:</p>
+<ul>
+<li>A request with <strong>1 personalization point</strong> = 1 decision credit</li>
+<li>A request with <strong>2 personalization points</strong> = 2 decision credits</li>
+<li>A blank response (individual doesn't qualify for any decision) still counts as a decision credit</li>
+</ul>
+<p>Plan your personalization point strategy with decision credit consumption in mind.</p>
+<hr>
+<h2 id="what-happens-next" tabindex="-1">What Happens Next</h2>
+<p>Once a personalization point is created, configure one of the following:</p>
+<ul>
+<li><strong><a href="/web-implementation/decisions/">Decisions</a></strong> — Define who gets what content, with targeting rules and priority</li>
+<li><strong><a href="/web-implementation/experiments/">Experiments</a></strong> — A/B test different decisioning strategies on this point</li>
+</ul>
+<hr>
+<p><strong>Next:</strong> <a href="/web-implementation/decisions/">Decisions</a> — Learn how to configure targeting rules and priority to determine who receives which personalized content.</p>
+
+      </article>
+
+      <!-- Previous / Next Navigation -->
+      <nav class="prev-next" aria-label="Page navigation">
+        <a href="/web-implementation/response-templates/" class="prev-next-btn pn-prev">
+      <span class="pn-direction">← Previous</span>
+      <span class="pn-title">Response Templates</span>
+    </a><a href="/web-implementation/decisions/" class="prev-next-btn pn-next">
+      <span class="pn-direction">Next →</span>
+      <span class="pn-title">Personalization Decisions</span>
+    </a>
+      </nav>
+
+      <!-- End-of-page Donation CTA -->
+      <div class="donate-cta">
+        <p>Found this guide helpful?</p>
+        <a href="https://buymeacoffee.com/YOUR_USERNAME" target="_blank" rel="noopener noreferrer" class="donate-btn donate-btn-cta">Buy Me a Latte ☕</a>
+      </div>
+    </main>
+  </div>
+
+  <!-- ==================== FOOTER AD ==================== -->
+  <div class="ad-container ad-footer">
+    <span class="ad-label">Advertisement</span>
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+         data-ad-slot="XXXXXXXXXX"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p class="footer-title">Salesforce Personalization Implementation Guide</p>
+      <p class="footer-subtitle">Based on documentation as of March 2026</p>
+      <p class="footer-disclaimer">This is an educational resource. Verify all information against the latest <a href="https://help.salesforce.com/" target="_blank" rel="noopener noreferrer">Salesforce documentation</a>. Salesforce releases updates three times per year.</p>
+      <p class="footer-donate">
+        <a href="https://buymeacoffee.com/YOUR_USERNAME" target="_blank" rel="noopener noreferrer">Support this project — Buy Me a Latte ☕</a>
+      </p>
+    </div>
+  </footer>
+
+  <script src="../../js/main.js"></script>
+  <script src="../../js/copy-code.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (typeof mermaid !== 'undefined') {
+        mermaid.initialize({ startOnLoad: false, theme: 'default' });
+        document.querySelectorAll('pre > code.language-mermaid').forEach(function(el) {
+          var pre = el.parentElement;
+          var container = document.createElement('div');
+          container.className = 'mermaid';
+          container.textContent = el.textContent;
+          pre.parentNode.replaceChild(container, pre);
+        });
+        mermaid.run();
+      }
+    });
+  </script>
+</body>
+</html>

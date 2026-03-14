@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mobile App Implementation — Salesforce Personalization Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body>
+
+  <!-- ==================== TOP NAV BAR ==================== -->
+  <nav class="navbar" id="navbar">
+    <div class="navbar-inner">
+      <a href="../" class="navbar-brand">Salesforce Personalization Guide</a>
+
+      <button class="hamburger" id="hamburger" aria-label="Toggle navigation" aria-expanded="false">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+      </button>
+
+      <div class="navbar-menu" id="navbar-menu">
+        <ul class="nav-list">
+          <li class="nav-item"><a href="../" class="nav-link">Home</a></li>
+          <li class="nav-item"><a href="../setup-permissions/" class="nav-link">Setup &amp; Permissions</a></li>
+
+          <li class="nav-item has-dropdown">
+            <a href="../data-capturing-modeling/" class="nav-link dropdown-toggle">Data Capturing &amp; Modeling <span class="dropdown-arrow">▾</span></a>
+            <ul class="dropdown-menu">
+              <li><a href="../data-capturing-modeling/">Overview</a></li>
+              <li><a href="../data-capturing-modeling/web-data-capturing/">Web Data Capturing</a></li>
+              <li><a href="../data-capturing-modeling/mobile-data-capturing/">Mobile Data Capturing</a></li>
+              <li><a href="../data-capturing-modeling/dlo-dmo-mapping-ir/">DLO-DMO Mapping &amp; IR</a></li>
+              <li><a href="../data-capturing-modeling/data-graphs/">Data Graphs</a></li>
+              <li><a href="../data-capturing-modeling/calculated-insights/">Calculated Insights</a></li>
+            </ul>
+          </li>
+
+          <li class="nav-item has-dropdown">
+            <a href="../web-implementation/" class="nav-link dropdown-toggle">Web Implementation <span class="dropdown-arrow">▾</span></a>
+            <ul class="dropdown-menu">
+              <li><a href="../web-implementation/">Overview</a></li>
+              <li><a href="../web-implementation/personalization-types/">Personalization Types</a></li>
+              <li><a href="../web-implementation/recommenders/">Recommenders</a></li>
+              <li><a href="../web-implementation/response-templates/">Response Templates</a></li>
+              <li><a href="../web-implementation/personalization-points/">Personalization Points</a></li>
+              <li><a href="../web-implementation/decisions/">Decisions</a></li>
+              <li><a href="../web-implementation/experiments/">Experiments</a></li>
+              <li><a href="../web-implementation/web-templates/">Web Templates</a></li>
+              <li><a href="../web-implementation/web-personalization-manager/">Web Personalization Manager</a></li>
+            </ul>
+          </li>
+
+          <li class="nav-item"><a href="../mobile-implementation/" class="nav-link">Mobile Implementation</a></li>
+          <li class="nav-item"><a href="../personalization-api/" class="nav-link">Personalization API</a></li>
+          <li class="nav-item"><a href="../experimentation/" class="nav-link">Experimentation</a></li>
+          <li class="nav-item"><a href="../batch-personalization/" class="nav-link">Batch Personalization</a></li>
+        </ul>
+
+        <a href="https://buymeacoffee.com/YOUR_USERNAME" target="_blank" rel="noopener noreferrer" class="donate-btn donate-btn-nav">
+          <span class="donate-btn-label">Buy Me a Latte ☕</span>
+          <span class="donate-btn-emoji">☕</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ==================== HEADER AD ==================== -->
+  <div class="ad-container ad-header">
+    <span class="ad-label">Advertisement</span>
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+         data-ad-slot="XXXXXXXXXX"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+
+  <!-- ==================== PAGE LAYOUT ==================== -->
+  <div class="page-wrapper">
+
+    <!-- ---- SIDEBAR ---- -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-inner">
+        <nav class="toc" id="toc" aria-label="Table of Contents">
+          <h3 class="toc-title">On This Page</h3>
+          <ul>
+  <li><a href="#prerequisites">Prerequisites</a></li>
+  <li><a href="#1-mobile-sdk-setup-recap">1. Mobile SDK Setup Recap</a></li>
+  <li><a href="#2-requesting-personalization-in-mobile">2. Requesting Personalization in Mobile</a></li>
+  <li class="toc-h3"><a href="#how-the-decisioning-flow-works">How the Decisioning Flow Works</a></li>
+  <li class="toc-h3"><a href="#making-a-personalization-request-ios-swift">Making a Personalization Request (iOS — Swift)</a></li>
+  <li class="toc-h3"><a href="#making-a-personalization-request-android-kotlin">Making a Personalization Request (Android — Kotlin)</a></li>
+  <li class="toc-h3"><a href="#personalization-response-structure">Personalization Response Structure</a></li>
+  <li><a href="#3-rendering-personalization-responses">3. Rendering Personalization Responses</a></li>
+  <li class="toc-h3"><a href="#ios-swiftui-example">iOS — SwiftUI Example</a></li>
+  <li class="toc-h3"><a href="#ios-uikit-example">iOS — UIKit Example</a></li>
+  <li class="toc-h3"><a href="#android-jetpack-compose-example">Android — Jetpack Compose Example</a></li>
+  <li class="toc-h3"><a href="#android-xml-layout-example">Android — XML Layout Example</a></li>
+  <li><a href="#4-tracking-engagement">4. Tracking Engagement</a></li>
+  <li class="toc-h3"><a href="#what-to-track">What to Track</a></li>
+  <li class="toc-h3"><a href="#sending-engagement-events-ios-swift">Sending Engagement Events (iOS — Swift)</a></li>
+  <li class="toc-h3"><a href="#sending-engagement-events-android-kotlin">Sending Engagement Events (Android — Kotlin)</a></li>
+  <li class="toc-h3"><a href="#impression-tracking-best-practices">Impression Tracking Best Practices</a></li>
+  <li><a href="#5-mobile-specific-considerations">5. Mobile-Specific Considerations</a></li>
+  <li class="toc-h3"><a href="#5a-offline-handling">5A. Offline Handling</a></li>
+  <li class="toc-h3"><a href="#5b-deep-linking">5B. Deep Linking</a></li>
+  <li class="toc-h3"><a href="#5c-push-notification-personalization-triggers">5C. Push Notification Personalization Triggers</a></li>
+  <li class="toc-h3"><a href="#5d-identity-management-in-mobile">5D. Identity Management in Mobile</a></li>
+  <li class="toc-h3"><a href="#5e-data-space-configuration-for-mobile">5E. Data Space Configuration for Mobile</a></li>
+  <li><a href="#mobile-vs-web-key-differences-summary">Mobile vs. Web: Key Differences Summary</a></li>
+  <li><a href="#whats-next">What's Next?</a></li>
+</ul>
+        </nav>
+
+        <!-- Sidebar Donation Card -->
+        <div class="donate-card">
+          <span class="donate-card-emoji">☕</span>
+          <p class="donate-card-heading">Enjoying this guide?</p>
+          <a href="https://buymeacoffee.com/YOUR_USERNAME" target="_blank" rel="noopener noreferrer" class="donate-btn donate-btn-sidebar">Buy Me a Latte</a>
+        </div>
+
+        <!-- Sidebar Ad -->
+        <div class="ad-container ad-sidebar">
+          <span class="ad-label">Advertisement</span>
+          <ins class="adsbygoogle"
+               style="display:block"
+               data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+               data-ad-slot="XXXXXXXXXX"
+               data-ad-format="auto"
+               data-full-width-responsive="true"></ins>
+          <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ---- MAIN CONTENT ---- -->
+    <main class="content" id="content">
+      <!-- Breadcrumbs -->
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <a href="/">Home</a><span class="breadcrumb-sep"> &gt; </span><span class="breadcrumb-current">Mobile Implementation</span>
+      </nav>
+
+      <!-- Page Content (H1 + body from Markdown) -->
+      <article class="article">
+        <h1 id="mobile-app-implementation" tabindex="-1">Mobile App Implementation</h1>
+<p>In this section, you'll learn how to deliver personalized experiences inside a native mobile app using Salesforce Personalization. Mobile personalization follows the same underlying data flow as web personalization — the Mobile SDK ingests behavioral data into Data Cloud in real time, identity resolution unifies the user's profile, and the Decisioning API returns personalized content. The key difference is in how you integrate the SDK and render responses: instead of JavaScript and HTML, you'll work with native platform tools (Swift/Kotlin) and native UI frameworks (SwiftUI, UIKit, Jetpack Compose, or XML layouts).</p>
+<div class="callout callout-important"><p><span class="callout-label">⚠️ Important:</span> Before starting mobile implementation, make sure you've completed the foundational setup covered in earlier sections:</p>
+<ul>
+<li><a href="/setup-permissions/">Setup &amp; Permissions</a> — Licenses, permission sets, and datakit deployment</li>
+<li><a href="/data-capturing-modeling/">Data Capturing &amp; Modeling</a> — Data space creation, connectors, schema, DLO-to-DMO mapping, identity resolution, and data graphs</li>
+</ul>
+<p>Mobile personalization reuses the same personalization points, decisions, recommenders, and response templates you configure for web — the only differences are in how data is ingested and how responses are rendered.</p></div>
+<hr>
+<h2 id="prerequisites" tabindex="-1">Prerequisites</h2>
+<p>Before you begin, confirm the following:</p>
+<ol>
+<li><strong>Salesforce Personalization and Data Cloud licenses</strong> are active in your org</li>
+<li><strong>A Data Space</strong> is created and configured (see <a href="/setup-permissions/">Setup &amp; Permissions</a>)</li>
+<li><strong>A Mobile App Connector</strong> is created (covered below in Step 1)</li>
+<li><strong>Personalization points and decisions</strong> are configured in the Personalization app (see <a href="/web-implementation/">Web Implementation</a> — the same points are reusable for mobile)</li>
+<li><strong>A Profile Data Graph</strong> is set up and includes the engagement objects you'll track from mobile (see <a href="/data-capturing-modeling/data-graphs/">Data Graphs</a>)</li>
+</ol>
+<hr>
+<h2 id="1-mobile-sdk-setup-recap" tabindex="-1">1. Mobile SDK Setup Recap</h2>
+<p>Mobile data capturing is covered in detail in <a href="/data-capturing-modeling/mobile-data-capturing/">Mobile Data Capturing</a>. Here's a quick recap of the setup steps:</p>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Step</th>
+<th>What to Do</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Create a Mobile App Connector</strong></td>
+<td>In Data Cloud Setup → Websites &amp; Mobile Apps → New → select <strong>Mobile App</strong> as the Connector Type</td>
+</tr>
+<tr>
+<td><strong>Upload the Mobile Event Schema</strong></td>
+<td>Download the recommended mobile event schema JSON and upload it to the connector</td>
+</tr>
+<tr>
+<td><strong>Install the Mobile SDK</strong></td>
+<td>Add the Salesforce Interactions SDK via CocoaPods/SPM (iOS) or Gradle (Android)</td>
+</tr>
+<tr>
+<td><strong>Initialize the SDK</strong></td>
+<td>Call the SDK's initialization method with your org's tenant-specific endpoint and data space configuration</td>
+</tr>
+<tr>
+<td><strong>Send behavioral events</strong></td>
+<td>Use the SDK's event-tracking API to send page views, product interactions, cart events, and profile data</td>
+</tr>
+<tr>
+<td><strong>Deploy Mobile Data Streams</strong></td>
+<td>Create data streams in Data Cloud Setup, select the mobile connector, choose events, and deploy</td>
+</tr>
+<tr>
+<td><strong>Map DLOs to DMOs</strong></td>
+<td>Map the mobile event DLO fields to the corresponding DMOs — the mapping is identical to web events</td>
+</tr>
+</tbody>
+</table></div>
+<div class="callout callout-tip"><p><span class="callout-label">💡 Tip:</span> The mobile event schema follows the same structure as the web event schema. The DLO-to-DMO mapping tables are identical for both web and mobile connectors. If you've already mapped web events, the mobile mapping process will be familiar.</p></div>
+<hr>
+<h2 id="2-requesting-personalization-in-mobile" tabindex="-1">2. Requesting Personalization in Mobile</h2>
+<p>Mobile apps request personalized content by calling the <strong>Decisioning API</strong>. This is the same API that powers web personalization — the difference is that on the web, the SDK's <code>SalesforceInteractions.Personalization.fetch()</code> method wraps the API call for you, while on mobile you interact with the API more directly through the Mobile SDK.</p>
+<h3 id="how-the-decisioning-flow-works" tabindex="-1">How the Decisioning Flow Works</h3>
+<p>The run-time decision flow is the same regardless of channel:</p>
+<ol>
+<li><strong>Personalization Request</strong> — Your app sends a request containing an individual ID and one or more personalization point names. Optional context data (e.g., anchor item IDs, category) can be included for recommendation filtering.</li>
+<li><strong>Augmenting Phase</strong> — Personalization retrieves the individual's Profile Data Graph from Data Cloud. If no profile exists, the individual is treated as a first-time anonymous visitor.</li>
+<li><strong>Qualifying Phase</strong> — For each personalization point, Personalization evaluates which decision or experiment cohort the individual qualifies for (experiments are highest priority).</li>
+<li><strong>Personalizing Phase</strong> — The qualifying decision is generated. For manual content, string values are returned. For recommendations, the recommender generates 1:1 personalized items using the real-time profile.</li>
+<li><strong>Decision Response</strong> — The response is returned to the app and logged in Data Cloud for analytics and attribution.</li>
+</ol>
+<div class="callout callout-note"><p><span class="callout-label">📝 Note:</span> Each personalization point in a request consumes one decision credit. A request with three personalization points consumes three credits.</p></div>
+<h3 id="making-a-personalization-request-ios-swift" tabindex="-1">Making a Personalization Request (iOS — Swift)</h3>
+<div class="callout callout-validation"><p><span class="callout-label">🔍 Needs Validation:</span> The following code examples are based on the Salesforce Interactions Mobile SDK patterns. Verify method signatures and class names against the latest <a href="https://developer.salesforce.com/docs/marketing/einstein-personalization/guide/mobile-sdk-overview.html" target="_blank" rel="noopener noreferrer">Salesforce Interactions Mobile SDK documentation</a>.</p></div>
+<pre><span class="code-lang">swift</span><button class="copy-btn" aria-label="Copy code">Copy</button><code class="language-swift">import SalesforceInteractions
+
+// Request personalization for one or more personalization points
+SalesforceInteractions.shared.personalization.fetch(
+    personalizationPoints: [&quot;home_recommendations&quot;, &quot;home_hero&quot;]
+) { result in
+    switch result {
+    case .success(let response):
+        // response.personalizations contains an array of decision responses
+        for personalization in response.personalizations {
+            print(&quot;Point: \(personalization.personalizationPointName)&quot;)
+            print(&quot;Data: \(personalization.data)&quot;)
+        }
+    case .failure(let error):
+        print(&quot;Personalization request failed: \(error.localizedDescription)&quot;)
+    }
+}
+</code></pre>
+<h3 id="making-a-personalization-request-android-kotlin" tabindex="-1">Making a Personalization Request (Android — Kotlin)</h3>
+<pre><span class="code-lang">kotlin</span><button class="copy-btn" aria-label="Copy code">Copy</button><code class="language-kotlin">import com.salesforce.interactions.SalesforceInteractions
+
+// Request personalization for one or more personalization points
+SalesforceInteractions.personalization.fetch(
+    personalizationPoints = listOf(&quot;home_recommendations&quot;, &quot;home_hero&quot;)
+) { result -&gt;
+    result.onSuccess { response -&gt;
+        // response.personalizations contains a list of decision responses
+        response.personalizations.forEach { personalization -&gt;
+            Log.d(&quot;Personalization&quot;, &quot;Point: ${personalization.personalizationPointName}&quot;)
+            Log.d(&quot;Personalization&quot;, &quot;Data: ${personalization.data}&quot;)
+        }
+    }
+    result.onFailure { error -&gt;
+        Log.e(&quot;Personalization&quot;, &quot;Request failed: ${error.message}&quot;)
+    }
+}
+</code></pre>
+<h3 id="personalization-response-structure" tabindex="-1">Personalization Response Structure</h3>
+<p>The response follows the same JSON structure as web personalization. Each personalization point returns a single decision response:</p>
+<pre><span class="code-lang">json</span><button class="copy-btn" aria-label="Copy code">Copy</button><code class="language-json">{
+  &quot;personalizations&quot;: [
+    {
+      &quot;personalizationId&quot;: &quot;96c4a971-71f5-4779-a82d-2c72dfa964fe&quot;,
+      &quot;requestId&quot;: &quot;c73e348d-3336-4ed4-90f5-c3ed63280e10&quot;,
+      &quot;individualId&quot;: &quot;ba8f56683e2ca01c&quot;,
+      &quot;dataSpace&quot;: &quot;default&quot;,
+      &quot;personalizationPointId&quot;: &quot;9ppSG00000004I9YAI&quot;,
+      &quot;personalizationPointName&quot;: &quot;home_recommendations&quot;,
+      &quot;dmoName&quot;: &quot;ssot__GoodsProduct__dlm&quot;,
+      &quot;data&quot;: [
+        {
+          &quot;ssot__Name__c&quot;: &quot;GoBrew Connected Coffee Machine&quot;,
+          &quot;ssot__ProductSKU__c&quot;: &quot;6010042&quot;,
+          &quot;ImageUrl__c&quot;: &quot;https://www.northerntrailoutfitters.com/.../go-brew.jpg&quot;,
+          &quot;PurchaseUrl__c&quot;: &quot;https://www.northerntrailoutfitters.com/.../gobrew-connected-coffee-machine-6010042.html&quot;,
+          &quot;ssot__PrimaryProductCategory__c&quot;: &quot;Coffee Machines&quot;,
+          &quot;UnitPrice__c&quot;: &quot;299.99&quot;,
+          &quot;personalizationContentId&quot;: &quot;96c4a971-71f5-4779-a82d-2c72dfa964fe:0&quot;
+        }
+      ]
+    }
+  ]
+}
+</code></pre>
+<p><strong>Key fields in each personalization response:</strong></p>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>personalizationId</code></td>
+<td>Unique ID for this decision — use this when tracking engagement</td>
+</tr>
+<tr>
+<td><code>requestId</code></td>
+<td>ID of the overall request (shared across all points in a single request)</td>
+</tr>
+<tr>
+<td><code>individualId</code></td>
+<td>The resolved identity of the individual</td>
+</tr>
+<tr>
+<td><code>personalizationPointName</code></td>
+<td>The name of the personalization point that was requested</td>
+</tr>
+<tr>
+<td><code>dmoName</code></td>
+<td>The DMO type of the returned items (e.g., <code>ssot__GoodsProduct__dlm</code>)</td>
+</tr>
+<tr>
+<td><code>data</code></td>
+<td>Array of recommended items or manual content attribute values</td>
+</tr>
+<tr>
+<td><code>personalizationContentId</code></td>
+<td>Unique ID for each item — use this when tracking item-level clicks</td>
+</tr>
+</tbody>
+</table></div>
+<div class="callout callout-important"><p><span class="callout-label">⚠️ Important:</span> Personalization assumes that all personalization points in a single request use the same Profile Data Graph. If one point uses a different DG than another in the same request, it will be skipped. Group your requests by data graph when calling multiple points.</p></div>
+<hr>
+
+  <div class="ad-container ad-in-content">
+    <span class="ad-label">Advertisement</span>
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+         data-ad-slot="XXXXXXXXXX"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+<h2 id="3-rendering-personalization-responses" tabindex="-1">3. Rendering Personalization Responses</h2>
+<p>Unlike web personalization — which uses Handlebars templates to convert JSON into HTML — mobile apps render personalization responses using <strong>native UI components</strong>. You parse the JSON response and map the fields to your app's views.</p>
+<h3 id="ios-swiftui-example" tabindex="-1">iOS — SwiftUI Example</h3>
+<pre><span class="code-lang">swift</span><button class="copy-btn" aria-label="Copy code">Copy</button><code class="language-swift">import SwiftUI
+
+struct RecommendationCard: View {
+    let name: String
+    let category: String
+    let imageUrl: String
+    let price: String
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            AsyncImage(url: URL(string: imageUrl)) { image in
+                image.resizable().aspectRatio(contentMode: .fill)
+            } placeholder: {
+                ProgressView()
+            }
+            .frame(height: 200)
+            .clipped()
+
+            Text(name)
+                .font(.headline)
+            Text(category)
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+            Text(&quot;$\(price)&quot;)
+                .font(.title3)
+                .fontWeight(.bold)
+        }
+        .padding()
+        .background(Color(.systemBackground))
+        .cornerRadius(12)
+        .shadow(radius: 4)
+    }
+}
+
+// Usage: Map personalization response data to UI
+struct RecommendationsView: View {
+    let personalizations: [PersonalizationData]
+
+    var body: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 16) {
+                ForEach(personalizations, id: \.personalizationContentId) { item in
+                    RecommendationCard(
+                        name: item.data[&quot;ssot__Name__c&quot;] ?? &quot;&quot;,
+                        category: item.data[&quot;ssot__PrimaryProductCategory__c&quot;] ?? &quot;&quot;,
+                        imageUrl: item.data[&quot;ImageUrl__c&quot;] ?? &quot;&quot;,
+                        price: item.data[&quot;UnitPrice__c&quot;] ?? &quot;&quot;
+                    )
+                }
+            }
+            .padding()
+        }
+    }
+}
+</code></pre>
+<h3 id="ios-uikit-example" tabindex="-1">iOS — UIKit Example</h3>
+<pre><span class="code-lang">swift</span><button class="copy-btn" aria-label="Copy code">Copy</button><code class="language-swift">import UIKit
+
+class RecommendationCell: UICollectionViewCell {
+    let imageView = UIImageView()
+    let nameLabel = UILabel()
+    let categoryLabel = UILabel()
+    let priceLabel = UILabel()
+
+    func configure(with item: [String: Any]) {
+        nameLabel.text = item[&quot;ssot__Name__c&quot;] as? String
+        categoryLabel.text = item[&quot;ssot__PrimaryProductCategory__c&quot;] as? String
+        priceLabel.text = &quot;$\(item[&quot;UnitPrice__c&quot;] as? String ?? &quot;&quot;)&quot;
+
+        if let urlString = item[&quot;ImageUrl__c&quot;] as? String,
+           let url = URL(string: urlString) {
+            // Load image asynchronously (use your preferred image loading library)
+            loadImage(from: url)
+        }
+    }
+
+    private func loadImage(from url: URL) {
+        URLSession.shared.dataTask(with: url) { [weak self] data, _, _ in
+            guard let data = data, let image = UIImage(data: data) else { return }
+            DispatchQueue.main.async {
+                self?.imageView.image = image
+            }
+        }.resume()
+    }
+}
+</code></pre>
+<h3 id="android-jetpack-compose-example" tabindex="-1">Android — Jetpack Compose Example</h3>
+<pre><span class="code-lang">kotlin</span><button class="copy-btn" aria-label="Copy code">Copy</button><code class="language-kotlin">import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.*
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
+
+@Composable
+fun RecommendationCard(
+    name: String,
+    category: String,
+    imageUrl: String,
+    price: String,
+    modifier: Modifier = Modifier
+) {
+    Card(
+        modifier = modifier.width(200.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+    ) {
+        Column {
+            AsyncImage(
+                model = imageUrl,
+                contentDescription = name,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(150.dp)
+            )
+            Column(modifier = Modifier.padding(12.dp)) {
+                Text(text = name, style = MaterialTheme.typography.titleSmall)
+                Text(text = category, style = MaterialTheme.typography.bodySmall)
+                Text(text = &quot;$price&quot;, style = MaterialTheme.typography.titleMedium)
+            }
+        }
+    }
+}
+
+@Composable
+fun RecommendationsRow(items: List&lt;Map&lt;String, String&gt;&gt;) {
+    LazyRow(
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        contentPadding = PaddingValues(horizontal = 16.dp)
+    ) {
+        items(items) { item -&gt;
+            RecommendationCard(
+                name = item[&quot;ssot__Name__c&quot;] ?: &quot;&quot;,
+                category = item[&quot;ssot__PrimaryProductCategory__c&quot;] ?: &quot;&quot;,
+                imageUrl = item[&quot;ImageUrl__c&quot;] ?: &quot;&quot;,
+                price = item[&quot;UnitPrice__c&quot;] ?: &quot;&quot;
+            )
+        }
+    }
+}
+</code></pre>
+<h3 id="android-xml-layout-example" tabindex="-1">Android — XML Layout Example</h3>
+<pre><span class="code-lang">xml</span><button class="copy-btn" aria-label="Copy code">Copy</button><code class="language-xml">&lt;!-- res/layout/item_recommendation.xml --&gt;
+&lt;com.google.android.material.card.MaterialCardView
+    xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+    xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;
+    android:layout_width=&quot;200dp&quot;
+    android:layout_height=&quot;wrap_content&quot;
+    app:cardElevation=&quot;4dp&quot;
+    app:cardCornerRadius=&quot;12dp&quot;&gt;
+
+    &lt;LinearLayout
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;wrap_content&quot;
+        android:orientation=&quot;vertical&quot;&gt;
+
+        &lt;ImageView
+            android:id=&quot;@+id/productImage&quot;
+            android:layout_width=&quot;match_parent&quot;
+            android:layout_height=&quot;150dp&quot;
+            android:scaleType=&quot;centerCrop&quot; /&gt;
+
+        &lt;LinearLayout
+            android:layout_width=&quot;match_parent&quot;
+            android:layout_height=&quot;wrap_content&quot;
+            android:orientation=&quot;vertical&quot;
+            android:padding=&quot;12dp&quot;&gt;
+
+            &lt;TextView
+                android:id=&quot;@+id/productName&quot;
+                android:layout_width=&quot;wrap_content&quot;
+                android:layout_height=&quot;wrap_content&quot;
+                android:textAppearance=&quot;?attr/textAppearanceTitleSmall&quot; /&gt;
+
+            &lt;TextView
+                android:id=&quot;@+id/productCategory&quot;
+                android:layout_width=&quot;wrap_content&quot;
+                android:layout_height=&quot;wrap_content&quot;
+                android:textAppearance=&quot;?attr/textAppearanceBodySmall&quot; /&gt;
+
+            &lt;TextView
+                android:id=&quot;@+id/productPrice&quot;
+                android:layout_width=&quot;wrap_content&quot;
+                android:layout_height=&quot;wrap_content&quot;
+                android:textAppearance=&quot;?attr/textAppearanceTitleMedium&quot; /&gt;
+        &lt;/LinearLayout&gt;
+    &lt;/LinearLayout&gt;
+&lt;/com.google.android.material.card.MaterialCardView&gt;
+</code></pre>
+<pre><span class="code-lang">kotlin</span><button class="copy-btn" aria-label="Copy code">Copy</button><code class="language-kotlin">// Bind data in your RecyclerView.Adapter
+class RecommendationViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    private val productImage: ImageView = view.findViewById(R.id.productImage)
+    private val productName: TextView = view.findViewById(R.id.productName)
+    private val productCategory: TextView = view.findViewById(R.id.productCategory)
+    private val productPrice: TextView = view.findViewById(R.id.productPrice)
+
+    fun bind(item: Map&lt;String, String&gt;) {
+        productName.text = item[&quot;ssot__Name__c&quot;]
+        productCategory.text = item[&quot;ssot__PrimaryProductCategory__c&quot;]
+        productPrice.text = &quot;${item[&quot;UnitPrice__c&quot;]}&quot;
+
+        // Use Glide, Coil, or Picasso to load the image
+        Glide.with(itemView.context)
+            .load(item[&quot;ImageUrl__c&quot;])
+            .into(productImage)
+    }
+}
+</code></pre>
+<div class="callout callout-tip"><p><span class="callout-label">💡 Tip:</span> Unlike web personalization, mobile apps don't need Handlebars templates or flicker defense. You have full control over the UI rendering using native components. Parse the JSON <code>data</code> array from the personalization response and map each field to your views.</p></div>
+<hr>
+<h2 id="4-tracking-engagement" tabindex="-1">4. Tracking Engagement</h2>
+<p>Tracking engagement (impressions and clicks) is essential for personalization analytics, attribution, and recommender model training. Without engagement tracking, Salesforce Personalization cannot measure the effectiveness of your decisions or improve recommendation quality over time.</p>
+<h3 id="what-to-track" tabindex="-1">What to Track</h3>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Event</th>
+<th>When to Send</th>
+<th>Required Data</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Impression</strong></td>
+<td>When a personalized element is displayed on screen (visible in the viewport)</td>
+<td><code>personalizationId</code>, <code>personalizationContentId</code></td>
+</tr>
+<tr>
+<td><strong>Click / Tap</strong></td>
+<td>When the user taps on a personalized element (e.g., taps a recommended product)</td>
+<td><code>personalizationId</code>, <code>personalizationContentId</code></td>
+</tr>
+<tr>
+<td><strong>Dismiss</strong></td>
+<td>When the user explicitly dismisses a personalized element (e.g., swipes away a card)</td>
+<td><code>personalizationId</code></td>
+</tr>
+</tbody>
+</table></div>
+<div class="callout callout-important"><p><span class="callout-label">⚠️ Important:</span> Use the <code>personalizationId</code> and <code>personalizationContentId</code> values from the decision response when sending engagement events. These IDs link the engagement back to the specific decision and item, enabling accurate attribution analytics and Pipeline Intelligence dashboards.</p></div>
+<h3 id="sending-engagement-events-ios-swift" tabindex="-1">Sending Engagement Events (iOS — Swift)</h3>
+<div class="callout callout-validation"><p><span class="callout-label">🔍 Needs Validation:</span> Verify the exact method signatures for mobile engagement tracking against the latest <a href="https://developer.salesforce.com/docs/marketing/einstein-personalization/guide/mobile-sdk-overview.html" target="_blank" rel="noopener noreferrer">Salesforce Interactions Mobile SDK documentation</a>.</p></div>
+<pre><span class="code-lang">swift</span><button class="copy-btn" aria-label="Copy code">Copy</button><code class="language-swift">// Track an impression when a recommendation becomes visible
+SalesforceInteractions.shared.sendEvent(
+    interaction: .init(
+        eventType: &quot;engagement&quot;,
+        interactionName: &quot;View Product Recommendation&quot;,
+        personalizationId: personalization.personalizationId,
+        personalizationContentId: item.personalizationContentId
+    )
+)
+
+// Track a click/tap when the user taps a recommended item
+SalesforceInteractions.shared.sendEvent(
+    interaction: .init(
+        eventType: &quot;engagement&quot;,
+        interactionName: &quot;Click Product Recommendation&quot;,
+        personalizationId: personalization.personalizationId,
+        personalizationContentId: item.personalizationContentId
+    )
+)
+</code></pre>
+<h3 id="sending-engagement-events-android-kotlin" tabindex="-1">Sending Engagement Events (Android — Kotlin)</h3>
+<pre><span class="code-lang">kotlin</span><button class="copy-btn" aria-label="Copy code">Copy</button><code class="language-kotlin">// Track an impression when a recommendation becomes visible
+SalesforceInteractions.sendEvent(
+    interaction = Interaction(
+        eventType = &quot;engagement&quot;,
+        interactionName = &quot;View Product Recommendation&quot;,
+        personalizationId = personalization.personalizationId,
+        personalizationContentId = item.personalizationContentId
+    )
+)
+
+// Track a click/tap when the user taps a recommended item
+SalesforceInteractions.sendEvent(
+    interaction = Interaction(
+        eventType = &quot;engagement&quot;,
+        interactionName = &quot;Click Product Recommendation&quot;,
+        personalizationId = personalization.personalizationId,
+        personalizationContentId = item.personalizationContentId
+    )
+)
+</code></pre>
+<h3 id="impression-tracking-best-practices" tabindex="-1">Impression Tracking Best Practices</h3>
+<p>On mobile, determining when content is &quot;visible&quot; requires viewport-awareness logic:</p>
+<ul>
+<li><strong>iOS:</strong> Use <code>onAppear</code> (SwiftUI) or implement <code>UICollectionViewDelegate</code>'s <code>willDisplay</code> / <code>didEndDisplaying</code> methods (UIKit) to detect when a recommendation card enters the viewport.</li>
+<li><strong>Android:</strong> Use <code>LazyListState</code> visibility checks (Compose) or <code>RecyclerView.OnChildAttachStateChangeListener</code> (Views) to detect item visibility.</li>
+<li><strong>Fire once per session:</strong> Track each impression only once per user session to avoid inflating metrics. Use a local set to deduplicate by <code>personalizationContentId</code>.</li>
+</ul>
+<pre><span class="code-lang">swift</span><button class="copy-btn" aria-label="Copy code">Copy</button><code class="language-swift">// SwiftUI — track impression when a card appears
+RecommendationCard(item: item)
+    .onAppear {
+        trackImpressionIfNeeded(for: item)
+    }
+</code></pre>
+<pre><span class="code-lang">kotlin</span><button class="copy-btn" aria-label="Copy code">Copy</button><code class="language-kotlin">// Jetpack Compose — track impression when a card appears
+LaunchedEffect(item.personalizationContentId) {
+    trackImpressionIfNeeded(item)
+}
+</code></pre>
+<hr>
+<h2 id="5-mobile-specific-considerations" tabindex="-1">5. Mobile-Specific Considerations</h2>
+<h3 id="5a-offline-handling" tabindex="-1">5A. Offline Handling</h3>
+<p>Mobile apps must gracefully handle scenarios where the device is offline or has intermittent connectivity.</p>
+<p><strong>Recommendations:</strong></p>
+<ul>
+<li><strong>Cache the last successful personalization response</strong> locally (using UserDefaults/SharedPreferences or a local database). When offline, display cached recommendations with a &quot;last updated&quot; indicator.</li>
+<li><strong>Queue behavioral events</strong> when the device is offline and send them in batch when connectivity is restored. The Salesforce Interactions Mobile SDK handles event queuing automatically.</li>
+<li><strong>Set appropriate timeouts</strong> on personalization fetch requests to avoid blocking the UI. Fallback to cached content or a default experience after the timeout.</li>
+</ul>
+<pre><span class="code-lang">swift</span><button class="copy-btn" aria-label="Copy code">Copy</button><code class="language-swift">// iOS — Simple caching strategy
+func fetchPersonalization() {
+    SalesforceInteractions.shared.personalization.fetch(
+        personalizationPoints: [&quot;home_recommendations&quot;]
+    ) { [weak self] result in
+        switch result {
+        case .success(let response):
+            self?.cache.store(response)  // Cache for offline use
+            self?.renderRecommendations(response)
+        case .failure:
+            if let cached = self?.cache.loadLastResponse() {
+                self?.renderRecommendations(cached)  // Use cached data
+            } else {
+                self?.showDefaultContent()  // Fallback
+            }
+        }
+    }
+}
+</code></pre>
+<pre><span class="code-lang">kotlin</span><button class="copy-btn" aria-label="Copy code">Copy</button><code class="language-kotlin">// Android — Simple caching strategy
+fun fetchPersonalization() {
+    SalesforceInteractions.personalization.fetch(
+        personalizationPoints = listOf(&quot;home_recommendations&quot;)
+    ) { result -&gt;
+        result.onSuccess { response -&gt;
+            cache.store(response)  // Cache for offline use
+            renderRecommendations(response)
+        }
+        result.onFailure {
+            val cached = cache.loadLastResponse()
+            if (cached != null) {
+                renderRecommendations(cached)  // Use cached data
+            } else {
+                showDefaultContent()  // Fallback
+            }
+        }
+    }
+}
+</code></pre>
+<div class="callout callout-tip"><p><span class="callout-label">💡 Tip:</span> The SDK's event queue ensures that behavioral events captured while offline are not lost. They are automatically replayed when the device reconnects, keeping the user's real-time profile up to date.</p></div>
+<h3 id="5b-deep-linking" tabindex="-1">5B. Deep Linking</h3>
+<p>When personalized content includes links to products or articles (via fields like <code>PurchaseUrl__c</code>), you should handle these with <strong>deep links</strong> rather than opening a web browser:</p>
+<ul>
+<li><strong>Map <code>PurchaseUrl__c</code> (or similar URL fields) to in-app screens.</strong> Parse the URL to extract product IDs, category paths, or article slugs, then navigate to the corresponding native screen.</li>
+<li><strong>Use Universal Links (iOS) and App Links (Android)</strong> to handle cases where the URL might be shared externally and needs to route back into the app.</li>
+<li><strong>Track deep link engagement</strong> by sending interaction events when users navigate through personalized deep links.</li>
+</ul>
+<pre><span class="code-lang">swift</span><button class="copy-btn" aria-label="Copy code">Copy</button><code class="language-swift">// iOS — Navigate to a product detail screen from a recommendation
+func handleRecommendationTap(item: [String: String]) {
+    // Track the tap engagement
+    trackClick(for: item)
+
+    // Extract product SKU and navigate natively
+    if let sku = item[&quot;ssot__ProductSKU__c&quot;] {
+        let productDetail = ProductDetailView(sku: sku)
+        navigationController?.pushViewController(productDetail, animated: true)
+    }
+}
+</code></pre>
+<pre><span class="code-lang">kotlin</span><button class="copy-btn" aria-label="Copy code">Copy</button><code class="language-kotlin">// Android — Navigate to a product detail screen from a recommendation
+fun handleRecommendationTap(item: Map&lt;String, String&gt;) {
+    // Track the tap engagement
+    trackClick(item)
+
+    // Extract product SKU and navigate natively
+    val sku = item[&quot;ssot__ProductSKU__c&quot;]
+    if (sku != null) {
+        val intent = Intent(context, ProductDetailActivity::class.java).apply {
+            putExtra(&quot;product_sku&quot;, sku)
+        }
+        context.startActivity(intent)
+    }
+}
+</code></pre>
+<h3 id="5c-push-notification-personalization-triggers" tabindex="-1">5C. Push Notification Personalization Triggers</h3>
+<p>Push notifications can serve as a trigger to request and display personalized content when the user opens the app:</p>
+<ol>
+<li><strong>Trigger a personalization request on notification open.</strong> When a push notification deep links into the app, immediately fetch personalized content for the landing screen.</li>
+<li><strong>Include context data in the push payload.</strong> If the notification is about a specific product category or campaign, pass that context to the personalization fetch request so recommendations are relevant to the notification content.</li>
+<li><strong>Send a notification-open event</strong> via the SDK so that the interaction is captured in Data Cloud and available in the user's profile for future decisioning.</li>
+</ol>
+<pre><span class="code-lang">swift</span><button class="copy-btn" aria-label="Copy code">Copy</button><code class="language-swift">// iOS — Handle push notification and fetch contextual personalization
+func userNotificationCenter(
+    _ center: UNUserNotificationCenter,
+    didReceive response: UNNotificationResponse,
+    withCompletionHandler completionHandler: @escaping () -&gt; Void
+) {
+    let userInfo = response.notification.request.content.userInfo
+
+    // Send notification open event
+    SalesforceInteractions.shared.sendEvent(
+        interaction: .init(
+            eventType: &quot;engagement&quot;,
+            interactionName: &quot;Push Notification Open&quot;
+        )
+    )
+
+    // Fetch personalization for the landing screen
+    SalesforceInteractions.shared.personalization.fetch(
+        personalizationPoints: [&quot;notification_landing_recs&quot;]
+    ) { result in
+        // Handle response and render personalized content
+    }
+
+    completionHandler()
+}
+</code></pre>
+<pre><span class="code-lang">kotlin</span><button class="copy-btn" aria-label="Copy code">Copy</button><code class="language-kotlin">// Android — Handle push notification and fetch contextual personalization
+class NotificationHandler : FirebaseMessagingService() {
+    fun handleNotificationOpen(data: Map&lt;String, String&gt;) {
+        // Send notification open event
+        SalesforceInteractions.sendEvent(
+            interaction = Interaction(
+                eventType = &quot;engagement&quot;,
+                interactionName = &quot;Push Notification Open&quot;
+            )
+        )
+
+        // Fetch personalization for the landing screen
+        SalesforceInteractions.personalization.fetch(
+            personalizationPoints = listOf(&quot;notification_landing_recs&quot;)
+        ) { result -&gt;
+            // Handle response and render personalized content
+        }
+    }
+}
+</code></pre>
+<h3 id="5d-identity-management-in-mobile" tabindex="-1">5D. Identity Management in Mobile</h3>
+<p>Mobile apps have a unique advantage over websites when it comes to identity resolution: users are often logged in, providing a known identity for personalization.</p>
+<ul>
+<li><strong>Pass the user's login credentials</strong> (email, user ID, or CRM contact ID) as identity attributes when the user authenticates in the app. This links the mobile profile to the unified individual across channels.</li>
+<li><strong>Handle anonymous-to-known transitions.</strong> When a user browses the app without logging in and then signs in, the SDK associates the anonymous device ID with the authenticated identity. Identity resolution merges the anonymous profile into the known individual's record.</li>
+<li><strong>Use the same identity identifiers as your web implementation</strong> to ensure cross-channel profile unification. If your web sitemap sends <code>email</code> and <code>userId</code>, send the same fields from mobile.</li>
+</ul>
+<pre><span class="code-lang">swift</span><button class="copy-btn" aria-label="Copy code">Copy</button><code class="language-swift">// iOS — Send identity event on user login
+func onUserLogin(email: String, userId: String, firstName: String, lastName: String) {
+    SalesforceInteractions.shared.sendEvent(
+        interaction: .init(
+            eventType: &quot;identity&quot;,
+            identity: .init(
+                email: email,
+                userId: userId,
+                firstName: firstName,
+                lastName: lastName
+            )
+        )
+    )
+}
+</code></pre>
+<pre><span class="code-lang">kotlin</span><button class="copy-btn" aria-label="Copy code">Copy</button><code class="language-kotlin">// Android — Send identity event on user login
+fun onUserLogin(email: String, userId: String, firstName: String, lastName: String) {
+    SalesforceInteractions.sendEvent(
+        interaction = Interaction(
+            eventType = &quot;identity&quot;,
+            identity = Identity(
+                email = email,
+                userId = userId,
+                firstName = firstName,
+                lastName = lastName
+            )
+        )
+    )
+}
+</code></pre>
+<div class="callout callout-tip"><p><span class="callout-label">💡 Tip:</span> Mobile provides more reliable identity data than web since users tend to stay logged in. Use this advantage to deliver more precisely targeted personalization by ensuring identity events are sent promptly at login.</p></div>
+<h3 id="5e-data-space-configuration-for-mobile" tabindex="-1">5E. Data Space Configuration for Mobile</h3>
+<p>If your org uses multiple data spaces, configure the data space when initializing the Mobile SDK — just as you would with the Web SDK:</p>
+<pre><span class="code-lang">swift</span><button class="copy-btn" aria-label="Copy code">Copy</button><code class="language-swift">// iOS — Configure data space during initialization
+SalesforceInteractions.shared.initialize(
+    configuration: .init(
+        consents: [],
+        personalization: .init(
+            dataspace: &quot;personalizationDemo&quot;
+        )
+    )
+)
+</code></pre>
+<pre><span class="code-lang">kotlin</span><button class="copy-btn" aria-label="Copy code">Copy</button><code class="language-kotlin">// Android — Configure data space during initialization
+SalesforceInteractions.initialize(
+    configuration = Configuration(
+        consents = emptyList(),
+        personalization = PersonalizationConfig(
+            dataspace = &quot;personalizationDemo&quot;
+        )
+    )
+)
+</code></pre>
+<div class="callout callout-note"><p><span class="callout-label">📝 Note:</span> If you don't specify a data space, the SDK uses the <code>default</code> data space. All personalization points in a single request must belong to the same data space.</p></div>
+<hr>
+<h2 id="mobile-vs-web-key-differences-summary" tabindex="-1">Mobile vs. Web: Key Differences Summary</h2>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>Web</th>
+<th>Mobile</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>SDK Installation</strong></td>
+<td>CDN <code>&lt;script&gt;</code> tag in HTML <code>&lt;head&gt;</code></td>
+<td>CocoaPods/SPM (iOS) or Gradle (Android) dependency</td>
+</tr>
+<tr>
+<td><strong>Sitemap</strong></td>
+<td>JavaScript sitemap with page types, <code>isMatch</code> logic, content zones</td>
+<td>Native code event tracking — no content zones needed</td>
+</tr>
+<tr>
+<td><strong>Personalization Rendering</strong></td>
+<td>Handlebars templates convert JSON → HTML</td>
+<td>Native UI components (SwiftUI, UIKit, Compose, XML)</td>
+</tr>
+<tr>
+<td><strong>Flicker Defense</strong></td>
+<td>Required — prevents FOUC while personalization loads</td>
+<td>Not needed — native apps control render timing</td>
+</tr>
+<tr>
+<td><strong>Content Zones</strong></td>
+<td>CSS selectors target DOM elements for injection</td>
+<td>Not applicable — you control the full native layout</td>
+</tr>
+<tr>
+<td><strong>Engagement Tracking</strong></td>
+<td>WPM configures tracking destinations automatically</td>
+<td>Manual — send <code>personalizationId</code> and <code>personalizationContentId</code> via SDK events</td>
+</tr>
+<tr>
+<td><strong>Web Personalization Manager</strong></td>
+<td>WYSIWYG overlay for business users to add experiences</td>
+<td>Not available — mobile experiences are configured via the Personalization app + code</td>
+</tr>
+<tr>
+<td><strong>Offline Handling</strong></td>
+<td>Limited — web typically requires connectivity</td>
+<td>SDK queues events; app can cache responses for offline display</td>
+</tr>
+<tr>
+<td><strong>Identity</strong></td>
+<td>Anonymous-heavy (cookie-based <code>deviceId</code>)</td>
+<td>Often authenticated (logged-in users provide known identity)</td>
+</tr>
+</tbody>
+</table></div>
+<hr>
+<h2 id="whats-next" tabindex="-1">What's Next?</h2>
+<p>With mobile personalization set up, explore these related topics:</p>
+<ul>
+<li><strong><a href="/personalization-api/">Personalization API</a></strong> — Learn the full Decisioning API request/response format for server-side and headless personalization</li>
+<li><strong><a href="/experimentation/">Experimentation</a></strong> — Set up A/B tests on your personalization points to optimize mobile experiences</li>
+<li><strong><a href="/batch-personalization/">Batch Personalization</a></strong> — Generate personalized recommendations at scale for push notifications and other batch-processed channels</li>
+</ul>
+
+      </article>
+
+      <!-- Previous / Next Navigation -->
+      <nav class="prev-next" aria-label="Page navigation">
+        <a href="/web-implementation/web-personalization-manager/" class="prev-next-btn pn-prev">
+      <span class="pn-direction">← Previous</span>
+      <span class="pn-title">Web Personalization Manager (WPM)</span>
+    </a><a href="/personalization-api/" class="prev-next-btn pn-next">
+      <span class="pn-direction">Next →</span>
+      <span class="pn-title">Personalization API (Decisioning API)</span>
+    </a>
+      </nav>
+
+      <!-- End-of-page Donation CTA -->
+      <div class="donate-cta">
+        <p>Found this guide helpful?</p>
+        <a href="https://buymeacoffee.com/YOUR_USERNAME" target="_blank" rel="noopener noreferrer" class="donate-btn donate-btn-cta">Buy Me a Latte ☕</a>
+      </div>
+    </main>
+  </div>
+
+  <!-- ==================== FOOTER AD ==================== -->
+  <div class="ad-container ad-footer">
+    <span class="ad-label">Advertisement</span>
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+         data-ad-slot="XXXXXXXXXX"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p class="footer-title">Salesforce Personalization Implementation Guide</p>
+      <p class="footer-subtitle">Based on documentation as of March 2026</p>
+      <p class="footer-disclaimer">This is an educational resource. Verify all information against the latest <a href="https://help.salesforce.com/" target="_blank" rel="noopener noreferrer">Salesforce documentation</a>. Salesforce releases updates three times per year.</p>
+      <p class="footer-donate">
+        <a href="https://buymeacoffee.com/YOUR_USERNAME" target="_blank" rel="noopener noreferrer">Support this project — Buy Me a Latte ☕</a>
+      </p>
+    </div>
+  </footer>
+
+  <script src="../js/main.js"></script>
+  <script src="../js/copy-code.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (typeof mermaid !== 'undefined') {
+        mermaid.initialize({ startOnLoad: false, theme: 'default' });
+        document.querySelectorAll('pre > code.language-mermaid').forEach(function(el) {
+          var pre = el.parentElement;
+          var container = document.createElement('div');
+          container.className = 'mermaid';
+          container.textContent = el.textContent;
+          pre.parentNode.replaceChild(container, pre);
+        });
+        mermaid.run();
+      }
+    });
+  </script>
+</body>
+</html>

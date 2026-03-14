@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Experiments — Salesforce Personalization Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/style.css">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body>
+
+  <!-- ==================== TOP NAV BAR ==================== -->
+  <nav class="navbar" id="navbar">
+    <div class="navbar-inner">
+      <a href="../../" class="navbar-brand">Salesforce Personalization Guide</a>
+
+      <button class="hamburger" id="hamburger" aria-label="Toggle navigation" aria-expanded="false">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+      </button>
+
+      <div class="navbar-menu" id="navbar-menu">
+        <ul class="nav-list">
+          <li class="nav-item"><a href="../../" class="nav-link">Home</a></li>
+          <li class="nav-item"><a href="../../setup-permissions/" class="nav-link">Setup &amp; Permissions</a></li>
+
+          <li class="nav-item has-dropdown">
+            <a href="../../data-capturing-modeling/" class="nav-link dropdown-toggle">Data Capturing &amp; Modeling <span class="dropdown-arrow">▾</span></a>
+            <ul class="dropdown-menu">
+              <li><a href="../../data-capturing-modeling/">Overview</a></li>
+              <li><a href="../../data-capturing-modeling/web-data-capturing/">Web Data Capturing</a></li>
+              <li><a href="../../data-capturing-modeling/mobile-data-capturing/">Mobile Data Capturing</a></li>
+              <li><a href="../../data-capturing-modeling/dlo-dmo-mapping-ir/">DLO-DMO Mapping &amp; IR</a></li>
+              <li><a href="../../data-capturing-modeling/data-graphs/">Data Graphs</a></li>
+              <li><a href="../../data-capturing-modeling/calculated-insights/">Calculated Insights</a></li>
+            </ul>
+          </li>
+
+          <li class="nav-item has-dropdown">
+            <a href="../../web-implementation/" class="nav-link dropdown-toggle">Web Implementation <span class="dropdown-arrow">▾</span></a>
+            <ul class="dropdown-menu">
+              <li><a href="../../web-implementation/">Overview</a></li>
+              <li><a href="../../web-implementation/personalization-types/">Personalization Types</a></li>
+              <li><a href="../../web-implementation/recommenders/">Recommenders</a></li>
+              <li><a href="../../web-implementation/response-templates/">Response Templates</a></li>
+              <li><a href="../../web-implementation/personalization-points/">Personalization Points</a></li>
+              <li><a href="../../web-implementation/decisions/">Decisions</a></li>
+              <li><a href="../../web-implementation/experiments/">Experiments</a></li>
+              <li><a href="../../web-implementation/web-templates/">Web Templates</a></li>
+              <li><a href="../../web-implementation/web-personalization-manager/">Web Personalization Manager</a></li>
+            </ul>
+          </li>
+
+          <li class="nav-item"><a href="../../mobile-implementation/" class="nav-link">Mobile Implementation</a></li>
+          <li class="nav-item"><a href="../../personalization-api/" class="nav-link">Personalization API</a></li>
+          <li class="nav-item"><a href="../../experimentation/" class="nav-link">Experimentation</a></li>
+          <li class="nav-item"><a href="../../batch-personalization/" class="nav-link">Batch Personalization</a></li>
+        </ul>
+
+        <a href="https://buymeacoffee.com/YOUR_USERNAME" target="_blank" rel="noopener noreferrer" class="donate-btn donate-btn-nav">
+          <span class="donate-btn-label">Buy Me a Latte ☕</span>
+          <span class="donate-btn-emoji">☕</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ==================== HEADER AD ==================== -->
+  <div class="ad-container ad-header">
+    <span class="ad-label">Advertisement</span>
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+         data-ad-slot="XXXXXXXXXX"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+
+  <!-- ==================== PAGE LAYOUT ==================== -->
+  <div class="page-wrapper">
+
+    <!-- ---- SIDEBAR ---- -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-inner">
+        <nav class="toc" id="toc" aria-label="Table of Contents">
+          <h3 class="toc-title">On This Page</h3>
+          <ul>
+  <li><a href="#how-experiments-work">How Experiments Work</a></li>
+  <li><a href="#experiment-components">Experiment Components</a></li>
+  <li class="toc-h3"><a href="#primary-secondary-metrics">Primary &amp; Secondary Metrics</a></li>
+  <li class="toc-h3"><a href="#targeting-rules">Targeting Rules</a></li>
+  <li class="toc-h3"><a href="#cohorts">Cohorts</a></li>
+  <li class="toc-h3"><a href="#control-cohort">Control Cohort</a></li>
+  <li><a href="#creating-an-experiment-step-by-step">Creating an Experiment — Step by Step</a></li>
+  <li><a href="#runtime-behavior">Runtime Behavior</a></li>
+  <li><a href="#viewing-experiment-analytics">Viewing Experiment Analytics</a></li>
+  <li class="toc-h3"><a href="#what-youll-see">What You'll See</a></li>
+  <li><a href="#experiment-lifecycle">Experiment Lifecycle</a></li>
+  <li class="toc-h3"><a href="#duration">Duration</a></li>
+  <li class="toc-h3"><a href="#managing-completed-experiments">Managing Completed Experiments</a></li>
+  <li class="toc-h3"><a href="#starting-a-new-experiment">Starting a New Experiment</a></li>
+  <li><a href="#best-practices">Best Practices</a></li>
+</ul>
+        </nav>
+
+        <!-- Sidebar Donation Card -->
+        <div class="donate-card">
+          <span class="donate-card-emoji">☕</span>
+          <p class="donate-card-heading">Enjoying this guide?</p>
+          <a href="https://buymeacoffee.com/YOUR_USERNAME" target="_blank" rel="noopener noreferrer" class="donate-btn donate-btn-sidebar">Buy Me a Latte</a>
+        </div>
+
+        <!-- Sidebar Ad -->
+        <div class="ad-container ad-sidebar">
+          <span class="ad-label">Advertisement</span>
+          <ins class="adsbygoogle"
+               style="display:block"
+               data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+               data-ad-slot="XXXXXXXXXX"
+               data-ad-format="auto"
+               data-full-width-responsive="true"></ins>
+          <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ---- MAIN CONTENT ---- -->
+    <main class="content" id="content">
+      <!-- Breadcrumbs -->
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <a href="/">Home</a><span class="breadcrumb-sep"> &gt; </span><a href="/web-implementation/">Web Implementation</a><span class="breadcrumb-sep"> &gt; </span><span class="breadcrumb-current">Experiments</span>
+      </nav>
+
+      <!-- Page Content (H1 + body from Markdown) -->
+      <article class="article">
+        <h1 id="experiments" tabindex="-1">Experiments</h1>
+<p>An <strong>experiment</strong> lets you A/B test different decisioning strategies on a personalization point. By splitting traffic into cohorts — each receiving a different decision configuration — you can measure which approach best achieves your business objectives.</p>
+<hr>
+<h2 id="how-experiments-work" tabindex="-1">How Experiments Work</h2>
+<p>An experiment is configured directly on a <a href="/web-implementation/personalization-points/">personalization point</a> and is treated as the <strong>highest priority item</strong> on that point. When a request comes in:</p>
+<ol>
+<li>The individual is evaluated against the experiment first (before any decisions)</li>
+<li>If the individual qualifies based on targeting rules, they are randomly assigned to a cohort</li>
+<li>The cohort's decision configuration determines the response</li>
+</ol>
+<div class="callout callout-important"><p><span class="callout-label">⚠️ Important:</span> Only <strong>one experiment</strong> can be active on a personalization point at a time. If you need to run a new experiment, you must first archive or delete the existing one.</p></div>
+<hr>
+<h2 id="experiment-components" tabindex="-1">Experiment Components</h2>
+<h3 id="primary-secondary-metrics" tabindex="-1">Primary &amp; Secondary Metrics</h3>
+<p>Metrics define how the experiment is measured. They come from <strong>engagement signal metrics</strong> where the underlying engagement DMO exists on the selected profile data graph.</p>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Metric Type</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Primary Metric</strong></td>
+<td>Determines the <strong>winning cohort</strong>. Only one primary metric per experiment.</td>
+</tr>
+<tr>
+<td><strong>Secondary Metrics</strong></td>
+<td>Displayed in the experiment analytics screen for additional insight. Add as many as needed.</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Example:</strong> For a product recommendations experiment:</p>
+<ul>
+<li><strong>Primary Metric:</strong> Purchase conversion rate (compound metric = purchases ÷ product browses)</li>
+<li><strong>Secondary Metric:</strong> Revenue per visitor, click-through rate</li>
+</ul>
+<h3 id="targeting-rules" tabindex="-1">Targeting Rules</h3>
+<p>Optionally restrict the experiment to a subset of individuals. The available targeting rules are the same as those on <a href="/web-implementation/decisions/">decisions</a>:</p>
+<ul>
+<li>Profile DG attributes (direct and related)</li>
+<li>Calculated Insights</li>
+<li>Segment memberships</li>
+<li>Contextual rules</li>
+</ul>
+<p>If no targeting rules are applied, <strong>all individuals</strong> are eligible for the experiment.</p>
+<h3 id="cohorts" tabindex="-1">Cohorts</h3>
+<p>Cohorts represent the possible decision configurations that an individual could receive. Each cohort has:</p>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Name</strong></td>
+<td>A descriptive label (e.g., &quot;ML Recommendations&quot;, &quot;Top Sellers&quot;, &quot;Control&quot;)</td>
+</tr>
+<tr>
+<td><strong>Traffic Allocation</strong></td>
+<td>Percentage of eligible traffic routed to this cohort. All cohort allocations must sum to 100%.</td>
+</tr>
+<tr>
+<td><strong>Decision Configuration</strong></td>
+<td>The same configuration options as a standard decision — personalization attributes and/or recommender selection, depending on the personalization type.</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="control-cohort" tabindex="-1">Control Cohort</h3>
+<p>You can optionally designate a cohort as the <strong>control cohort</strong>. The control cohort can be configured to <strong>fall through</strong> to be evaluated against any other decisions configured on the personalization point. This is useful for comparing a new personalization experience against whatever the individual would have received without the experiment.</p>
+<hr>
+<h2 id="creating-an-experiment-step-by-step" tabindex="-1">Creating an Experiment — Step by Step</h2>
+<ol>
+<li>Navigate to the <strong>Personalization</strong> app → <strong>Personalization Points</strong></li>
+<li>Open the personalization point where you want to run the experiment</li>
+<li>In the <strong>Experiments</strong> section, click <strong>New Experiment</strong></li>
+<li>Select the <strong>primary metric</strong> (e.g., purchase count, click-through rate)</li>
+<li>Optionally add <strong>secondary metrics</strong></li>
+<li>Optionally configure <strong>targeting rules</strong> to limit the experiment audience</li>
+<li>Add <strong>cohorts</strong>:
+<ul>
+<li>Give each cohort a name</li>
+<li>Set the <strong>traffic allocation</strong> percentage</li>
+<li>Configure the cohort's decision settings (personalization attributes and/or recommender)</li>
+</ul>
+</li>
+<li>Optionally designate one cohort as the <strong>control cohort</strong></li>
+<li>Save and activate the experiment</li>
+</ol>
+<hr>
+
+  <div class="ad-container ad-in-content">
+    <span class="ad-label">Advertisement</span>
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+         data-ad-slot="XXXXXXXXXX"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+<h2 id="runtime-behavior" tabindex="-1">Runtime Behavior</h2>
+<p>When an experiment is active on a personalization point:</p>
+<pre><button class="copy-btn" aria-label="Copy code">Copy</button><code class="language-">Individual requests personalization point
+│
+├── Experiment active? → YES
+│   │
+│   ├── Individual qualifies (targeting rules)? → YES
+│   │   └── Randomly assign to a cohort based on traffic allocation
+│   │       └── Return the cohort's decision response ✓
+│   │
+│   └── Individual does NOT qualify → Skip experiment
+│       └── Evaluate standard decisions by priority ↓
+│
+└── No experiment → Evaluate standard decisions by priority
+</code></pre>
+<div class="callout callout-warning"><p><span class="callout-label">🚨 Warning:</span> Since experiments are the highest-priority item on a point, applying an experiment with <strong>no targeting rules</strong> will route <strong>all traffic</strong> through the experiment. Expect a <strong>dip in analytics</strong> for any underlying decisions during the experiment period, as traffic is diverted away from them.</p></div>
+<hr>
+<h2 id="viewing-experiment-analytics" tabindex="-1">Viewing Experiment Analytics</h2>
+<ol>
+<li>Navigate to the <strong>Personalization</strong> app → <strong>Experiments</strong> tab</li>
+<li>Click on the experiment to open its detail page</li>
+<li>Go to the <strong>Analytics</strong> tab</li>
+<li>Review cohort performance against the primary and secondary metrics</li>
+</ol>
+<div class="callout callout-note"><p><span class="callout-label">📝 Note:</span> Experiment data is processed with a <strong>24-hour delay</strong>. Results will not appear immediately after the experiment starts.</p></div>
+<h3 id="what-youll-see" tabindex="-1">What You'll See</h3>
+<ul>
+<li><strong>Cohort comparison</strong> — Side-by-side performance of each cohort</li>
+<li><strong>Primary metric results</strong> — The metric that determines the winner</li>
+<li><strong>Secondary metric results</strong> — Additional context metrics</li>
+<li><strong>Statistical significance</strong> — Confidence level of the results</li>
+</ul>
+<hr>
+<h2 id="experiment-lifecycle" tabindex="-1">Experiment Lifecycle</h2>
+<h3 id="duration" tabindex="-1">Duration</h3>
+<p>Experiments stop processing data after <strong>90 days</strong>. Plan your experiment duration accordingly — ensure you have enough traffic and time to reach statistical significance within this window.</p>
+<h3 id="managing-completed-experiments" tabindex="-1">Managing Completed Experiments</h3>
+<p>When you're done with an experiment, you have two options:</p>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Action</th>
+<th>What Happens</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Archive</strong></td>
+<td>Removes the experiment from the personalization point's Related tab but retains all records and data. You can access archived experiment data from the Experiments tab. The experiment can no longer be used on a personalization point.</td>
+</tr>
+<tr>
+<td><strong>Delete</strong></td>
+<td>Permanently deletes the experiment and all its underlying objects. This action is irreversible.</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="starting-a-new-experiment" tabindex="-1">Starting a New Experiment</h3>
+<p>To create a new experiment on a personalization point that already has one:</p>
+<ol>
+<li><strong>Archive</strong> the existing experiment (preserves data), or</li>
+<li><strong>Delete</strong> the existing experiment (removes data)</li>
+<li>Create the new experiment</li>
+</ol>
+<hr>
+<h2 id="best-practices" tabindex="-1">Best Practices</h2>
+<ol>
+<li><strong>Define your hypothesis first</strong> — Before creating an experiment, clearly state what you're testing and what outcome you expect</li>
+<li><strong>Use meaningful metrics</strong> — Choose a primary metric directly tied to business value (revenue, conversion rate) rather than vanity metrics (page views)</li>
+<li><strong>Run long enough</strong> — Give the experiment enough time to collect statistically significant results. Avoid drawing conclusions from the first few hours of data</li>
+<li><strong>Include a control cohort</strong> — Comparing against a control gives you a true measure of personalization lift</li>
+<li><strong>Limit concurrent changes</strong> — Don't modify decisions or recommenders on the same point while an experiment is running — it invalidates the results</li>
+<li><strong>Document your learnings</strong> — When archiving an experiment, note what you learned so future experiments build on previous insights</li>
+</ol>
+<hr>
+<p><strong>Next:</strong> <a href="/web-implementation/web-templates/">Web Templates (Transformers)</a> — Learn how to convert JSON decision responses into rendered HTML using Handlebars templates.</p>
+
+      </article>
+
+      <!-- Previous / Next Navigation -->
+      <nav class="prev-next" aria-label="Page navigation">
+        <a href="/web-implementation/decisions/" class="prev-next-btn pn-prev">
+      <span class="pn-direction">← Previous</span>
+      <span class="pn-title">Personalization Decisions</span>
+    </a><a href="/web-implementation/web-templates/" class="prev-next-btn pn-next">
+      <span class="pn-direction">Next →</span>
+      <span class="pn-title">Web Templates (Transformers)</span>
+    </a>
+      </nav>
+
+      <!-- End-of-page Donation CTA -->
+      <div class="donate-cta">
+        <p>Found this guide helpful?</p>
+        <a href="https://buymeacoffee.com/YOUR_USERNAME" target="_blank" rel="noopener noreferrer" class="donate-btn donate-btn-cta">Buy Me a Latte ☕</a>
+      </div>
+    </main>
+  </div>
+
+  <!-- ==================== FOOTER AD ==================== -->
+  <div class="ad-container ad-footer">
+    <span class="ad-label">Advertisement</span>
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+         data-ad-slot="XXXXXXXXXX"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p class="footer-title">Salesforce Personalization Implementation Guide</p>
+      <p class="footer-subtitle">Based on documentation as of March 2026</p>
+      <p class="footer-disclaimer">This is an educational resource. Verify all information against the latest <a href="https://help.salesforce.com/" target="_blank" rel="noopener noreferrer">Salesforce documentation</a>. Salesforce releases updates three times per year.</p>
+      <p class="footer-donate">
+        <a href="https://buymeacoffee.com/YOUR_USERNAME" target="_blank" rel="noopener noreferrer">Support this project — Buy Me a Latte ☕</a>
+      </p>
+    </div>
+  </footer>
+
+  <script src="../../js/main.js"></script>
+  <script src="../../js/copy-code.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (typeof mermaid !== 'undefined') {
+        mermaid.initialize({ startOnLoad: false, theme: 'default' });
+        document.querySelectorAll('pre > code.language-mermaid').forEach(function(el) {
+          var pre = el.parentElement;
+          var container = document.createElement('div');
+          container.className = 'mermaid';
+          container.textContent = el.textContent;
+          pre.parentNode.replaceChild(container, pre);
+        });
+        mermaid.run();
+      }
+    });
+  </script>
+</body>
+</html>

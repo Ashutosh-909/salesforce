@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Web Data Capturing — Salesforce Personalization Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/style.css">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body>
+
+  <!-- ==================== TOP NAV BAR ==================== -->
+  <nav class="navbar" id="navbar">
+    <div class="navbar-inner">
+      <a href="../../" class="navbar-brand">Salesforce Personalization Guide</a>
+
+      <button class="hamburger" id="hamburger" aria-label="Toggle navigation" aria-expanded="false">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+      </button>
+
+      <div class="navbar-menu" id="navbar-menu">
+        <ul class="nav-list">
+          <li class="nav-item"><a href="../../" class="nav-link">Home</a></li>
+          <li class="nav-item"><a href="../../setup-permissions/" class="nav-link">Setup &amp; Permissions</a></li>
+
+          <li class="nav-item has-dropdown">
+            <a href="../../data-capturing-modeling/" class="nav-link dropdown-toggle">Data Capturing &amp; Modeling <span class="dropdown-arrow">▾</span></a>
+            <ul class="dropdown-menu">
+              <li><a href="../../data-capturing-modeling/">Overview</a></li>
+              <li><a href="../../data-capturing-modeling/web-data-capturing/">Web Data Capturing</a></li>
+              <li><a href="../../data-capturing-modeling/mobile-data-capturing/">Mobile Data Capturing</a></li>
+              <li><a href="../../data-capturing-modeling/dlo-dmo-mapping-ir/">DLO-DMO Mapping &amp; IR</a></li>
+              <li><a href="../../data-capturing-modeling/data-graphs/">Data Graphs</a></li>
+              <li><a href="../../data-capturing-modeling/calculated-insights/">Calculated Insights</a></li>
+            </ul>
+          </li>
+
+          <li class="nav-item has-dropdown">
+            <a href="../../web-implementation/" class="nav-link dropdown-toggle">Web Implementation <span class="dropdown-arrow">▾</span></a>
+            <ul class="dropdown-menu">
+              <li><a href="../../web-implementation/">Overview</a></li>
+              <li><a href="../../web-implementation/personalization-types/">Personalization Types</a></li>
+              <li><a href="../../web-implementation/recommenders/">Recommenders</a></li>
+              <li><a href="../../web-implementation/response-templates/">Response Templates</a></li>
+              <li><a href="../../web-implementation/personalization-points/">Personalization Points</a></li>
+              <li><a href="../../web-implementation/decisions/">Decisions</a></li>
+              <li><a href="../../web-implementation/experiments/">Experiments</a></li>
+              <li><a href="../../web-implementation/web-templates/">Web Templates</a></li>
+              <li><a href="../../web-implementation/web-personalization-manager/">Web Personalization Manager</a></li>
+            </ul>
+          </li>
+
+          <li class="nav-item"><a href="../../mobile-implementation/" class="nav-link">Mobile Implementation</a></li>
+          <li class="nav-item"><a href="../../personalization-api/" class="nav-link">Personalization API</a></li>
+          <li class="nav-item"><a href="../../experimentation/" class="nav-link">Experimentation</a></li>
+          <li class="nav-item"><a href="../../batch-personalization/" class="nav-link">Batch Personalization</a></li>
+        </ul>
+
+        <a href="https://buymeacoffee.com/YOUR_USERNAME" target="_blank" rel="noopener noreferrer" class="donate-btn donate-btn-nav">
+          <span class="donate-btn-label">Buy Me a Latte ☕</span>
+          <span class="donate-btn-emoji">☕</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ==================== HEADER AD ==================== -->
+  <div class="ad-container ad-header">
+    <span class="ad-label">Advertisement</span>
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+         data-ad-slot="XXXXXXXXXX"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+
+  <!-- ==================== PAGE LAYOUT ==================== -->
+  <div class="page-wrapper">
+
+    <!-- ---- SIDEBAR ---- -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-inner">
+        <nav class="toc" id="toc" aria-label="Table of Contents">
+          <h3 class="toc-title">On This Page</h3>
+          <ul>
+  <li><a href="#overview">Overview</a></li>
+  <li><a href="#1-create-a-website-connector">1. Create a Website Connector</a></li>
+  <li class="toc-h3"><a href="#steps">Steps</a></li>
+  <li class="toc-h3"><a href="#multi-website-considerations">Multi-Website Considerations</a></li>
+  <li><a href="#2-upload-your-event-schema">2. Upload Your Event Schema</a></li>
+  <li class="toc-h3"><a href="#steps-1">Steps</a></li>
+  <li class="toc-h3"><a href="#updating-your-schema-later">Updating Your Schema Later</a></li>
+  <li class="toc-h3"><a href="#see-also">See Also</a></li>
+  <li><a href="#3-install-the-interactions-sdk-on-your-website">3. Install the Interactions SDK on Your Website</a></li>
+  <li class="toc-h3"><a href="#steps-2">Steps</a></li>
+  <li class="toc-h3"><a href="#see-also-1">See Also</a></li>
+  <li><a href="#4-build-a-sitemap">4. Build a Sitemap</a></li>
+  <li class="toc-h3"><a href="#creating-your-sitemap">Creating Your Sitemap</a></li>
+  <li class="toc-h3"><a href="#key-sitemap-components">Key Sitemap Components</a></li>
+  <li><a href="#5-web-schema-configuration">5. Web Schema Configuration</a></li>
+  <li class="toc-h3"><a href="#key-rules">Key Rules</a></li>
+  <li class="toc-h3"><a href="#building-schema-alongside-your-sitemap">Building Schema Alongside Your Sitemap</a></li>
+  <li><a href="#6-deploy-website-data-streams">6. Deploy Website Data Streams</a></li>
+  <li class="toc-h3"><a href="#steps-3">Steps</a></li>
+  <li class="toc-h3"><a href="#key-considerations">Key Considerations</a></li>
+  <li><a href="#7-map-dlos-to-dmos">7. Map DLOs to DMOs</a></li>
+  <li class="toc-h3"><a href="#how-to-start-mapping">How to Start Mapping</a></li>
+  <li class="toc-h3"><a href="#key-mapping-considerations">Key Mapping Considerations</a></li>
+  <li class="toc-h3"><a href="#common-field-mappings">Common Field Mappings</a></li>
+  <li class="toc-h3"><a href="#behavioral-events-data-mapping">Behavioral Events Data Mapping</a></li>
+  <li class="toc-h3"><a href="#contact-point-email-data-mapping">Contact Point Email Data Mapping</a></li>
+  <li class="toc-h3"><a href="#contact-point-phone-data-mapping">Contact Point Phone Data Mapping</a></li>
+  <li class="toc-h3"><a href="#identity-data-mapping">Identity Data Mapping</a></li>
+  <li class="toc-h3"><a href="#party-identification-data-mapping">Party Identification Data Mapping</a></li>
+  <li><a href="#summary-checklist">Summary Checklist</a></li>
+  <li><a href="#whats-next">What's Next?</a></li>
+  <li><a href="#additional-resources">Additional Resources</a></li>
+</ul>
+        </nav>
+
+        <!-- Sidebar Donation Card -->
+        <div class="donate-card">
+          <span class="donate-card-emoji">☕</span>
+          <p class="donate-card-heading">Enjoying this guide?</p>
+          <a href="https://buymeacoffee.com/YOUR_USERNAME" target="_blank" rel="noopener noreferrer" class="donate-btn donate-btn-sidebar">Buy Me a Latte</a>
+        </div>
+
+        <!-- Sidebar Ad -->
+        <div class="ad-container ad-sidebar">
+          <span class="ad-label">Advertisement</span>
+          <ins class="adsbygoogle"
+               style="display:block"
+               data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+               data-ad-slot="XXXXXXXXXX"
+               data-ad-format="auto"
+               data-full-width-responsive="true"></ins>
+          <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ---- MAIN CONTENT ---- -->
+    <main class="content" id="content">
+      <!-- Breadcrumbs -->
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <a href="/">Home</a><span class="breadcrumb-sep"> &gt; </span><a href="/data-capturing-modeling/">Data Capturing &amp; Modeling</a><span class="breadcrumb-sep"> &gt; </span><span class="breadcrumb-current">Web Data Capturing</span>
+      </nav>
+
+      <!-- Page Content (H1 + body from Markdown) -->
+      <article class="article">
+        <h1 id="web-data-capturing" tabindex="-1">Web Data Capturing</h1>
+<p>This section walks you through the end-to-end process of capturing real-time user interactions from your website and sending them to Data Cloud. By the end, you'll have a working website connector, a deployed SDK, a sitemap capturing structured events, and data streams mapping those events to Data Model Objects (DMOs).</p>
+<div class="callout callout-note"><p><span class="callout-label">📝 Note:</span> Acronyms used in this section — <strong>SDK</strong> = Software Development Kit, <strong>DLO</strong> = Data Lake Object, <strong>DMO</strong> = Data Model Object, <strong>CDN</strong> = Content Delivery Network, <strong>DC</strong> = Data Cloud.</p></div>
+<hr>
+<h2 id="overview" tabindex="-1">Overview</h2>
+<p>Capturing web data involves seven sequential steps:</p>
+<ol>
+<li>Create a Website Connector</li>
+<li>Upload your Event Schema</li>
+<li>Install the Interactions SDK on your website</li>
+<li>Build a Sitemap</li>
+<li>Configure the Web Schema</li>
+<li>Deploy Website Data Streams</li>
+<li>Map DLOs to DMOs</li>
+</ol>
+<p>Each step is covered in detail below.</p>
+<hr>
+<h2 id="1-create-a-website-connector" tabindex="-1">1. Create a Website Connector</h2>
+<p>A website connector links your website to Data Cloud, controlling the scope of data ingestion. Each connector is tied to a specific website domain.</p>
+<h3 id="steps" tabindex="-1">Steps</h3>
+<ol>
+<li>Navigate to <strong>Data Cloud Setup</strong>.</li>
+<li>Under <strong>CONFIGURATION</strong>, click <strong>Websites &amp; Mobile Apps</strong>.</li>
+<li>Click <strong>New</strong>.</li>
+<li>Provide a <strong>Connector Name</strong> (e.g., &quot;NTO Main Website&quot;).</li>
+<li>From the <strong>Connector Type</strong> dropdown, select <strong>Website</strong>.</li>
+<li>Click <strong>Save</strong>.</li>
+</ol>
+<div class="callout callout-tip"><p><span class="callout-label">💡 Tip:</span> Keep your website connectors <strong>1:1 with a website domain</strong>. While you <em>can</em> write a single sitemap that works across multiple websites, this leads to a more complex sitemap, higher risk when making changes, and nuanced data mapping considerations. If you have multiple websites, create a separate connector for each.</p></div>
+<h3 id="multi-website-considerations" tabindex="-1">Multi-Website Considerations</h3>
+<p>If you have multiple websites, you need to decide how to organize them:</p>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Approach</th>
+<th>When to Use</th>
+<th>Pros</th>
+<th>Cons</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Multiple websites in a single data space</strong></td>
+<td>When you want cross-brand/cross-region analytics and personalization</td>
+<td>Unlocks cross-brand Identity Resolution, analytics, and personalization. Enables unified customer view across portfolio.</td>
+<td>Business teams must ensure the right data is used for each brand's personalization. Teams can affect each other within a shared data space.</td>
+</tr>
+<tr>
+<td><strong>One website per data space</strong></td>
+<td>When brands operate independently with distinct products and teams</td>
+<td>Clean data separation. Team access can be scoped to their brand. Easier to manage analytics and personalization independently.</td>
+<td>Requires the Data Spaces add-on license (additional cost). Limits cross-brand insights.</td>
+</tr>
+</tbody>
+</table></div>
+<div class="callout callout-note"><p><span class="callout-label">📝 Note:</span> Multiple website connectors can be deployed to the <strong>same data space</strong>. This allows you to keep website schemas and sitemaps separate while still analyzing cross-website engagement within a single data space.</p></div>
+<hr>
+<h2 id="2-upload-your-event-schema" tabindex="-1">2. Upload Your Event Schema</h2>
+<p>The event schema is a JSON file that defines the structure of the event data your website will track. It tells Data Cloud what types of events to expect and what fields each event contains.</p>
+<p>The SDK provides a <strong>recommended schema file</strong> covering common events:</p>
+<ul>
+<li><strong>Engagement Events</strong> — Cart interactions, catalog (product browse) interactions, order interactions, consent events</li>
+<li><strong>Profile Events</strong> — Contact point email, contact point phone, identity, party identification</li>
+</ul>
+<h3 id="steps-1" tabindex="-1">Steps</h3>
+<ol>
+<li><a href="https://cdn.c360a.salesforce.com/cdp/schemas/250/web-connector-schema.json" target="_blank" rel="noopener noreferrer">Download the recommended schema file</a> or prepare your own custom schema file.</li>
+<li>On the website connector setup page, scroll to the <strong>Schema</strong> section.</li>
+<li>Click <strong>Upload Schema</strong> and select your schema file.</li>
+<li>Confirm that all events and their associated fields are populated correctly.</li>
+<li>Click <strong>Save</strong>.</li>
+</ol>
+<h3 id="updating-your-schema-later" tabindex="-1">Updating Your Schema Later</h3>
+<p>You can update your schema at any point by clicking <strong>Update Schema</strong> on the connector page.</p>
+<div class="callout callout-important"><p><span class="callout-label">⚠️ Important:</span> Schema updates are <strong>additive only</strong>. You can add new events and fields, but you must retain all previous events and fields. You cannot remove existing schema definitions.</p></div>
+<p>To view the full schema you uploaded, click <strong>View Full Schema</strong> on the connector page.</p>
+<h3 id="see-also" tabindex="-1">See Also</h3>
+<ul>
+<li>Download: <a href="https://cdn.c360a.salesforce.com/cdp/schemas/250/web-connector-schema.json" target="_blank" rel="noopener noreferrer">Recommended Web Connector Schema (JSON)</a></li>
+</ul>
+<hr>
+
+  <div class="ad-container ad-in-content">
+    <span class="ad-label">Advertisement</span>
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+         data-ad-slot="XXXXXXXXXX"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+<h2 id="3-install-the-interactions-sdk-on-your-website" tabindex="-1">3. Install the Interactions SDK on Your Website</h2>
+<p>With your connector created and schema uploaded, you can now install the Salesforce Interactions SDK on your website.</p>
+<h3 id="steps-2" tabindex="-1">Steps</h3>
+<ol>
+<li>On the website connector setup page, scroll down to the <strong>Integration Guide</strong> section.</li>
+<li>Copy the <strong>Content Delivery Network (CDN) URL</strong> — this is a connector-specific script URL.</li>
+<li>Add the script to the <code>&lt;head&gt;</code> section of your website using a <code>&lt;script&gt;</code> tag:</li>
+</ol>
+<pre><span class="code-lang">html</span><button class="copy-btn" aria-label="Copy code">Copy</button><code class="language-html">&lt;script src=&quot;https://cdn.c360a.salesforce.com/beacon/YOUR_CONNECTOR_ID/scripts/c360a.js&quot;&gt;&lt;/script&gt;
+</code></pre>
+<ol start="4">
+<li>Initialize the SDK using the <code>SalesforceInteractions.init</code> method:</li>
+</ol>
+<pre><span class="code-lang">javascript</span><button class="copy-btn" aria-label="Copy code">Copy</button><code class="language-javascript">SalesforceInteractions.init({
+  consents: [{
+    provider: 'YourConsentProvider',
+    purpose: 'Tracking',
+    status: 'Opt In'
+  }]
+});
+</code></pre>
+<div class="callout callout-important"><p><span class="callout-label">⚠️ Important:</span> Replace the CDN URL above with your actual connector-specific URL from the Integration Guide section. The URL shown here is a placeholder.</p></div>
+<h3 id="see-also-1" tabindex="-1">See Also</h3>
+<ul>
+<li><a href="https://developer.salesforce.com/docs/atlas.en-us.c360a_api.meta/c360a_api/c360a_api_salesforce_interactions_web_sdk.htm" target="_blank" rel="noopener noreferrer">Salesforce Interactions SDK: Capture Web Interactions</a></li>
+<li><a href="https://developer.salesforce.com/docs/atlas.en-us.c360a_api.meta/c360a_api/c360a_api_initialization.htm" target="_blank" rel="noopener noreferrer">Salesforce Interactions SDK: Initialization</a></li>
+<li><a href="https://developer.salesforce.com/docs/atlas.en-us.c360a_api.meta/c360a_api/c360a_api_consent.htm" target="_blank" rel="noopener noreferrer">Salesforce Interactions SDK: Consent</a></li>
+</ul>
+<hr>
+<h2 id="4-build-a-sitemap" tabindex="-1">4. Build a Sitemap</h2>
+<p>The sitemap is a JavaScript file that defines the <strong>data capture logic</strong> across different pages of your website. It tells the SDK what events to capture, what data to include in each event, and where personalization content zones exist on each page.</p>
+<h3 id="creating-your-sitemap" tabindex="-1">Creating Your Sitemap</h3>
+<ol>
+<li>Install the <a href="https://chromewebstore.google.com/detail/salesforce-interactions-s/mhmpepeohaddbhkhecaldflljggicedf" target="_blank" rel="noopener noreferrer">Salesforce Interactions SDK Launcher Chrome Extension</a>.</li>
+<li>Enable and access the <strong>Sitemap Editor</strong> on your website through the extension.</li>
+<li>Use the Sitemap Editor to instrument your website's sitemap.</li>
+<li>Create a JavaScript file named <code>sitemap.js</code>.</li>
+<li>Copy the sitemap code you created and paste it into this file.</li>
+<li>On the website connector setup page, navigate to the <strong>Sitemap</strong> section.</li>
+<li>Click <strong>Upload</strong> and upload the <code>sitemap.js</code> file.</li>
+<li>Review the sitemap for errors, and click <strong>Save</strong>.</li>
+</ol>
+<h3 id="key-sitemap-components" tabindex="-1">Key Sitemap Components</h3>
+<p>A sitemap is made up of several key building blocks. Let's walk through each one.</p>
+<h4 id="41-consent-management" tabindex="-1">4.1. Consent Management</h4>
+<p>Not all website visitors consent to cookie tracking. The SDK only sends events if a customer has consented. When consent is revoked, the SDK captures this preference and immediately stops emitting events.</p>
+<pre><span class="code-lang">javascript</span><button class="copy-btn" aria-label="Copy code">Copy</button><code class="language-javascript">SalesforceInteractions.init({
+  consents: [{
+    provider: 'ExampleProvider',
+    purpose: 'Tracking',
+    status: 'Opt In'
+  }]
+});
+</code></pre>
+<p>You can configure multiple consent entries in the <code>consents</code> array if your site uses multiple consent providers or purposes. For more details, see the <a href="https://developer.salesforce.com/docs/atlas.en-us.c360a_api.meta/c360a_api/c360a_api_consent.htm" target="_blank" rel="noopener noreferrer">Consent documentation</a>.</p>
+<h4 id="42-page-types" tabindex="-1">4.2. Page Types</h4>
+<p>A sitemap is made up of <strong>page type configurations</strong>. One page type config can apply to multiple pages. Page types organize your sitemap's code structure and help define where an event originated. From a personalization standpoint, page types allow business users to easily configure multi-page personalization experiences (e.g., &quot;show recommendations on all Product Display Pages&quot;).</p>
+<p>Each page type has three key properties:</p>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td>The name of the page type (e.g., &quot;Home&quot;, &quot;Product Display Page&quot;, &quot;Cart&quot;, &quot;Article&quot;)</td>
+</tr>
+<tr>
+<td><code>isMatch</code></td>
+<td>A boolean function that returns <code>true</code> when the current browser page matches this page type. Can use the data layer, page URL, meta tags, or any other page information.</td>
+</tr>
+<tr>
+<td><code>interaction</code></td>
+<td>An object describing the engagement event to send to Data Cloud. Contains <code>name</code> (the action being performed) and <code>eventType</code> (the identifier used to map the event to a schema object).</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Example — Homepage page type:</strong></p>
+<pre><span class="code-lang">javascript</span><button class="copy-btn" aria-label="Copy code">Copy</button><code class="language-javascript">{
+  name: &quot;home&quot;,
+  isMatch: () =&gt; {
+    return window.location.pathname === '/';
+  },
+  interaction: {
+    name: &quot;home view&quot;,
+    eventType: &quot;websiteEngagement&quot;,
+  }
+}
+</code></pre>
+<div class="callout callout-important"><p><span class="callout-label">⚠️ Important:</span> Always explicitly define the <code>eventType</code> attribute for each page type. The <code>eventType</code> is the identifier used to map the event to a corresponding object defined on your web schema. Without it, Data Cloud won't know how to categorize the event.</p></div>
+<h4 id="43-content-zones" tabindex="-1">4.3. Content Zones</h4>
+<p>Content Zones define pre-configured areas of the website — at the global or page type level — that are eligible for personalization. When a business user applies personalization via the Web Personalization Manager (WPM), they can select one of these content zones as the render target.</p>
+<p>Each content zone requires:</p>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td>A descriptive name for the content zone, displayed in the WPM UI when selecting a render location</td>
+</tr>
+<tr>
+<td><code>selector</code></td>
+<td>A CSS selector targeting a specific DOM element on the page. The content of this element will be replaced with the personalized experience.</td>
+</tr>
+</tbody>
+</table></div>
+<div class="callout callout-note"><p><span class="callout-label">📝 Note:</span> Salesforce Personalization only supports content zones where <strong>both</strong> <code>name</code> and <code>selector</code> are defined.</p></div>
+<p><strong>Example — Page type with content zones:</strong></p>
+<pre><span class="code-lang">javascript</span><button class="copy-btn" aria-label="Copy code">Copy</button><code class="language-javascript">{
+  name: &quot;home&quot;,
+  isMatch: () =&gt; {
+    return window.location.pathname === '/';
+  },
+  interaction: {
+    name: &quot;home view&quot;,
+    eventType: &quot;websiteEngagement&quot;,
+  },
+  contentZones: [
+    {
+      name: &quot;hero_banner&quot;,
+      selector: &quot;div#hero&quot;
+    },
+    {
+      name: &quot;recommendations&quot;,
+      selector: &quot;div#main.recs&quot;
+    }
+  ]
+}
+</code></pre>
+<div class="callout callout-tip"><p><span class="callout-label">💡 Tip:</span> Define content zones for every area of your website where you might want to display personalized content. Having these &quot;personalization hotspots&quot; pre-defined in the sitemap ensures that personalization experiences target consistent, stable parts of the website.</p></div>
+<h4 id="44-engagement-events-vs-profile-events" tabindex="-1">4.4. Engagement Events vs. Profile Events</h4>
+<p>Each event sent from the sitemap can include two different types of information:</p>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Type</th>
+<th>What It Contains</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Engagement Data</strong></td>
+<td>Information about a specific action performed by the user</td>
+<td>Page view, button click, add to cart, form submit, purchase</td>
+</tr>
+<tr>
+<td><strong>Profile Data</strong></td>
+<td>Information about the user themselves</td>
+<td>Email address, first name, loyalty points, phone number</td>
+</tr>
+</tbody>
+</table></div>
+<h4 id="45-event-type-splitting" tabindex="-1">4.5. Event Type Splitting</h4>
+<p>Since a single sitemap event can include information that should be mapped to <strong>different DMOs</strong>, the Data Cloud SDK allows you to specify different event types for different data types within one event:</p>
+<ul>
+<li><strong>Engagement data:</strong> Define <code>eventType</code> under the <code>interaction</code> object</li>
+<li><strong>Profile data:</strong> Define <code>eventType</code> under the <code>user.attributes</code> object</li>
+</ul>
+<p>The DC module automatically <strong>splits</strong> the sitemap event into multiple events based on these event types before sending to Data Cloud.</p>
+<p><strong>Example — A single sitemap event with both engagement and profile data:</strong></p>
+<pre><span class="code-lang">javascript</span><button class="copy-btn" aria-label="Copy code">Copy</button><code class="language-javascript">SalesforceInteractions.sendEvent({
+  interaction: {
+    eventType: 'userEngagement',
+    name: 'button_click'
+  },
+  user: {
+    attributes: {
+      eventType: 'contactPointEmail',
+      email: 'joe.smith@domain.com'
+    }
+  }
+});
+</code></pre>
+<p><strong>Data Cloud receives two separate events:</strong></p>
+<pre><span class="code-lang">json</span><button class="copy-btn" aria-label="Copy code">Copy</button><code class="language-json">[
+  {
+    &quot;eventType&quot;: &quot;contactPointEmail&quot;,
+    &quot;email&quot;: &quot;joe.smith@domain.com&quot;,
+    &quot;category&quot;: &quot;Profile&quot;
+  },
+  {
+    &quot;eventType&quot;: &quot;userEngagement&quot;,
+    &quot;interactionName&quot;: &quot;button_click&quot;,
+    &quot;category&quot;: &quot;Engagement&quot;
+  }
+]
+</code></pre>
+<p>In addition to the fields you define on the sitemap event, the Data Cloud SDK <strong>automatically populates</strong> a set of values on every event — including <code>dateTime</code>, <code>deviceId</code>, <code>eventId</code>, and others. A full list of auto-populated values is available in the <a href="https://developer.salesforce.com/docs/atlas.en-us.c360a_api.meta/c360a_api/c360a_api_salesforce_interactions_web_sdk.htm" target="_blank" rel="noopener noreferrer">SDK documentation</a>.</p>
+<h4 id="46-standard-vs-custom-interaction-names" tabindex="-1">4.6. Standard vs. Custom Interaction Names</h4>
+<p>When reviewing sitemap documentation, you may encounter standard interaction structures for events like &quot;View Catalog Object&quot;, &quot;Purchase&quot;, and &quot;Add to Cart&quot;.</p>
+<p><strong>Standard Interaction Names:</strong> Events with standard interaction names are transformed to DC events using pre-configured patterns. The <code>eventType</code> value is automatically derived based on the interaction name and <strong>cannot be overridden</strong>. For example, events with the &quot;View Catalog Object&quot; interaction name always have an <code>eventType</code> of <code>&quot;catalog&quot;</code>.</p>
+<p><strong>Custom Interaction Names:</strong> If your website includes different types of objects (e.g., Products <em>and</em> Articles) that users interact with in different ways (e.g., &quot;View Product&quot; vs. &quot;Download Article&quot;), use <strong>custom interaction names and event types</strong>. This gives you flexibility during data mapping — allowing you to map engagement with different object types to different DMOs.</p>
+<p><strong>Example — Why custom names matter:</strong></p>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Approach</th>
+<th>Product Browse → DMO</th>
+<th>Article View → DMO</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Standard (<code>View Catalog Object</code> for both)</td>
+<td>Both go to the same DMO</td>
+<td>Both go to the same DMO</td>
+</tr>
+<tr>
+<td>Custom (<code>productBrowse</code> + <code>articleBrowse</code>)</td>
+<td>Maps to Product Browse Engagement DMO</td>
+<td>Maps to Article Engagement DMO</td>
+</tr>
+</tbody>
+</table></div>
+<div class="callout callout-tip"><p><span class="callout-label">💡 Tip:</span> Use custom interaction names and event types when your website has multiple types of content objects. This gives you maximum control over how each type of engagement is mapped in Data Cloud.</p></div>
+<h4 id="47-sitemapping-best-practices" tabindex="-1">4.7. Sitemapping Best Practices</h4>
+<p>Follow these tips for a smoother implementation:</p>
+<ol>
+<li><strong>Build your sitemap first</strong>, test it on the website, capture all emitted events, and build a schema based on the captured data.</li>
+<li><strong>Understand SDK event translation.</strong> Standard events (with standard interaction names) use pre-defined <code>eventType</code> values and pre-configured transformation logic. Custom events behave differently.
+<ul>
+<li><a href="https://developer.salesforce.com/docs/atlas.en-us.c360a_api.meta/c360a_api/c360a_api_salesforce_interactions_web_sdk.htm" target="_blank" rel="noopener noreferrer">Translation of standard events</a></li>
+<li><a href="https://developer.salesforce.com/docs/atlas.en-us.c360a_api.meta/c360a_api/c360a_api_salesforce_interactions_web_sdk.htm" target="_blank" rel="noopener noreferrer">Translation of custom events</a></li>
+</ul>
+</li>
+<li><strong>Extend events with additional properties.</strong> You can add custom properties to any event based on your business requirements.</li>
+<li><strong>Use different <code>eventType</code> values</strong> for engagement with different object types (e.g., Products vs. Articles) to enable separate DMO mapping.</li>
+<li><strong>Validate events are landing in DC.</strong> If events are not ingested, confirm that the flat DC events sent by the SDK include all mandatory fields defined in the web schema and that data types match.</li>
+<li><strong>Map <code>eventType</code> to the target DMO.</strong> For behavioral event data streams, you <strong>must</strong> map the <code>eventType</code> field of each event type group to the target DMO.</li>
+</ol>
+<hr>
+<h2 id="5-web-schema-configuration" tabindex="-1">5. Web Schema Configuration</h2>
+<p>A web schema is a JSON document that defines a collection of event definitions used in Data Cloud. For any event emitted by the sitemap to successfully land in Data Cloud and be available in Data Lake Objects (DLOs) for mapping, a <strong>corresponding schema object must exist</strong>.</p>
+<h3 id="key-rules" tabindex="-1">Key Rules</h3>
+<ul>
+<li>For every <code>eventType</code> defined in your sitemap, you need a <strong>matching schema object</strong> in the schema JSON.</li>
+<li>For every attribute or data point on an event, a <strong>corresponding attribute</strong> must exist on the related schema object.</li>
+<li>If you are sending events from your sitemap but not seeing data appear in Data Cloud, it is likely due to <strong>missing attributes on the schema event definition</strong>.</li>
+</ul>
+<h3 id="building-schema-alongside-your-sitemap" tabindex="-1">Building Schema Alongside Your Sitemap</h3>
+<p>While building your sitemap, it's helpful to construct your schema in parallel so you can validate that events are properly registering in Data Cloud. You can deploy data streams early to help with event validation via Data Explorer — you don't need to wait until sitemapping is completely done.</p>
+<div class="callout callout-tip"><p><span class="callout-label">💡 Tip:</span> As you add schema objects, you'll need to update the data streams to view the new events in Data Cloud. Deploy data streams progressively as you build out your sitemap.</p></div>
+<hr>
+<h2 id="6-deploy-website-data-streams" tabindex="-1">6. Deploy Website Data Streams</h2>
+<p>With your web connector set up and sitemap/schema ready, create the data streams that will flow events from your website into Data Cloud.</p>
+<h3 id="steps-3" tabindex="-1">Steps</h3>
+<ol>
+<li>In Data Cloud, navigate to the <strong>Data Streams</strong> tab and click <strong>New</strong>.</li>
+<li>Under <strong>Connected Sources</strong>, click <strong>Website</strong> and then click <strong>Next</strong>.</li>
+<li>From the <strong>Website</strong> dropdown, select the website connector you configured.</li>
+<li>Select the events you'd like to capture from your website and click <strong>Next</strong>.</li>
+<li>Review and verify the events and their associated fields.</li>
+<li>Click <strong>Next</strong>.</li>
+<li>If you have more than one data space, select the target data space from the <strong>Data Space</strong> dropdown.</li>
+<li>For every profile event, set the <strong>Refresh Mode</strong> to <strong>Partial</strong> using the dropdown.</li>
+<li>Click <strong>Deploy</strong>.</li>
+</ol>
+<h3 id="key-considerations" tabindex="-1">Key Considerations</h3>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Data Stream Components</strong></td>
+<td>When you select your website connector and click Next, you see all event definitions from your web schema. Select all events you want to map to DMOs. If you add new schema definitions later, return to this page to include them.</td>
+</tr>
+<tr>
+<td><strong>Data Space Selection</strong></td>
+<td>Choose the data space where you want these data streams to reside. Data streams can be shared to additional data spaces later — sharing does not duplicate consumption.</td>
+</tr>
+<tr>
+<td><strong>Partial vs. Incremental Refresh</strong></td>
+<td><strong>Always use Partial refresh mode</strong> for web data streams. Incremental mode overwrites/clears any values not included on the event and should not be used for web implementations. Partial mode is the default.</td>
+</tr>
+<tr>
+<td><strong>Filters</strong></td>
+<td>Optional criteria to filter out certain events from flowing to a data space.</td>
+</tr>
+</tbody>
+</table></div>
+<div class="callout callout-warning"><p><span class="callout-label">🚨 Warning:</span> Using <strong>Incremental</strong> refresh mode for web data streams will cause values to be overwritten or cleared on each event. Always use <strong>Partial</strong> mode for web implementations.</p></div>
+<div class="callout callout-note"><p><span class="callout-label">📝 Note:</span> A single data stream with the category <strong>Engagement</strong> consolidates all behavioral/engagement events, while each profile event gets its own data stream with the category <strong>Profile</strong>.</p></div>
+<hr>
+<h2 id="7-map-dlos-to-dmos" tabindex="-1">7. Map DLOs to DMOs</h2>
+<p>Data ingested by all data streams is written to <strong>Data Lake Objects (DLOs)</strong>. After creating your data streams, map the DLO fields to the corresponding <strong>Data Model Objects (DMOs)</strong>.</p>
+<h3 id="how-to-start-mapping" tabindex="-1">How to Start Mapping</h3>
+<ol>
+<li>Navigate to the <strong>Data Stream</strong> detail page for your newly created data stream.</li>
+<li>Click <strong>Start Data Mapping</strong>.</li>
+<li>You'll see a field mapping canvas displaying your DLOs and target DMOs.</li>
+<li>Click the name of a DLO field and connect it to the desired DMO field.</li>
+</ol>
+<h3 id="key-mapping-considerations" tabindex="-1">Key Mapping Considerations</h3>
+<ul>
+<li><strong>Schema Object to DMO Cardinality:</strong> The <code>All Event Data</code> object in the data stream can be mapped to multiple DMOs. All other schema objects must be <strong>1:1</strong> mapped to DMOs. Mapping a schema object to multiple DMOs can cause data to be overwritten.</li>
+<li><strong>Single Field to Multiple DMO Fields:</strong> It is possible to map one DLO field to multiple fields on a <strong>single</strong> DMO (e.g., <code>dateTime</code> → <code>Created Date</code> and <code>Engagement Date Time</code>).</li>
+<li><strong>Auto-Mapping:</strong> Web schema fields with a <code>masterLabel</code> that exactly matches a DMO field label will be <strong>automatically mapped</strong>, saving significant manual effort.</li>
+</ul>
+<div class="callout callout-tip"><p><span class="callout-label">💡 Tip:</span> See <a href="/data-capturing-modeling/dlo-dmo-mapping-ir/">DLO-DMO Mapping &amp; Identity Resolution</a> for a progressive mapping strategy that simplifies this process by handling one event type at a time.</p></div>
+<h3 id="common-field-mappings" tabindex="-1">Common Field Mappings</h3>
+<p>These fields appear across most schema objects and follow standard mapping patterns:</p>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Schema Field (DLO)</th>
+<th>DMO Field</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>dateTime</code></td>
+<td>Created Date</td>
+<td>Maps to Created Date on all engagement and profile DMOs</td>
+</tr>
+<tr>
+<td><code>deviceId</code></td>
+<td>Individual ID</td>
+<td>The device-level identifier used to associate events with an individual. For identity data streams, also maps to Party ID.</td>
+</tr>
+<tr>
+<td><code>eventId</code></td>
+<td>DMO Primary Key</td>
+<td>Unique event identifier → engagement object primary key (e.g., Product Browse Engagement ID)</td>
+</tr>
+<tr>
+<td><code>eventType</code></td>
+<td>Engagement Channel Type</td>
+<td>Identifies the type of engagement event</td>
+</tr>
+<tr>
+<td><code>interactionName</code></td>
+<td>Engagement Channel Action</td>
+<td>The action performed (e.g., &quot;product_view&quot;, &quot;add_to_cart&quot;)</td>
+</tr>
+<tr>
+<td><code>personalizationID</code></td>
+<td>Personalization</td>
+<td>Links the event back to a personalization decision for attribution</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="behavioral-events-data-mapping" tabindex="-1">Behavioral Events Data Mapping</h3>
+<p>Map fields from your website connector's behavioral events DLO to the DMO. The table below shows the full recommended mapping:</p>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>DLO Section</th>
+<th>DLO Field</th>
+<th>Target DMO</th>
+<th>DMO Field</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>All Event Data</strong></td>
+<td><code>dateTime</code></td>
+<td>Product Browse Engagement</td>
+<td>Created Date</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>Product Browse Engagement</td>
+<td>Engagement Date Time</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>Shopping Cart Engagement</td>
+<td>Created Date</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>Shopping Cart Engagement</td>
+<td>Engagement Date Time</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>Shopping Cart Product Engagement</td>
+<td>Created Date</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>Product Order Engagement</td>
+<td>Created Date</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>Product Order Engagement</td>
+<td>Engagement Date Time</td>
+</tr>
+<tr>
+<td></td>
+<td><code>deviceId</code></td>
+<td>Product Browse Engagement</td>
+<td>Individual</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>Shopping Cart Engagement</td>
+<td>Individual</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>Shopping Cart Product Engagement</td>
+<td>Individual</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>Product Order Engagement</td>
+<td>Individual</td>
+</tr>
+<tr>
+<td></td>
+<td><code>eventId</code> (PK)</td>
+<td>Product Browse Engagement</td>
+<td>Product Browse Engagement ID (PK)</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>Shopping Cart Engagement</td>
+<td>Shopping Cart Engagement ID (PK)</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>Shopping Cart Product Engagement</td>
+<td>Shopping Cart Engagement ID (PK)</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>Product Order Engagement</td>
+<td>Product Order Engagement ID (PK)</td>
+</tr>
+<tr>
+<td><strong>Cart</strong></td>
+<td><code>eventType</code></td>
+<td>Shopping Cart Engagement</td>
+<td>Engagement Type</td>
+</tr>
+<tr>
+<td></td>
+<td><code>interactionName</code></td>
+<td>Shopping Cart Engagement</td>
+<td>Engagement Channel Action</td>
+</tr>
+<tr>
+<td><strong>Cart Item</strong></td>
+<td><code>catalogObjectId</code></td>
+<td>Shopping Cart Product Engagement</td>
+<td>Product</td>
+</tr>
+<tr>
+<td></td>
+<td><code>catalogObjectType</code></td>
+<td>Shopping Cart Product Engagement</td>
+<td>Product Category</td>
+</tr>
+<tr>
+<td></td>
+<td><code>currency</code></td>
+<td>Shopping Cart Product Engagement</td>
+<td>Currency</td>
+</tr>
+<tr>
+<td></td>
+<td><code>price</code></td>
+<td>Shopping Cart Product Engagement</td>
+<td>Product Price</td>
+</tr>
+<tr>
+<td></td>
+<td><code>quantity</code></td>
+<td>Shopping Cart Product Engagement</td>
+<td>Product Quantity</td>
+</tr>
+<tr>
+<td></td>
+<td><code>eventType</code></td>
+<td>Shopping Cart Product Engagement</td>
+<td>Engagement Type</td>
+</tr>
+<tr>
+<td><strong>Catalog</strong></td>
+<td><code>id</code></td>
+<td>Product Browse Engagement</td>
+<td>Product</td>
+</tr>
+<tr>
+<td></td>
+<td><code>interactionName</code></td>
+<td>Product Browse Engagement</td>
+<td>Engagement Channel Action</td>
+</tr>
+<tr>
+<td></td>
+<td><code>productSku</code></td>
+<td>Product Browse Engagement</td>
+<td>Product SKU</td>
+</tr>
+<tr>
+<td></td>
+<td><code>personalizationId</code></td>
+<td>Product Browse Engagement</td>
+<td>Personalization</td>
+</tr>
+<tr>
+<td></td>
+<td><code>personalizationContentId</code></td>
+<td>Product Browse Engagement</td>
+<td>Personalization Content</td>
+</tr>
+<tr>
+<td></td>
+<td><code>eventType</code></td>
+<td>Product Browse Engagement</td>
+<td>Engagement Type</td>
+</tr>
+<tr>
+<td><strong>Order</strong></td>
+<td><code>eventType</code></td>
+<td>Product Order Engagement</td>
+<td>Engagement Type</td>
+</tr>
+<tr>
+<td></td>
+<td><code>interactionName</code></td>
+<td>Product Order Engagement</td>
+<td>Engagement Channel Action</td>
+</tr>
+<tr>
+<td></td>
+<td><code>orderId</code></td>
+<td>Product Order Engagement</td>
+<td>Correlation ID</td>
+</tr>
+<tr>
+<td></td>
+<td><code>orderTotalValue</code></td>
+<td>Product Order Engagement</td>
+<td>Adjusted Total Product Amount</td>
+</tr>
+<tr>
+<td></td>
+<td><code>orderTotalValue</code></td>
+<td>Product Order Engagement</td>
+<td>Total Product Amount</td>
+</tr>
+</tbody>
+</table></div>
+<div class="callout callout-note"><p><span class="callout-label">📝 Note:</span> The <strong>Consent Log</strong> and <strong>Order Item</strong> DLO sections are <strong>not mapped</strong> in the standard recommended mapping.</p></div>
+<h3 id="contact-point-email-data-mapping" tabindex="-1">Contact Point Email Data Mapping</h3>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>DLO Field</th>
+<th>DMO Field</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>dateTime</code></td>
+<td>Created Date</td>
+</tr>
+<tr>
+<td><code>deviceId</code> (PK)</td>
+<td>Contact Point Email ID (PK), Party</td>
+</tr>
+<tr>
+<td><code>email</code></td>
+<td>Email Address</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="contact-point-phone-data-mapping" tabindex="-1">Contact Point Phone Data Mapping</h3>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>DLO Field</th>
+<th>DMO Field</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>dateTime</code></td>
+<td>Created Date</td>
+</tr>
+<tr>
+<td><code>deviceId</code> (PK)</td>
+<td>Contact Point Phone ID (PK), Party</td>
+</tr>
+<tr>
+<td><code>phoneNumber</code></td>
+<td>Telephone Number</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="identity-data-mapping" tabindex="-1">Identity Data Mapping</h3>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>DLO Field</th>
+<th>DMO Field</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>dateTime</code></td>
+<td>Created Date</td>
+</tr>
+<tr>
+<td><code>deviceId</code> (PK)</td>
+<td>Individual ID (PK)</td>
+</tr>
+<tr>
+<td><code>firstName</code></td>
+<td>First Name</td>
+</tr>
+<tr>
+<td><code>isAnonymous</code></td>
+<td>Is Anonymous</td>
+</tr>
+<tr>
+<td><code>lastName</code></td>
+<td>Last Name</td>
+</tr>
+<tr>
+<td><code>userName</code></td>
+<td>External Record ID</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="party-identification-data-mapping" tabindex="-1">Party Identification Data Mapping</h3>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>DLO Field</th>
+<th>DMO Field</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>dateTime</code></td>
+<td>Created Date</td>
+</tr>
+<tr>
+<td><code>deviceId</code> (PK)</td>
+<td>Party, Party Identification ID (PK)</td>
+</tr>
+<tr>
+<td><code>IDName</code></td>
+<td>Identification Name</td>
+</tr>
+<tr>
+<td><code>IDType</code></td>
+<td>Party Identification Type</td>
+</tr>
+<tr>
+<td><code>userId</code></td>
+<td>Identification Number</td>
+</tr>
+</tbody>
+</table></div>
+<div class="callout callout-note"><p><span class="callout-label">📝 Note:</span> Don't map fields in your website connector's <strong>Contact Point Address</strong> DLO to a DMO.</p></div>
+<hr>
+<h2 id="summary-checklist" tabindex="-1">Summary Checklist</h2>
+<p>Use this checklist to confirm you've completed all web data capturing steps:</p>
+<ul>
+<li>[ ] <strong>Website connector created</strong> — One connector per website domain</li>
+<li>[ ] <strong>Event schema uploaded</strong> — Recommended schema or custom schema covering your use cases</li>
+<li>[ ] <strong>Interactions SDK installed</strong> — CDN script added to <code>&lt;head&gt;</code>, SDK initialized with consent config</li>
+<li>[ ] <strong>Sitemap built and uploaded</strong> — Page types, content zones, engagement events, and profile events defined</li>
+<li>[ ] <strong>Web schema configured</strong> — Schema objects match every <code>eventType</code> in your sitemap</li>
+<li>[ ] <strong>Data streams deployed</strong> — All event definitions selected, Partial refresh mode set</li>
+<li>[ ] <strong>DLO-to-DMO mapping complete</strong> — All behavioral and profile data streams mapped to the correct DMOs</li>
+</ul>
+<hr>
+<h2 id="whats-next" tabindex="-1">What's Next?</h2>
+<p>If you also need to capture data from a mobile app, continue to <a href="/data-capturing-modeling/mobile-data-capturing/">Mobile Data Capturing</a>. Otherwise, proceed to <a href="/data-capturing-modeling/dlo-dmo-mapping-ir/">DLO-DMO Mapping &amp; Identity Resolution</a> for a deeper dive into mapping strategies and identity resolution configuration.</p>
+<p><strong><a href="/data-capturing-modeling/">← Previous: Data Capturing &amp; Modeling Overview</a></strong> | <strong><a href="/data-capturing-modeling/mobile-data-capturing/">Next: Mobile Data Capturing →</a></strong></p>
+<hr>
+<h2 id="additional-resources" tabindex="-1">Additional Resources</h2>
+<ul>
+<li><a href="https://help.salesforce.com/s/articleView?id=sf.c360_a_data_mapping.htm" target="_blank" rel="noopener noreferrer">Salesforce Help: Data Mapping</a></li>
+<li><a href="https://help.salesforce.com/s/articleView?id=sf.c360_a_data_streams.htm" target="_blank" rel="noopener noreferrer">Salesforce Help: Data Streams</a></li>
+<li><a href="https://developer.salesforce.com/docs/atlas.en-us.c360a_api.meta/c360a_api/c360a_api_sitemap.htm" target="_blank" rel="noopener noreferrer">Salesforce Interactions SDK: Sitemap</a></li>
+<li><a href="https://developer.salesforce.com/docs/atlas.en-us.c360a_api.meta/c360a_api/c360a_api_salesforce_interactions_web_sdk.htm" target="_blank" rel="noopener noreferrer">Salesforce Interactions SDK: Capture Web Interactions</a></li>
+<li><a href="https://developer.salesforce.com/docs/atlas.en-us.c360a_api.meta/c360a_api/c360a_api_consent.htm" target="_blank" rel="noopener noreferrer">Salesforce Interactions SDK: Consent</a></li>
+<li><a href="https://cdn.c360a.salesforce.com/cdp/schemas/250/web-connector-schema.json" target="_blank" rel="noopener noreferrer">Download: Recommended Web Connector Schema (JSON)</a></li>
+</ul>
+
+      </article>
+
+      <!-- Previous / Next Navigation -->
+      <nav class="prev-next" aria-label="Page navigation">
+        <a href="/data-capturing-modeling/" class="prev-next-btn pn-prev">
+      <span class="pn-direction">← Previous</span>
+      <span class="pn-title">Data Capturing &amp; Modeling</span>
+    </a><a href="/data-capturing-modeling/mobile-data-capturing/" class="prev-next-btn pn-next">
+      <span class="pn-direction">Next →</span>
+      <span class="pn-title">Mobile Data Capturing</span>
+    </a>
+      </nav>
+
+      <!-- End-of-page Donation CTA -->
+      <div class="donate-cta">
+        <p>Found this guide helpful?</p>
+        <a href="https://buymeacoffee.com/YOUR_USERNAME" target="_blank" rel="noopener noreferrer" class="donate-btn donate-btn-cta">Buy Me a Latte ☕</a>
+      </div>
+    </main>
+  </div>
+
+  <!-- ==================== FOOTER AD ==================== -->
+  <div class="ad-container ad-footer">
+    <span class="ad-label">Advertisement</span>
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+         data-ad-slot="XXXXXXXXXX"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p class="footer-title">Salesforce Personalization Implementation Guide</p>
+      <p class="footer-subtitle">Based on documentation as of March 2026</p>
+      <p class="footer-disclaimer">This is an educational resource. Verify all information against the latest <a href="https://help.salesforce.com/" target="_blank" rel="noopener noreferrer">Salesforce documentation</a>. Salesforce releases updates three times per year.</p>
+      <p class="footer-donate">
+        <a href="https://buymeacoffee.com/YOUR_USERNAME" target="_blank" rel="noopener noreferrer">Support this project — Buy Me a Latte ☕</a>
+      </p>
+    </div>
+  </footer>
+
+  <script src="../../js/main.js"></script>
+  <script src="../../js/copy-code.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (typeof mermaid !== 'undefined') {
+        mermaid.initialize({ startOnLoad: false, theme: 'default' });
+        document.querySelectorAll('pre > code.language-mermaid').forEach(function(el) {
+          var pre = el.parentElement;
+          var container = document.createElement('div');
+          container.className = 'mermaid';
+          container.textContent = el.textContent;
+          pre.parentNode.replaceChild(container, pre);
+        });
+        mermaid.run();
+      }
+    });
+  </script>
+</body>
+</html>

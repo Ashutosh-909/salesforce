@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Web Templates (Transformers) — Salesforce Personalization Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/style.css">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body>
+
+  <!-- ==================== TOP NAV BAR ==================== -->
+  <nav class="navbar" id="navbar">
+    <div class="navbar-inner">
+      <a href="../../" class="navbar-brand">Salesforce Personalization Guide</a>
+
+      <button class="hamburger" id="hamburger" aria-label="Toggle navigation" aria-expanded="false">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+      </button>
+
+      <div class="navbar-menu" id="navbar-menu">
+        <ul class="nav-list">
+          <li class="nav-item"><a href="../../" class="nav-link">Home</a></li>
+          <li class="nav-item"><a href="../../setup-permissions/" class="nav-link">Setup &amp; Permissions</a></li>
+
+          <li class="nav-item has-dropdown">
+            <a href="../../data-capturing-modeling/" class="nav-link dropdown-toggle">Data Capturing &amp; Modeling <span class="dropdown-arrow">▾</span></a>
+            <ul class="dropdown-menu">
+              <li><a href="../../data-capturing-modeling/">Overview</a></li>
+              <li><a href="../../data-capturing-modeling/web-data-capturing/">Web Data Capturing</a></li>
+              <li><a href="../../data-capturing-modeling/mobile-data-capturing/">Mobile Data Capturing</a></li>
+              <li><a href="../../data-capturing-modeling/dlo-dmo-mapping-ir/">DLO-DMO Mapping &amp; IR</a></li>
+              <li><a href="../../data-capturing-modeling/data-graphs/">Data Graphs</a></li>
+              <li><a href="../../data-capturing-modeling/calculated-insights/">Calculated Insights</a></li>
+            </ul>
+          </li>
+
+          <li class="nav-item has-dropdown">
+            <a href="../../web-implementation/" class="nav-link dropdown-toggle">Web Implementation <span class="dropdown-arrow">▾</span></a>
+            <ul class="dropdown-menu">
+              <li><a href="../../web-implementation/">Overview</a></li>
+              <li><a href="../../web-implementation/personalization-types/">Personalization Types</a></li>
+              <li><a href="../../web-implementation/recommenders/">Recommenders</a></li>
+              <li><a href="../../web-implementation/response-templates/">Response Templates</a></li>
+              <li><a href="../../web-implementation/personalization-points/">Personalization Points</a></li>
+              <li><a href="../../web-implementation/decisions/">Decisions</a></li>
+              <li><a href="../../web-implementation/experiments/">Experiments</a></li>
+              <li><a href="../../web-implementation/web-templates/">Web Templates</a></li>
+              <li><a href="../../web-implementation/web-personalization-manager/">Web Personalization Manager</a></li>
+            </ul>
+          </li>
+
+          <li class="nav-item"><a href="../../mobile-implementation/" class="nav-link">Mobile Implementation</a></li>
+          <li class="nav-item"><a href="../../personalization-api/" class="nav-link">Personalization API</a></li>
+          <li class="nav-item"><a href="../../experimentation/" class="nav-link">Experimentation</a></li>
+          <li class="nav-item"><a href="../../batch-personalization/" class="nav-link">Batch Personalization</a></li>
+        </ul>
+
+        <a href="https://buymeacoffee.com/YOUR_USERNAME" target="_blank" rel="noopener noreferrer" class="donate-btn donate-btn-nav">
+          <span class="donate-btn-label">Buy Me a Latte ☕</span>
+          <span class="donate-btn-emoji">☕</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ==================== HEADER AD ==================== -->
+  <div class="ad-container ad-header">
+    <span class="ad-label">Advertisement</span>
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+         data-ad-slot="XXXXXXXXXX"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+
+  <!-- ==================== PAGE LAYOUT ==================== -->
+  <div class="page-wrapper">
+
+    <!-- ---- SIDEBAR ---- -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-inner">
+        <nav class="toc" id="toc" aria-label="Table of Contents">
+          <h3 class="toc-title">On This Page</h3>
+          <ul>
+  <li><a href="#handlebars-transformer-structure">Handlebars Transformer Structure</a></li>
+  <li class="toc-h3"><a href="#field-reference">Field Reference</a></li>
+  <li><a href="#substitution-definitions">Substitution Definitions</a></li>
+  <li class="toc-h3"><a href="#mapping-syntax">Mapping Syntax</a></li>
+  <li class="toc-h3"><a href="#example">Example</a></li>
+  <li><a href="#writing-the-handlebars-template">Writing the Handlebars Template</a></li>
+  <li class="toc-h3"><a href="#key-handlebars-helpers">Key Handlebars Helpers</a></li>
+  <li><a href="#example-transformers">Example Transformers</a></li>
+  <li class="toc-h3"><a href="#simplerecs-product-recommendations-carousel">SimpleRecs — Product Recommendations Carousel</a></li>
+  <li class="toc-h3"><a href="#simplehero-hero-banner-with-cta">SimpleHero — Hero Banner with CTA</a></li>
+  <li class="toc-h3"><a href="#simpleoverlay-pop-up-overlay-with-cta">SimpleOverlay — Pop-Up Overlay with CTA</a></li>
+  <li><a href="#registering-templates-in-the-sitemap">Registering Templates in the Sitemap</a></li>
+  <li><a href="#content-zone-handlers-for-modern-frameworks">Content Zone Handlers for Modern Frameworks</a></li>
+  <li class="toc-h3"><a href="#registering-a-content-zone-handler">Registering a Content Zone Handler</a></li>
+  <li class="toc-h3"><a href="#contentzonehandler-properties">ContentZoneHandler Properties</a></li>
+  <li class="toc-h3"><a href="#react-example">React Example</a></li>
+  <li class="toc-h3"><a href="#usage-in-your-react-app">Usage in Your React App</a></li>
+  <li><a href="#engagement-configurations">Engagement Configurations</a></li>
+</ul>
+        </nav>
+
+        <!-- Sidebar Donation Card -->
+        <div class="donate-card">
+          <span class="donate-card-emoji">☕</span>
+          <p class="donate-card-heading">Enjoying this guide?</p>
+          <a href="https://buymeacoffee.com/YOUR_USERNAME" target="_blank" rel="noopener noreferrer" class="donate-btn donate-btn-sidebar">Buy Me a Latte</a>
+        </div>
+
+        <!-- Sidebar Ad -->
+        <div class="ad-container ad-sidebar">
+          <span class="ad-label">Advertisement</span>
+          <ins class="adsbygoogle"
+               style="display:block"
+               data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+               data-ad-slot="XXXXXXXXXX"
+               data-ad-format="auto"
+               data-full-width-responsive="true"></ins>
+          <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ---- MAIN CONTENT ---- -->
+    <main class="content" id="content">
+      <!-- Breadcrumbs -->
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <a href="/">Home</a><span class="breadcrumb-sep"> &gt; </span><a href="/web-implementation/">Web Implementation</a><span class="breadcrumb-sep"> &gt; </span><span class="breadcrumb-current">Web Templates</span>
+      </nav>
+
+      <!-- Page Content (H1 + body from Markdown) -->
+      <article class="article">
+        <h1 id="web-templates-transformers" tabindex="-1">Web Templates (Transformers)</h1>
+<p><strong>Web templates</strong> — also called <strong>transformers</strong> — convert personalization data received as JSON from the Decisioning API into <strong>dynamic HTML</strong> that renders on your website. Salesforce Personalization currently supports <a href="https://handlebarsjs.com/" target="_blank" rel="noopener noreferrer">Handlebars</a>-based transformers.</p>
+<p>Templates are configured by developers, stored in the sitemap, and then accessible by business users when they apply personalization experiences via the <a href="/web-implementation/web-personalization-manager/">Web Personalization Manager</a>.</p>
+<div class="callout callout-note"><p><span class="callout-label">📝 Note:</span> Templates are helpful for handling common use cases (recommendation carousels, hero banners, overlays), but they are <strong>not required</strong>. Business users can also use the WPM to perform simple string substitution directly on website elements without a template.</p></div>
+<hr>
+<h2 id="handlebars-transformer-structure" tabindex="-1">Handlebars Transformer Structure</h2>
+<p>Every transformer follows this structure:</p>
+<pre><span class="code-lang">javascript</span><button class="copy-btn" aria-label="Copy code">Copy</button><code class="language-javascript">{
+    name: 'YourTransformerName',       // A unique name for your transformer
+    transformerType: 'Handlebars',     // Specifies that this is a Handlebars transformer
+    lastModifiedDate: 0,               // Optional timestamp for tracking updates
+    substitutionDefinitions: {
+        // Key-value pairs mapping template variables to decision response fields
+    },
+    transformerTypeDetails: {
+        html: `&lt;!-- Your Handlebars template goes here --&gt;`
+    }
+}
+</code></pre>
+<h3 id="field-reference" tabindex="-1">Field Reference</h3>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td>The unique name of the transformer. Business users see this name in the WPM.</td>
+</tr>
+<tr>
+<td><code>transformerType</code></td>
+<td>Must be <code>'Handlebars'</code>.</td>
+</tr>
+<tr>
+<td><code>lastModifiedDate</code></td>
+<td>Optional. A timestamp used to track updates. Commonly set to <code>new Date().getTime()</code> or <code>0</code>.</td>
+</tr>
+<tr>
+<td><code>substitutionDefinitions</code></td>
+<td>Key-value pairs that define placeholders in the template. Each key is a variable name; its <code>defaultValue</code> maps to a field in the Decisioning API response.</td>
+</tr>
+<tr>
+<td><code>transformerTypeDetails</code></td>
+<td>Contains the <code>html</code> property with the Handlebars template string. Uses Handlebars helpers like <code>{{#each}}</code> and <code>{{subVar}}</code>.</td>
+</tr>
+</tbody>
+</table></div>
+<hr>
+<h2 id="substitution-definitions" tabindex="-1">Substitution Definitions</h2>
+<p>Substitution definitions map user-friendly variable names to fields in the Decisioning API response. Each definition has a <code>defaultValue</code> that uses bracket notation to reference response fields.</p>
+<h3 id="mapping-syntax" tabindex="-1">Mapping Syntax</h3>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Pattern</th>
+<th>Maps To</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>[attributes].[fieldName]</code></td>
+<td>A field in the <code>attributes</code> object of the response (personalization attributes from the response template)</td>
+</tr>
+<tr>
+<td><code>[data]</code></td>
+<td>The <code>data</code> array containing recommended items</td>
+</tr>
+<tr>
+<td><code>[ssot__Name__c]</code></td>
+<td>A specific field on each item in the <code>data</code> array</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="example" tabindex="-1">Example</h3>
+<p>Given this Decisioning API response:</p>
+<pre><span class="code-lang">json</span><button class="copy-btn" aria-label="Copy code">Copy</button><code class="language-json">{
+  &quot;personalizations&quot;: [
+    {
+      &quot;personalizationId&quot;: &quot;96c4a971-...&quot;,
+      &quot;personalizationPointName&quot;: &quot;home_recommendations&quot;,
+      &quot;attributes&quot;: {
+        &quot;introText&quot;: &quot;Recommended For You&quot;
+      },
+      &quot;data&quot;: [
+        {
+          &quot;ssot__Id__c&quot;: &quot;6010042&quot;,
+          &quot;ssot__Name__c&quot;: &quot;GoBrew Connected Coffee Machine&quot;,
+          &quot;ImageUrl__c&quot;: &quot;https://example.com/images/go-brew.jpg&quot;,
+          &quot;personalizationContentId&quot;: &quot;96c4a971-...:0&quot;
+        }
+      ]
+    }
+  ]
+}
+</code></pre>
+<p>Define substitution definitions:</p>
+<pre><span class="code-lang">javascript</span><button class="copy-btn" aria-label="Copy code">Copy</button><code class="language-javascript">substitutionDefinitions: {
+    introText: { defaultValue: '[attributes].[introText]' },
+    recs: { defaultValue: '[data]' },
+    name: { defaultValue: '[ssot__Name__c]' },
+    image: { defaultValue: '[ImageUrl__c]' }
+}
+</code></pre>
+<ul>
+<li><code>introText</code> → maps to the <code>introText</code> attribute</li>
+<li><code>recs</code> → maps to the <code>data</code> array (list of recommended items)</li>
+<li><code>name</code> → maps to each item's <code>ssot__Name__c</code> field</li>
+<li><code>image</code> → maps to each item's <code>ImageUrl__c</code> field</li>
+</ul>
+<hr>
+<h2 id="writing-the-handlebars-template" tabindex="-1">Writing the Handlebars Template</h2>
+<p>The <code>transformerTypeDetails.html</code> property contains your Handlebars template. Use the <code>{{subVar}}</code> helper to reference substitution definitions:</p>
+<pre><span class="code-lang">html</span><button class="copy-btn" aria-label="Copy code">Copy</button><code class="language-html">&lt;div&gt;
+    &lt;h1&gt;{{subVar 'introText'}}&lt;/h1&gt;
+    {{#each (subVar 'recs')}}
+        &lt;img src=&quot;{{subVar 'image'}}&quot;&gt;
+        &lt;h2&gt;{{subVar 'name'}}&lt;/h2&gt;
+    {{/each}}
+&lt;/div&gt;
+</code></pre>
+<h3 id="key-handlebars-helpers" tabindex="-1">Key Handlebars Helpers</h3>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Helper</th>
+<th>Usage</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>{{subVar 'varName'}}</code></td>
+<td>Anywhere</td>
+<td>Outputs the value of a substitution definition</td>
+</tr>
+<tr>
+<td><code>{{#each (subVar 'arrayVar')}}</code></td>
+<td>Loops</td>
+<td>Iterates over an array substitution (like <code>data</code>)</td>
+</tr>
+<tr>
+<td><code>{{#if (subVar 'varName')}}</code></td>
+<td>Conditionals</td>
+<td>Renders content only if the value is truthy</td>
+</tr>
+</tbody>
+</table></div>
+<div class="callout callout-important"><p><span class="callout-label">⚠️ Important:</span> The fields used in <code>substitutionDefinitions</code> must match the actual field names in your Decisioning API response. Always verify your field names against a real response before deploying a template.</p></div>
+<hr>
+
+  <div class="ad-container ad-in-content">
+    <span class="ad-label">Advertisement</span>
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+         data-ad-slot="XXXXXXXXXX"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+<h2 id="example-transformers" tabindex="-1">Example Transformers</h2>
+<p>The examples below demonstrate common template patterns. Adapt the <code>substitutionDefinitions</code> field names to match your own Decisioning API response.</p>
+<h3 id="simplerecs-product-recommendations-carousel" tabindex="-1">SimpleRecs — Product Recommendations Carousel</h3>
+<p>A responsive carousel displaying recommended products with image, name, and price.</p>
+<pre><span class="code-lang">javascript</span><button class="copy-btn" aria-label="Copy code">Copy</button><code class="language-javascript">{
+  name: &quot;SimpleRecs&quot;,
+  transformerType: &quot;Handlebars&quot;,
+  lastModifiedDate: new Date().getTime() - (1000 * 60 * 60 * 36),
+  substitutionDefinitions: {
+      recs: { defaultValue: '[data]' },
+      image: { defaultValue: '[ImageURL__c]' },
+      name: { defaultValue: '[ssot__Name__c]' },
+      price: { defaultValue: '[UnitPrice__c]' }
+  },
+  transformerTypeDetails: {
+    html: `
+        &lt;style&gt;
+            .sfdcep-recs-carousel {
+                width: 100%;
+                max-width: 1440px !important;
+                margin: 0px auto;
+                display: flex;
+                justify-content: space-evenly;
+                flex-flow: row wrap;
+                padding: 20px 0px !important;
+            }
+            .sfdcep-recs-item {
+                margin: 0 !important;
+                width: 25%;
+                min-width: 250px;
+                color: #393939;
+                font-family: Arial, Helvetica, sans-serif;
+                font-size: 15px;
+            }
+            .sfdcep-recs-item-img { text-align: center; }
+            .sfdcep-recs-item-img img {
+                width: 90%;
+                max-height: 320px;
+                max-width: 320px;
+            }
+            .sfdcep-recs-item-name { padding-top: 10px; }
+            .sfdcep-recs-item-name a {
+                color: #393939;
+                text-decoration: none;
+                font-weight: 600;
+            }
+            .sfdcep-recs-item-price { padding-top: 10px; }
+            .sfdcep-recs-item-rating {
+                color: #097fb3;
+                letter-spacing: 3px;
+                padding-top: 10px;
+            }
+        &lt;/style&gt;
+        &lt;div class=&quot;sfdcep-recs-carousel&quot;&gt;
+            {{#each (subVar 'recs')}}
+            &lt;div class=&quot;sfdcep-recs-item&quot;&gt;
+                &lt;div class=&quot;sfdcep-recs-item-img&quot;&gt;
+                    {{#if (subVar 'image')}}
+                        &lt;img src=&quot;{{subVar 'image'}}&quot; /&gt;
+                    {{else}}
+                        &lt;img src=&quot;https://placehold.co/320x320/white/blue?text=*&quot; /&gt;
+                    {{/if}}
+                &lt;/div&gt;
+                &lt;div class=&quot;sfdcep-recs-item-name&quot;&gt;
+                    &lt;a href=&quot;#&quot;&gt;{{subVar 'name'}}&lt;/a&gt;
+                &lt;/div&gt;
+                &lt;div class=&quot;sfdcep-recs-item-price&quot;&gt;
+                    {{#if (subVar 'price')}}
+                        $ {{subVar 'price'}}
+                    {{else}}
+                        Out-of-stock
+                    {{/if}}
+                &lt;/div&gt;
+                &lt;div class=&quot;sfdcep-recs-item-rating&quot;&gt; ★★★★★ &lt;/div&gt;
+            &lt;/div&gt;
+            {{/each}}
+        &lt;/div&gt;
+    `
+  }
+}
+</code></pre>
+<h3 id="simplehero-hero-banner-with-cta" tabindex="-1">SimpleHero — Hero Banner with CTA</h3>
+<p>A full-width hero banner with background image, heading, subheading, and call-to-action button. Ideal for Manual Content personalization.</p>
+<pre><span class="code-lang">javascript</span><button class="copy-btn" aria-label="Copy code">Copy</button><code class="language-javascript">{
+  name: &quot;SimpleHero&quot;,
+  transformerType: &quot;Handlebars&quot;,
+  lastModifiedDate: new Date().getTime() - (1000 * 60 * 60 * 36),
+  substitutionDefinitions: {
+      BackgroundImageUrl: { defaultValue: '[attributes].[BackgroundImageUrl]' },
+      Header: { defaultValue: '[attributes].[Header]' },
+      Subheader: { defaultValue: '[attributes].[Subheader]' },
+      CallToActionUrl: { defaultValue: '[attributes].[CallToActionUrl]' },
+      CallToActionText: { defaultValue: '[attributes].[CallToActionText]' }
+  },
+  transformerTypeDetails: {
+      html: `
+          &lt;style&gt;
+              .sfdcep-banner {
+                  margin: 0px auto; width: 100%; min-height: 600px;
+                  display: flex; flex-flow: column wrap; justify-content: center;
+                  font-family: Arial, Helvetica, sans-serif;
+              }
+              .sfdcep-banner-header {
+                  font-size: 32px; padding-bottom: 40px; font-weight: 600;
+                  color: #DDDDDD; text-align: center;
+              }
+              .sfdcep-banner-subheader {
+                  font-size: 20px; font-weight: 400; color: #DDDDDD;
+                  text-align: center; padding-bottom: 40px;
+              }
+              .sfdcep-banner-cta { text-align: center; }
+              .sfdcep-banner-cta a {
+                  padding: 10px 20px; display: inline-block;
+                  background-color: #097fb3; border-radius: 20px;
+                  color: #DDDDDD; text-decoration: none;
+                  font-weight: 400; font-size: 18px;
+              }
+          &lt;/style&gt;
+          &lt;div class=&quot;sfdcep-banner&quot;
+               style=&quot;background: url('{{subVar 'BackgroundImageUrl'}}') no-repeat top left;&quot;&gt;
+              &lt;div class=&quot;sfdcep-banner-header&quot;&gt;{{subVar 'Header'}}&lt;/div&gt;
+              &lt;div class=&quot;sfdcep-banner-subheader&quot;&gt;{{subVar 'Subheader'}}&lt;/div&gt;
+              &lt;div class=&quot;sfdcep-banner-cta&quot;&gt;
+                  &lt;a href=&quot;{{subVar 'CallToActionUrl'}}&quot;&gt;{{subVar 'CallToActionText'}}&lt;/a&gt;
+              &lt;/div&gt;
+          &lt;/div&gt;
+      `
+  }
+}
+</code></pre>
+<h3 id="simpleoverlay-pop-up-overlay-with-cta" tabindex="-1">SimpleOverlay — Pop-Up Overlay with CTA</h3>
+<p>A full-screen overlay with a centered modal containing a background image, heading, subheading, and CTA. Clicking anywhere outside the modal dismisses it.</p>
+<pre><span class="code-lang">javascript</span><button class="copy-btn" aria-label="Copy code">Copy</button><code class="language-javascript">{
+  name: &quot;SimpleOverlay&quot;,
+  transformerType: &quot;Handlebars&quot;,
+  lastModifiedDate: new Date().getTime() - (1000 * 60 * 60 * 36),
+  substitutionDefinitions: {
+      BackgroundImageUrl: { defaultValue: '[attributes].[BackgroundImageUrl]' },
+      Header: { defaultValue: '[attributes].[Header]' },
+      Subheader: { defaultValue: '[attributes].[Subheader]' },
+      CallToActionUrl: { defaultValue: '[attributes].[CallToActionUrl]' },
+      CallToActionText: { defaultValue: '[attributes].[CallToActionText]' }
+  },
+  transformerTypeDetails: {
+      html: `
+          &lt;style&gt;
+              .sfdcep-overlay {
+                  background-color: rgba(0,0,0,0.7);
+                  position: fixed; top: 0; bottom: 0; left: 0; right: 0;
+                  z-index: 256;
+              }
+              .sfdcep-overlay-banner {
+                  margin: 0px auto; margin-top: 256px;
+                  width: 500px; height: 500px; background-color: white;
+                  display: flex; flex-flow: column wrap; justify-content: center;
+                  font-family: Arial, Helvetica, sans-serif;
+              }
+              .sfdcep-overlay-header {
+                  font-size: 32px; padding-bottom: 40px; font-weight: 600;
+                  color: #333333; text-align: center;
+              }
+              .sfdcep-overlay-subheader {
+                  font-size: 20px; font-weight: 400; color: #666666;
+                  text-align: center; padding-bottom: 40px;
+              }
+              .sfdcep-overlay-cta { text-align: center; }
+              .sfdcep-overlay-cta a {
+                  padding: 10px 20px; display: inline-block;
+                  background-color: #097fb3; border-radius: 20px;
+                  color: #FFFFFF; text-decoration: none;
+                  font-weight: 400; font-size: 18px;
+              }
+          &lt;/style&gt;
+          &lt;div class=&quot;sfdcep-overlay&quot;
+               onclick=&quot;document.body.removeChild(document.querySelector('.sfdcep-overlay'))&quot;&gt;
+              &lt;div class=&quot;sfdcep-overlay-banner&quot;
+                   style=&quot;background: url('{{subVar 'BackgroundImageUrl'}}') no-repeat top left;&quot;&gt;
+                  &lt;div class=&quot;sfdcep-overlay-header&quot;&gt;{{subVar 'Header'}}&lt;/div&gt;
+                  &lt;div class=&quot;sfdcep-overlay-subheader&quot;&gt;{{subVar 'Subheader'}}&lt;/div&gt;
+                  &lt;div class=&quot;sfdcep-overlay-cta&quot;&gt;
+                      &lt;a href=&quot;{{subVar 'CallToActionUrl'}}&quot;&gt;
+                          {{subVar 'CallToActionText'}}
+                      &lt;/a&gt;
+                  &lt;/div&gt;
+              &lt;/div&gt;
+          &lt;/div&gt;
+      `
+  }
+}
+</code></pre>
+<hr>
+<h2 id="registering-templates-in-the-sitemap" tabindex="-1">Registering Templates in the Sitemap</h2>
+<p>Templates are registered during Personalization module initialization, <strong>before</strong> <code>SalesforceInteractions.init</code> is called:</p>
+<pre><span class="code-lang">javascript</span><button class="copy-btn" aria-label="Copy code">Copy</button><code class="language-javascript">SalesforceInteractions.Personalization.Config.initialize({
+    additionalTransformers: [SimpleRecs, SimpleHero, SimpleOverlay],
+    // ... other config options
+});
+
+SalesforceInteractions.init({
+    consents: [],
+    // ...
+});
+</code></pre>
+<div class="callout callout-important"><p><span class="callout-label">⚠️ Important:</span> The <code>SalesforceInteractions.Personalization.Config.initialize</code> call must happen <strong>before</strong> <code>SalesforceInteractions.init</code>. This ensures templates are available when the Personalization module starts processing experiences.</p></div>
+<hr>
+<h2 id="content-zone-handlers-for-modern-frameworks" tabindex="-1">Content Zone Handlers for Modern Frameworks</h2>
+<p>Traditional DOM manipulation by the SDK can conflict with the virtual DOM or rendering strategies of modern frameworks (React, Vue, Angular). Instead of using Handlebars transformers, use <strong>content zone handlers</strong> to deliver personalized content through your framework's own rendering methods.</p>
+<h3 id="registering-a-content-zone-handler" tabindex="-1">Registering a Content Zone Handler</h3>
+<pre><span class="code-lang">javascript</span><button class="copy-btn" aria-label="Copy code">Copy</button><code class="language-javascript">SalesforceInteractions.Personalization.Config.ContentZoneHandler.set(
+    &quot;home_banner&quot;,  // Unique name for the content zone handler
+    {
+        label: &quot;Home Banner&quot;,         // Friendly name shown in WPM
+        path: &quot;#home-banner-element&quot;, // CSS selector for WPM highlighting
+        onReady: (content, metadata) =&gt; {
+            // Called when personalized content is ready
+            // Use your framework's state management to render
+        },
+        onRevert: (metadata) =&gt; {
+            // Called when preview is cancelled in WPM
+            // Revert to original, non-personalized content
+        }
+    }
+);
+</code></pre>
+<h3 id="contentzonehandler-properties" tabindex="-1">ContentZoneHandler Properties</h3>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>onReady</code></td>
+<td>Yes</td>
+<td>Called when personalized content is ready for rendering. Receives the content and metadata as parameters.</td>
+</tr>
+<tr>
+<td><code>onRevert</code></td>
+<td>No (recommended)</td>
+<td>Called when a WPM preview is cancelled. Should revert to original content.</td>
+</tr>
+<tr>
+<td><code>label</code></td>
+<td>No</td>
+<td>User-friendly name displayed in WPM. Defaults to the handler name.</td>
+</tr>
+<tr>
+<td><code>path</code></td>
+<td>No</td>
+<td>CSS selector for WPM to visually highlight the content zone.</td>
+</tr>
+<tr>
+<td><code>onHighlight</code></td>
+<td>No</td>
+<td>Custom highlight logic for WPM. Use only when <code>path</code> doesn't work (e.g., Shadow DOM).</td>
+</tr>
+</tbody>
+</table></div>
+<div class="callout callout-important"><p><span class="callout-label">⚠️ Important:</span> Don't define both <code>path</code> and <code>onHighlight</code> at the same time.</p></div>
+<h3 id="react-example" tabindex="-1">React Example</h3>
+<pre><span class="code-lang">jsx</span><button class="copy-btn" aria-label="Copy code">Copy</button><code class="language-jsx">import React, { useEffect, useState } from &quot;react&quot;;
+
+export const PersonalizationContentHandler = ({
+    children,
+    contentZoneName,
+    contentZoneLabel
+}) =&gt; {
+    const [personalizedContent, setPersonalizedContent] = useState(undefined);
+    const [elementId, setElementId] = useState(undefined);
+
+    useEffect(() =&gt; {
+        setElementId(`__sf_personalization_contentzonehandler_${contentZoneName}`);
+
+        window.SalesforceInteractions.Personalization.Config.ContentZoneHandler.set(
+            contentZoneName,
+            {
+                label: contentZoneLabel,
+                path: `#${elementId}`,
+                onReady: (content) =&gt; {
+                    setPersonalizedContent(content);
+                },
+                onRevert: () =&gt; {
+                    setPersonalizedContent(undefined);
+                },
+            }
+        );
+
+        return () =&gt; {
+            window.SalesforceInteractions.Personalization.Config.ContentZoneHandler.set(
+                contentZoneName,
+                { onReady: () =&gt; {} }
+            );
+        };
+    });
+
+    if (personalizedContent) {
+        return (
+            &lt;div
+                id={elementId}
+                dangerouslySetInnerHTML={{ __html: personalizedContent }}
+            /&gt;
+        );
+    } else {
+        return &lt;div id={elementId}&gt;{children}&lt;/div&gt;;
+    }
+};
+</code></pre>
+<h3 id="usage-in-your-react-app" tabindex="-1">Usage in Your React App</h3>
+<pre><span class="code-lang">jsx</span><button class="copy-btn" aria-label="Copy code">Copy</button><code class="language-jsx">&lt;PersonalizationContentHandler
+    contentZoneName=&quot;ProductRecs&quot;
+    contentZoneLabel=&quot;Product Recs&quot;
+&gt;
+    &lt;h1&gt;Non-personalized content&lt;/h1&gt;
+    &lt;p&gt;This content will be replaced with personalized content&lt;/p&gt;
+&lt;/PersonalizationContentHandler&gt;
+</code></pre>
+<p>When personalized content is available, the component renders it. Otherwise, the original children are displayed.</p>
+<hr>
+<h2 id="engagement-configurations" tabindex="-1">Engagement Configurations</h2>
+<p>Engagement configurations allow business users to determine <strong>where</strong> personalization decision engagement data should be sent in Data Cloud. They are defined in the sitemap and appear for selection in the second tab of the WPM.</p>
+<p>For example:</p>
+<ul>
+<li>Product recommendation engagement → routes to the <strong>Product Browse</strong> engagement DMO</li>
+<li>Article recommendation engagement → routes to the <strong>Article Browse</strong> engagement DMO</li>
+</ul>
+<p>This separation ensures engagement data lands in the correct DMO for accurate attribution tracking and analytics.</p>
+<p>For details on configuring engagement tracking, see <a href="/web-implementation/web-personalization-manager/">Web Personalization Manager</a>.</p>
+<hr>
+<p><strong>Next:</strong> <a href="/web-implementation/web-personalization-manager/">Web Personalization Manager</a> — Learn how to use the WYSIWYG tool to apply personalization experiences to your website.</p>
+
+      </article>
+
+      <!-- Previous / Next Navigation -->
+      <nav class="prev-next" aria-label="Page navigation">
+        <a href="/web-implementation/experiments/" class="prev-next-btn pn-prev">
+      <span class="pn-direction">← Previous</span>
+      <span class="pn-title">Experiments</span>
+    </a><a href="/web-implementation/web-personalization-manager/" class="prev-next-btn pn-next">
+      <span class="pn-direction">Next →</span>
+      <span class="pn-title">Web Personalization Manager (WPM)</span>
+    </a>
+      </nav>
+
+      <!-- End-of-page Donation CTA -->
+      <div class="donate-cta">
+        <p>Found this guide helpful?</p>
+        <a href="https://buymeacoffee.com/YOUR_USERNAME" target="_blank" rel="noopener noreferrer" class="donate-btn donate-btn-cta">Buy Me a Latte ☕</a>
+      </div>
+    </main>
+  </div>
+
+  <!-- ==================== FOOTER AD ==================== -->
+  <div class="ad-container ad-footer">
+    <span class="ad-label">Advertisement</span>
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+         data-ad-slot="XXXXXXXXXX"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p class="footer-title">Salesforce Personalization Implementation Guide</p>
+      <p class="footer-subtitle">Based on documentation as of March 2026</p>
+      <p class="footer-disclaimer">This is an educational resource. Verify all information against the latest <a href="https://help.salesforce.com/" target="_blank" rel="noopener noreferrer">Salesforce documentation</a>. Salesforce releases updates three times per year.</p>
+      <p class="footer-donate">
+        <a href="https://buymeacoffee.com/YOUR_USERNAME" target="_blank" rel="noopener noreferrer">Support this project — Buy Me a Latte ☕</a>
+      </p>
+    </div>
+  </footer>
+
+  <script src="../../js/main.js"></script>
+  <script src="../../js/copy-code.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (typeof mermaid !== 'undefined') {
+        mermaid.initialize({ startOnLoad: false, theme: 'default' });
+        document.querySelectorAll('pre > code.language-mermaid').forEach(function(el) {
+          var pre = el.parentElement;
+          var container = document.createElement('div');
+          container.className = 'mermaid';
+          container.textContent = el.textContent;
+          pre.parentNode.replaceChild(container, pre);
+        });
+        mermaid.run();
+      }
+    });
+  </script>
+</body>
+</html>

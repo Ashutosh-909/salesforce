@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Personalization API (Decisioning API) — Salesforce Personalization Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body>
+
+  <!-- ==================== TOP NAV BAR ==================== -->
+  <nav class="navbar" id="navbar">
+    <div class="navbar-inner">
+      <a href="../" class="navbar-brand">Salesforce Personalization Guide</a>
+
+      <button class="hamburger" id="hamburger" aria-label="Toggle navigation" aria-expanded="false">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+      </button>
+
+      <div class="navbar-menu" id="navbar-menu">
+        <ul class="nav-list">
+          <li class="nav-item"><a href="../" class="nav-link">Home</a></li>
+          <li class="nav-item"><a href="../setup-permissions/" class="nav-link">Setup &amp; Permissions</a></li>
+
+          <li class="nav-item has-dropdown">
+            <a href="../data-capturing-modeling/" class="nav-link dropdown-toggle">Data Capturing &amp; Modeling <span class="dropdown-arrow">▾</span></a>
+            <ul class="dropdown-menu">
+              <li><a href="../data-capturing-modeling/">Overview</a></li>
+              <li><a href="../data-capturing-modeling/web-data-capturing/">Web Data Capturing</a></li>
+              <li><a href="../data-capturing-modeling/mobile-data-capturing/">Mobile Data Capturing</a></li>
+              <li><a href="../data-capturing-modeling/dlo-dmo-mapping-ir/">DLO-DMO Mapping &amp; IR</a></li>
+              <li><a href="../data-capturing-modeling/data-graphs/">Data Graphs</a></li>
+              <li><a href="../data-capturing-modeling/calculated-insights/">Calculated Insights</a></li>
+            </ul>
+          </li>
+
+          <li class="nav-item has-dropdown">
+            <a href="../web-implementation/" class="nav-link dropdown-toggle">Web Implementation <span class="dropdown-arrow">▾</span></a>
+            <ul class="dropdown-menu">
+              <li><a href="../web-implementation/">Overview</a></li>
+              <li><a href="../web-implementation/personalization-types/">Personalization Types</a></li>
+              <li><a href="../web-implementation/recommenders/">Recommenders</a></li>
+              <li><a href="../web-implementation/response-templates/">Response Templates</a></li>
+              <li><a href="../web-implementation/personalization-points/">Personalization Points</a></li>
+              <li><a href="../web-implementation/decisions/">Decisions</a></li>
+              <li><a href="../web-implementation/experiments/">Experiments</a></li>
+              <li><a href="../web-implementation/web-templates/">Web Templates</a></li>
+              <li><a href="../web-implementation/web-personalization-manager/">Web Personalization Manager</a></li>
+            </ul>
+          </li>
+
+          <li class="nav-item"><a href="../mobile-implementation/" class="nav-link">Mobile Implementation</a></li>
+          <li class="nav-item"><a href="../personalization-api/" class="nav-link">Personalization API</a></li>
+          <li class="nav-item"><a href="../experimentation/" class="nav-link">Experimentation</a></li>
+          <li class="nav-item"><a href="../batch-personalization/" class="nav-link">Batch Personalization</a></li>
+        </ul>
+
+        <a href="https://buymeacoffee.com/YOUR_USERNAME" target="_blank" rel="noopener noreferrer" class="donate-btn donate-btn-nav">
+          <span class="donate-btn-label">Buy Me a Latte ☕</span>
+          <span class="donate-btn-emoji">☕</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ==================== HEADER AD ==================== -->
+  <div class="ad-container ad-header">
+    <span class="ad-label">Advertisement</span>
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+         data-ad-slot="XXXXXXXXXX"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+
+  <!-- ==================== PAGE LAYOUT ==================== -->
+  <div class="page-wrapper">
+
+    <!-- ---- SIDEBAR ---- -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-inner">
+        <nav class="toc" id="toc" aria-label="Table of Contents">
+          <h3 class="toc-title">On This Page</h3>
+          <ul>
+  <li><a href="#prerequisites">Prerequisites</a></li>
+  <li><a href="#how-the-decisioning-pipeline-works">How the Decisioning Pipeline Works</a></li>
+  <li class="toc-h3"><a href="#1-personalization-request">1. Personalization Request</a></li>
+  <li class="toc-h3"><a href="#2-augmenting-phase">2. Augmenting Phase</a></li>
+  <li class="toc-h3"><a href="#3-qualifying-phase">3. Qualifying Phase</a></li>
+  <li class="toc-h3"><a href="#4-personalizing-phase">4. Personalizing Phase</a></li>
+  <li class="toc-h3"><a href="#5-decision-response-logging">5. Decision Response &amp; Logging</a></li>
+  <li><a href="#fetching-personalization-via-the-web-sdk">Fetching Personalization via the Web SDK</a></li>
+  <li class="toc-h3"><a href="#basic-fetch-example">Basic Fetch Example</a></li>
+  <li class="toc-h3"><a href="#fetching-in-modern-frameworks-react-vue-angular">Fetching in Modern Frameworks (React, Vue, Angular)</a></li>
+  <li><a href="#configuring-the-data-space">Configuring the Data Space</a></li>
+  <li><a href="#authenticated-requests">Authenticated Requests</a></li>
+  <li class="toc-h3"><a href="#when-to-use-authenticated-requests">When to Use Authenticated Requests</a></li>
+  <li class="toc-h3"><a href="#configuring-authentication-on-a-personalization-point">Configuring Authentication on a Personalization Point</a></li>
+  <li class="toc-h3"><a href="#server-side-authentication-flow">Server-Side Authentication Flow</a></li>
+  <li><a href="#server-side-api-requests">Server-Side API Requests</a></li>
+  <li class="toc-h3"><a href="#request-format">Request Format</a></li>
+  <li class="toc-h3"><a href="#including-authentication">Including Authentication</a></li>
+  <li><a href="#response-structure">Response Structure</a></li>
+  <li class="toc-h3"><a href="#example-response">Example Response</a></li>
+  <li class="toc-h3"><a href="#response-fields">Response Fields</a></li>
+  <li class="toc-h3"><a href="#empty-responses">Empty Responses</a></li>
+  <li><a href="#pipeline-diagnostics">Pipeline Diagnostics</a></li>
+  <li class="toc-h3"><a href="#1-verify-the-profile-data-graph">1. Verify the Profile Data Graph</a></li>
+  <li class="toc-h3"><a href="#2-check-recommender-training-status">2. Check Recommender Training Status</a></li>
+  <li class="toc-h3"><a href="#3-review-targeting-rules-and-filters">3. Review Targeting Rules and Filters</a></li>
+  <li class="toc-h3"><a href="#4-verify-decision-and-experiment-configuration">4. Verify Decision and Experiment Configuration</a></li>
+  <li class="toc-h3"><a href="#5-credit-consumption-check">5. Credit Consumption Check</a></li>
+  <li><a href="#rendering-personalization-responses">Rendering Personalization Responses</a></li>
+  <li class="toc-h3"><a href="#using-web-templates-transformers">Using Web Templates (Transformers)</a></li>
+  <li class="toc-h3"><a href="#using-wpm-no-code">Using WPM (No-Code)</a></li>
+  <li class="toc-h3"><a href="#manual-rendering-custom-code">Manual Rendering (Custom Code)</a></li>
+  <li><a href="#engagement-tracking-for-api-driven-personalization">Engagement Tracking for API-Driven Personalization</a></li>
+  <li><a href="#summary">Summary</a></li>
+  <li><a href="#learn-more">Learn More</a></li>
+</ul>
+        </nav>
+
+        <!-- Sidebar Donation Card -->
+        <div class="donate-card">
+          <span class="donate-card-emoji">☕</span>
+          <p class="donate-card-heading">Enjoying this guide?</p>
+          <a href="https://buymeacoffee.com/YOUR_USERNAME" target="_blank" rel="noopener noreferrer" class="donate-btn donate-btn-sidebar">Buy Me a Latte</a>
+        </div>
+
+        <!-- Sidebar Ad -->
+        <div class="ad-container ad-sidebar">
+          <span class="ad-label">Advertisement</span>
+          <ins class="adsbygoogle"
+               style="display:block"
+               data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+               data-ad-slot="XXXXXXXXXX"
+               data-ad-format="auto"
+               data-full-width-responsive="true"></ins>
+          <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ---- MAIN CONTENT ---- -->
+    <main class="content" id="content">
+      <!-- Breadcrumbs -->
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <a href="/">Home</a><span class="breadcrumb-sep"> &gt; </span><span class="breadcrumb-current">Personalization API</span>
+      </nav>
+
+      <!-- Page Content (H1 + body from Markdown) -->
+      <article class="article">
+        <h1 id="personalization-api-decisioning-api" tabindex="-1">Personalization API (Decisioning API)</h1>
+<p>Salesforce Personalization exposes a <strong>Decisioning API</strong> that lets you request personalized content programmatically — from the Web SDK on a browser, from a native mobile app, or from a server-side integration. Whether you are rendering product recommendations on a single-page application, powering a headless commerce storefront, or driving personalized email content from a backend service, the Decisioning API is the single endpoint that evaluates an individual against your configured personalization points and returns the right content for the right person.</p>
+<p>This section covers the API's request and response structure, authentication options, client-side and server-side usage patterns, diagnostics, and data space configuration.</p>
+<div class="callout callout-note"><p><span class="callout-label">📝 Note:</span> DLO = Data Lake Object · DMO = Data Model Object · DG = Data Graph · CI = Calculated Insight · WPM = Web Personalization Manager · SDK = Software Development Kit</p></div>
+<hr>
+<h2 id="prerequisites" tabindex="-1">Prerequisites</h2>
+<p>Before you can request personalization decisions through the API, ensure the following are in place:</p>
+<ol>
+<li><strong>At least one Personalization Point</strong> is created with an active Decision or Experiment configured on it. A personalization point without a decision or experiment returns an empty response.</li>
+<li><strong>A Profile Data Graph</strong> is deployed and populated with individual profile data. The DG must have record caching enabled for real-time web personalization.</li>
+<li><strong>Response Templates</strong> are configured and applied to your personalization points so the API knows what shape of data to return.</li>
+<li><strong>The Web SDK is installed</strong> (for client-side usage) and initialized with <code>SalesforceInteractions.init()</code>.</li>
+<li><strong>For recommendations use cases:</strong> A Recommender is configured against the same Profile DG selected on the personalization point, and an Item Data Graph is built with the fields you want returned in the response.</li>
+</ol>
+<div class="callout callout-tip"><p><span class="callout-label">💡 Tip:</span> You can start requesting personalization decisions as soon as you have a Manual Content personalization point with a decision configured — no recommender or item data graph required. This is the fastest path to delivering value.</p></div>
+<hr>
+<h2 id="how-the-decisioning-pipeline-works" tabindex="-1">How the Decisioning Pipeline Works</h2>
+<p>When a personalization request hits the Decisioning API, it flows through four stages before a response is returned. Understanding this pipeline helps you debug issues and design effective personalization strategies.</p>
+<h3 id="1-personalization-request" tabindex="-1">1. Personalization Request</h3>
+<p>A request sent to the decisioning pipeline contains two key components:</p>
+<ul>
+<li><strong>Individual ID</strong> — Identifies who is requesting personalization (e.g., a device ID for anonymous visitors, a unified individual ID for known users).</li>
+<li><strong>One or more Personalization Point IDs</strong> — The named points you want decisions for (e.g., <code>&quot;home_recommendations&quot;</code>, <code>&quot;home_hero&quot;</code>).</li>
+<li><strong>Context data</strong> <em>(optional)</em> — Additional data for recommendation filtering, such as an anchor item ID for &quot;similar items&quot; recommendations. The Web SDK automatically sends context data required by any contextual rules configured on the point's decisions or experiments.</li>
+</ul>
+<h3 id="2-augmenting-phase" tabindex="-1">2. Augmenting Phase</h3>
+<p>Personalization takes the individual ID from the request and calls the Data Cloud Profile API to retrieve the corresponding <strong>Profile Data Graph</strong>. The profile DG returned is the one configured on the personalization point.</p>
+<ul>
+<li>If a profile exists, its full real-time data (engagement history, segment memberships, calculated insights) is available for targeting and recommendation generation.</li>
+<li>If <strong>no profile exists</strong>, the individual is treated as a <strong>first-time anonymous visitor</strong>.</li>
+</ul>
+<div class="callout callout-important"><p><span class="callout-label">⚠️ Important:</span> Personalization assumes that all personalization points included in a single request use the <strong>same Profile Data Graph</strong>. If one of the points references a different DG than a point listed earlier in the request, it will be skipped.</p></div>
+<h3 id="3-qualifying-phase" tabindex="-1">3. Qualifying Phase</h3>
+<p>Using the profile data retrieved from Data Cloud, personalization evaluates each personalization point and determines which decision or experiment cohort the individual qualifies for.</p>
+<ul>
+<li><strong>Experiments are treated as the highest priority</strong> on a personalization point. The individual is evaluated against the experiment first before any decisions.</li>
+<li>Only <strong>one</strong> cohort or decision is returned per personalization point — the highest-priority qualifying match.</li>
+</ul>
+<h3 id="4-personalizing-phase" tabindex="-1">4. Personalizing Phase</h3>
+<p>Once the qualifying cohort or decision is selected, the actual decision content is generated:</p>
+<ul>
+<li><strong>Manual Content:</strong> The text values entered on the decision (e.g., CTA text, header text, image URL) are collected and returned directly.</li>
+<li><strong>Recommendations:</strong> The Profile DG is passed to the Recommendations Service alongside the recommender ID selected on the decision/cohort. The service generates <strong>personalized, 1:1 recommendations</strong> based on the real-time understanding of the individual.</li>
+</ul>
+<h3 id="5-decision-response-logging" tabindex="-1">5. Decision Response &amp; Logging</h3>
+<p>Personalization returns the decision response to the requesting application and simultaneously <strong>logs the decision</strong> in Data Cloud's personalization log. This decision logging is critical for:</p>
+<ul>
+<li><strong>Attribution analytics</strong> — measuring what personalization is driving</li>
+<li><strong>Pipeline Intelligence dashboards</strong> — tracking decision volume and performance</li>
+<li><strong>Experimentation</strong> — recording which cohort an individual was assigned to</li>
+</ul>
+<div class="callout callout-note"><p><span class="callout-label">📝 Note:</span> For each decision that personalization makes, <strong>1 decision credit is consumed</strong>. If a request includes 1 personalization point, that is 1 credit. If a request includes 2 personalization points, that is 2 credits. Plan your credit consumption accordingly.</p></div>
+<hr>
+<h2 id="fetching-personalization-via-the-web-sdk" tabindex="-1">Fetching Personalization via the Web SDK</h2>
+<p>The most common way to request personalization on a website is through the <code>SalesforceInteractions</code> Web SDK. The SDK's <code>Personalization</code> module provides a <code>fetch</code> method that calls the Decisioning API client-side.</p>
+<h3 id="basic-fetch-example" tabindex="-1">Basic Fetch Example</h3>
+<pre><span class="code-lang">javascript</span><button class="copy-btn" aria-label="Copy code">Copy</button><code class="language-javascript">SalesforceInteractions.Personalization.fetch([&quot;home_recommendations&quot;, &quot;home_hero&quot;])
+  .then((personalizationResponse) =&gt; {
+    // Custom logic to render personalization on the website
+    console.log(&quot;Personalization Response&quot;, personalizationResponse);
+  });
+</code></pre>
+<p><strong>How it works:</strong></p>
+<ol>
+<li>The <code>fetch</code> method accepts an <strong>array of personalization point names</strong> as its parameter.</li>
+<li>It returns a <strong>Promise</strong>. When the Promise resolves, the callback function receives the full personalization response.</li>
+<li>Inside the callback, you implement your own rendering logic — updating DOM elements, populating a recommendations carousel, showing a banner, etc.</li>
+</ol>
+<div class="callout callout-tip"><p><span class="callout-label">💡 Tip:</span> When using the Web Personalization Manager (WPM) to configure experiences, you typically don't call <code>fetch</code> manually. WPM automatically creates the sitemap configuration that triggers fetch calls and renders responses using your configured templates. Use manual <code>fetch</code> calls when you need full control over the rendering process or are integrating with a modern frontend framework.</p></div>
+<h3 id="fetching-in-modern-frameworks-react-vue-angular" tabindex="-1">Fetching in Modern Frameworks (React, Vue, Angular)</h3>
+<p>For single-page applications built with React, Vue, Angular, or similar frameworks, use the <strong>Content Zone Handler</strong> API instead of relying on WPM's DOM-based rendering. This gives your framework full control over rendering lifecycle.</p>
+<pre><span class="code-lang">javascript</span><button class="copy-btn" aria-label="Copy code">Copy</button><code class="language-javascript">SalesforceInteractions.ContentZoneHandler.set({
+  contentZoneName: &quot;home_recs_zone&quot;,
+  callback: (response) =&gt; {
+    // Use your framework's state management to render the response
+    // React example: setState, Redux dispatch, etc.
+    // Vue example: reactive data update
+    // Angular example: Observable emission
+    renderRecommendations(response);
+  }
+});
+</code></pre>
+<div class="callout callout-note"><p><span class="callout-label">📝 Note:</span> Content Zone Handlers are registered in your sitemap and fire whenever a personalization response is returned for the named content zone. See <a href="/web-implementation/web-templates/">Web Templates</a> for details on transformer-based rendering.</p></div>
+<hr>
+
+  <div class="ad-container ad-in-content">
+    <span class="ad-label">Advertisement</span>
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+         data-ad-slot="XXXXXXXXXX"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+<h2 id="configuring-the-data-space" tabindex="-1">Configuring the Data Space</h2>
+<p>If your Salesforce org has <strong>more than one data space</strong>, you must specify which data space to use when initializing the SDK. If you don't specify one, the <code>fetch</code> method uses the <code>default</code> data space.</p>
+<pre><span class="code-lang">javascript</span><button class="copy-btn" aria-label="Copy code">Copy</button><code class="language-javascript">SalesforceInteractions.init({
+  consents: [],
+  personalization: {
+    dataspace: &quot;personalizationDemo&quot;,
+  },
+});
+</code></pre>
+<div class="callout callout-important"><p><span class="callout-label">⚠️ Important:</span> You <strong>cannot mix personalization points from multiple data spaces</strong> on a single website. All points requested in a single page load must belong to the same data space. If you don't see any personalization points listed in WPM, verify that your sitemap has the correct data space information configured.</p></div>
+<hr>
+<h2 id="authenticated-requests" tabindex="-1">Authenticated Requests</h2>
+<p>By default, personalization requests from the Web SDK are <strong>anonymous</strong> — the individual is identified by a device ID managed by the SDK. However, for sensitive personalization use cases, you can mark a personalization point as requiring authentication.</p>
+<h3 id="when-to-use-authenticated-requests" tabindex="-1">When to Use Authenticated Requests</h3>
+<ul>
+<li><strong>Logged-in user experiences</strong> where the personalization content is sensitive or user-specific (e.g., account-specific offers, loyalty tier content)</li>
+<li><strong>Server-side integrations</strong> where you want to ensure only authorized systems can request decisions</li>
+<li><strong>Compliance requirements</strong> where you need to verify the caller's identity before returning personalized content</li>
+</ul>
+<h3 id="configuring-authentication-on-a-personalization-point" tabindex="-1">Configuring Authentication on a Personalization Point</h3>
+<ol>
+<li>Navigate to the <strong>Personalization</strong> app in Salesforce Setup.</li>
+<li>Open or create a <strong>Personalization Point</strong>.</li>
+<li>In the configuration modal, enable the <strong>Authentication Required</strong> option.</li>
+<li>Save the personalization point.</li>
+</ol>
+<p>Once enabled, any request against this point must go through personalization's <strong>authenticated Decisioning API</strong> with proper OAuth credentials.</p>
+<h3 id="server-side-authentication-flow" tabindex="-1">Server-Side Authentication Flow</h3>
+<p>For server-side integrations, use the standard Salesforce <strong>OAuth 2.0 token flow</strong> to obtain an access token:</p>
+<ol>
+<li><strong>Create a Connected App</strong> in your Salesforce org with the appropriate OAuth scopes.</li>
+<li><strong>Request an access token</strong> using the OAuth 2.0 client credentials flow or JWT bearer flow.</li>
+<li><strong>Include the access token</strong> in the <code>Authorization</code> header of your API request.</li>
+</ol>
+<pre><span class="code-lang">bash</span><button class="copy-btn" aria-label="Copy code">Copy</button><code class="language-bash"># Example: Obtain an access token via client credentials flow
+curl -X POST https://login.salesforce.com/services/oauth2/token \
+  -d &quot;grant_type=client_credentials&quot; \
+  -d &quot;client_id=YOUR_CONNECTED_APP_CLIENT_ID&quot; \
+  -d &quot;client_secret=YOUR_CONNECTED_APP_CLIENT_SECRET&quot;
+</code></pre>
+<div class="callout callout-warning"><p><span class="callout-label">🚨 Warning:</span> Never hardcode client secrets or access tokens in client-side code. Store credentials securely in environment variables or a secrets manager. Rotate credentials regularly and use the principle of least privilege when configuring Connected App permissions.</p></div>
+<div class="callout callout-validation"><p><span class="callout-label">🔍 Needs Validation:</span> The specific OAuth scopes required for the authenticated Decisioning API and the exact REST endpoint URL should be verified against the latest Salesforce Personalization API documentation, as these may evolve across releases.</p></div>
+<hr>
+<h2 id="server-side-api-requests" tabindex="-1">Server-Side API Requests</h2>
+<p>For headless implementations, backend services, or any integration outside of the Web SDK, you can call the Decisioning API directly via REST.</p>
+<h3 id="request-format" tabindex="-1">Request Format</h3>
+<p>Send a POST request to the Decisioning API endpoint with the following structure:</p>
+<pre><span class="code-lang">json</span><button class="copy-btn" aria-label="Copy code">Copy</button><code class="language-json">{
+  &quot;individualId&quot;: &quot;ba8f56683e2ca01c&quot;,
+  &quot;personalizationPoints&quot;: [
+    {
+      &quot;name&quot;: &quot;home_recommendations&quot;
+    },
+    {
+      &quot;name&quot;: &quot;home_hero&quot;
+    }
+  ],
+  &quot;contextData&quot;: {
+    &quot;anchorItemId&quot;: &quot;6010042&quot;
+  }
+}
+</code></pre>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>individualId</code></td>
+<td>String</td>
+<td>Yes</td>
+<td>The unique identifier for the individual (device ID, unified individual ID, or other configured identifier)</td>
+</tr>
+<tr>
+<td><code>personalizationPoints</code></td>
+<td>Array</td>
+<td>Yes</td>
+<td>Array of objects, each with a <code>name</code> field matching a configured personalization point name</td>
+</tr>
+<tr>
+<td><code>contextData</code></td>
+<td>Object</td>
+<td>No</td>
+<td>Optional key-value pairs for recommendation filtering (e.g., anchor item ID, category)</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="including-authentication" tabindex="-1">Including Authentication</h3>
+<p>For authenticated personalization points, include the OAuth access token in the request header:</p>
+<pre><span class="code-lang">bash</span><button class="copy-btn" aria-label="Copy code">Copy</button><code class="language-bash">curl -X POST https://&lt;your-instance&gt;.salesforce.com/services/data/personalization/decisioning \
+  -H &quot;Authorization: Bearer &lt;ACCESS_TOKEN&gt;&quot; \
+  -H &quot;Content-Type: application/json&quot; \
+  -d '{
+    &quot;individualId&quot;: &quot;ba8f56683e2ca01c&quot;,
+    &quot;personalizationPoints&quot;: [
+      { &quot;name&quot;: &quot;home_recommendations&quot; }
+    ]
+  }'
+</code></pre>
+<div class="callout callout-validation"><p><span class="callout-label">🔍 Needs Validation:</span> The exact REST API endpoint path for the Decisioning API should be verified against the latest Salesforce Personalization API reference documentation. The endpoint structure shown above is illustrative and may differ in your org.</p></div>
+<hr>
+<h2 id="response-structure" tabindex="-1">Response Structure</h2>
+<p>The Decisioning API returns a <code>personalizations</code> array, with one entry per requested personalization point that returned a qualifying decision.</p>
+<h3 id="example-response" tabindex="-1">Example Response</h3>
+<pre><span class="code-lang">json</span><button class="copy-btn" aria-label="Copy code">Copy</button><code class="language-json">{
+  &quot;personalizations&quot;: [
+    {
+      &quot;personalizationId&quot;: &quot;96c4a971-71f5-4779-a82d-2c72dfa964fe&quot;,
+      &quot;requestId&quot;: &quot;c73e348d-3336-4ed4-90f5-c3ed63280e10&quot;,
+      &quot;individualId&quot;: &quot;ba8f56683e2ca01c&quot;,
+      &quot;dataSpace&quot;: &quot;default&quot;,
+      &quot;personalizationPointId&quot;: &quot;9ppSG00000004I9YAI&quot;,
+      &quot;personalizationPointName&quot;: &quot;home_recommendations&quot;,
+      &quot;dmoName&quot;: &quot;ssot__GoodsProduct__dlm&quot;,
+      &quot;data&quot;: [
+        {
+          &quot;ssot__IsSellable__c&quot;: &quot;Y&quot;,
+          &quot;ssot__BrandId__c&quot;: &quot;NTO&quot;,
+          &quot;ssot__Id__c&quot;: &quot;6010042&quot;,
+          &quot;ssot__DataSourceId__c&quot;: &quot;nto_product_data&quot;,
+          &quot;ImageUrl__c&quot;: &quot;https://www.northerntrailoutfitters.com/dw/image/v2/BDPX_PRD/on/demandware.static/-/Sites-nto-alpine-nutrition/default/dwf19b5e9c/images/hi-res/go-brew.jpg&quot;,
+          &quot;personalizationContentId&quot;: &quot;96c4a971-71f5-4779-a82d-2c72dfa964fe:0&quot;,
+          &quot;PurchaseUrl__c&quot;: &quot;https://www.northerntrailoutfitters.com/default/gobrew-connected-coffee-machine-6010042.html&quot;,
+          &quot;ssot__PrimaryProductCategory__c&quot;: &quot;Coffee Machines&quot;,
+          &quot;ssot__Name__c&quot;: &quot;GoBrew Connected Coffee Machine&quot;,
+          &quot;ssot__ProductSKU__c&quot;: &quot;6010042&quot;,
+          &quot;GoodsProductSales__cio&quot;: &quot;[{TotalSoldUnits__c=43.0, ProductId__c=6010042}]&quot;
+        }
+      ]
+    }
+  ]
+}
+</code></pre>
+<h3 id="response-fields" tabindex="-1">Response Fields</h3>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>personalizationId</code></td>
+<td>Unique identifier for this specific personalization decision instance</td>
+</tr>
+<tr>
+<td><code>requestId</code></td>
+<td>Unique identifier for the overall API request</td>
+</tr>
+<tr>
+<td><code>individualId</code></td>
+<td>The individual ID from the request</td>
+</tr>
+<tr>
+<td><code>dataSpace</code></td>
+<td>The data space that served the decision</td>
+</tr>
+<tr>
+<td><code>personalizationPointId</code></td>
+<td>The Salesforce record ID of the personalization point</td>
+</tr>
+<tr>
+<td><code>personalizationPointName</code></td>
+<td>The developer-friendly name of the personalization point</td>
+</tr>
+<tr>
+<td><code>dmoName</code></td>
+<td>The API name of the DMO (Data Model Object) the recommended items belong to (for Recommendations type)</td>
+</tr>
+<tr>
+<td><code>data</code></td>
+<td>Array of recommended items or manual content attributes. Each item contains the fields selected on the Response Template</td>
+</tr>
+<tr>
+<td><code>personalizationContentId</code></td>
+<td>A unique identifier for each piece of content, used for engagement tracking (impressions, clicks)</td>
+</tr>
+</tbody>
+</table></div>
+<div class="callout callout-tip"><p><span class="callout-label">💡 Tip:</span> The fields returned in the <code>data</code> array are determined by two configurations: the <strong>Response Template</strong> applied to the personalization point and the <strong>Item Data Graph</strong> definition. A field must be selected on <strong>both</strong> the response template AND the item data graph to appear in the response.</p></div>
+<h3 id="empty-responses" tabindex="-1">Empty Responses</h3>
+<p>A personalization point can return a <strong>blank decision response</strong> if:</p>
+<ul>
+<li>The individual does not qualify for any experiments or decisions configured on the point (due to targeting rules)</li>
+<li>A recommendations-based decision has no items to return (e.g., all items filtered out)</li>
+<li>The personalization point has no active decision or experiment</li>
+</ul>
+<p>Handle empty responses gracefully in your rendering logic — either show a default fallback experience or hide the content zone.</p>
+<hr>
+<h2 id="pipeline-diagnostics" tabindex="-1">Pipeline Diagnostics</h2>
+<p>When personalization decisions are returning unexpected results — empty responses, wrong content, or missing recommendation items — use these diagnostic approaches to identify the root cause.</p>
+<h3 id="1-verify-the-profile-data-graph" tabindex="-1">1. Verify the Profile Data Graph</h3>
+<p>The first step is to ensure the individual's profile data is reaching the real-time Profile Data Graph correctly.</p>
+<p><strong>Using Data Explorer:</strong></p>
+<ol>
+<li>Navigate to <strong>Data Cloud</strong> → <strong>Data Explorer</strong>.</li>
+<li>Select the <strong>Profile Data Graph</strong> object.</li>
+<li>Search for the individual by their ID.</li>
+<li>Review the JSON output, which shows profile versions in two views:
+<ul>
+<li><strong>Hot-store (RT view):</strong> Real-time data for individuals currently in an active session</li>
+<li><strong>Lakehouse (NRT view):</strong> Near real-time data from the most recent data graph refresh</li>
+</ul>
+</li>
+</ol>
+<div class="callout callout-important"><p><span class="callout-label">⚠️ Important:</span> When debugging real-time events, ensure the Real-Time View toggle is set to <strong>&quot;On&quot;</strong> in Data Explorer. Otherwise you may be looking at stale lakehouse data and assume events are not arriving.</p></div>
+<p><strong>Using a Data Graph Lookup Flow:</strong></p>
+<p>For a more structured debugging approach, create a Screen Flow or auto-launched flow that invokes the <strong>&quot;Data Cloud Get Data Graph By Lookup&quot;</strong> invocable action:</p>
+<ol>
+<li>Create a new flow with the developer name <code>LookupDataGraph</code>.</li>
+<li>Add three <strong>Input Parameters</strong> (all String type):
+<ul>
+<li><code>DataGraphAPIName</code> — API name of the profile data graph</li>
+<li><code>DataspaceAPIName</code> — API name of the data space</li>
+<li><code>LookupKey</code> — The lookup key in the format <code>.SourceRecordId__c=&lt;value&gt;</code></li>
+</ul>
+</li>
+<li>Add one <strong>Output Parameter</strong> (String type):
+<ul>
+<li><code>OutputDataGraph</code> — The returned data graph JSON</li>
+</ul>
+</li>
+<li>Add an <strong>Action</strong> element that invokes &quot;Data Cloud Get Data Graph By Lookup&quot;, mapping the input/output parameters.</li>
+<li><strong>To test:</strong> Run the flow in debug mode and enter different individual IDs to inspect their profile data graphs.</li>
+</ol>
+<h3 id="2-check-recommender-training-status" tabindex="-1">2. Check Recommender Training Status</h3>
+<p>If recommendations are coming back empty, the recommender may not have completed its training cycle.</p>
+<ol>
+<li>Open the <strong>Personalization</strong> app and navigate to your Recommender.</li>
+<li>Click the <strong>Refresh History</strong> tab on the recommender detail page.</li>
+<li>Verify that training has completed successfully.</li>
+</ol>
+<p>Key training requirements:</p>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Factor</th>
+<th>Detail</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Minimum data</strong></td>
+<td>At least <strong>3 engagement rows</strong> across the referenced engagement objects are required for an objective-based recommender to train</td>
+</tr>
+<tr>
+<td><strong>Training cadence</strong></td>
+<td>Every <strong>24 hours</strong> (independent per recommender, not a global schedule)</td>
+</tr>
+<tr>
+<td><strong>New items (Rules-Based)</strong></td>
+<td>Available as soon as they enter the item index — CI refresh (fastest: 1 hour) + Item DG refresh (fastest: 30 minutes)</td>
+</tr>
+<tr>
+<td><strong>New items (Objective-Based)</strong></td>
+<td>Require <strong>1 full training cycle</strong> after the item enters the index (up to 24 hours)</td>
+</tr>
+<tr>
+<td><strong>Incremental updates</strong></td>
+<td>Reflected via the <strong>15-minute index update job</strong> (e.g., a price change from $50 to $45)</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="3-review-targeting-rules-and-filters" tabindex="-1">3. Review Targeting Rules and Filters</h3>
+<p>If an individual is not qualifying for any decisions:</p>
+<ul>
+<li>Open the personalization point and check each decision's <strong>targeting rules</strong></li>
+<li>Verify the individual's profile data graph contains the attributes used in targeting (segment memberships, CIs, profile fields)</li>
+<li>Check that <strong>recommender filters</strong> (decision context, static, profile DG filters) are not overly restrictive — removing all eligible items</li>
+</ul>
+<div class="callout callout-tip"><p><span class="callout-label">💡 Tip:</span> Start with broad targeting rules and permissive filters to confirm the pipeline works end-to-end, then progressively tighten them once you've verified responses are flowing correctly.</p></div>
+<h3 id="4-verify-decision-and-experiment-configuration" tabindex="-1">4. Verify Decision and Experiment Configuration</h3>
+<ul>
+<li>Ensure the personalization point has at least one active <strong>Decision</strong> or <strong>Experiment</strong> applied.</li>
+<li>If an experiment is active, remember it is treated as the <strong>highest priority</strong> — it will intercept traffic before any decisions are evaluated. If the experiment has narrow targeting rules, most individuals fall through to underlying decisions.</li>
+<li>Check that the decision's <strong>response template</strong> matches the personalization type (Manual Content vs. Recommendations).</li>
+</ul>
+<h3 id="5-credit-consumption-check" tabindex="-1">5. Credit Consumption Check</h3>
+<p>If decisions are being returned but you suspect silent failures, review your <strong>decision credit consumption</strong> in the Personalization setup page to ensure credits are being consumed as expected (1 credit per personalization point per request).</p>
+<hr>
+<h2 id="rendering-personalization-responses" tabindex="-1">Rendering Personalization Responses</h2>
+<p>Once you receive a response from the Decisioning API, how you render it depends on your implementation approach.</p>
+<h3 id="using-web-templates-transformers" tabindex="-1">Using Web Templates (Transformers)</h3>
+<p>If you have configured <strong>Handlebars transformers</strong> in your sitemap, the Web SDK's Personalization module automatically converts the JSON response into HTML and injects it into the corresponding <strong>content zone</strong> on the page. See <a href="/web-implementation/web-templates/">Web Templates</a> for details.</p>
+<h3 id="using-wpm-no-code" tabindex="-1">Using WPM (No-Code)</h3>
+<p>The <strong>Web Personalization Manager</strong> handles the full lifecycle — requesting, rendering, and engagement tracking — through a WYSIWYG interface. Business users configure everything visually without writing code. See <a href="/web-implementation/web-personalization-manager/">Web Personalization Manager</a> for details.</p>
+<h3 id="manual-rendering-custom-code" tabindex="-1">Manual Rendering (Custom Code)</h3>
+<p>For full control, use the <code>fetch</code> method and write your own rendering logic:</p>
+<pre><span class="code-lang">javascript</span><button class="copy-btn" aria-label="Copy code">Copy</button><code class="language-javascript">SalesforceInteractions.Personalization.fetch([&quot;home_recommendations&quot;])
+  .then((response) =&gt; {
+    const personalizations = response.personalizations;
+
+    personalizations.forEach((personalization) =&gt; {
+      const pointName = personalization.personalizationPointName;
+      const items = personalization.data;
+
+      if (pointName === &quot;home_recommendations&quot; &amp;&amp; items.length &gt; 0) {
+        const container = document.getElementById(&quot;recs-container&quot;);
+
+        items.forEach((item) =&gt; {
+          const card = document.createElement(&quot;div&quot;);
+          card.className = &quot;recommendation-card&quot;;
+          card.innerHTML = `
+            &lt;img src=&quot;${item.ImageUrl__c}&quot; alt=&quot;${item.ssot__Name__c}&quot; /&gt;
+            &lt;h3&gt;${item.ssot__Name__c}&lt;/h3&gt;
+            &lt;p&gt;${item.ssot__PrimaryProductCategory__c}&lt;/p&gt;
+            &lt;a href=&quot;${item.PurchaseUrl__c}&quot;&gt;Shop Now&lt;/a&gt;
+          `;
+          container.appendChild(card);
+        });
+      }
+    });
+  });
+</code></pre>
+<div class="callout callout-note"><p><span class="callout-label">📝 Note:</span> When rendering manually, you are responsible for sending <strong>engagement tracking events</strong> (impressions, clicks) back to the SDK so that personalization analytics and attribution can function. See <a href="/data-capturing-modeling/web-data-capturing/">Web Data Capturing</a> for details on engagement event tracking.</p></div>
+<hr>
+<h2 id="engagement-tracking-for-api-driven-personalization" tabindex="-1">Engagement Tracking for API-Driven Personalization</h2>
+<p>For personalization analytics, attribution, and experiment measurement to work correctly, you must track two types of engagement events when rendering decisions:</p>
+<ol>
+<li><strong>Impression</strong> — Fired when a personalized experience is displayed to the user. Include the <code>personalizationId</code> and <code>personalizationContentId</code> from the response.</li>
+<li><strong>Click</strong> — Fired when the user interacts with the personalized content (clicks a recommendation, clicks a CTA). Include the same identifiers.</li>
+</ol>
+<p>These identifiers link user interactions back to the specific decision that was served, enabling:</p>
+<ul>
+<li><strong>Attribution analytics</strong> — Understanding which personalization experiences drive conversions</li>
+<li><strong>Experiment measurement</strong> — Comparing cohort performance in A/B tests</li>
+<li><strong>Pipeline Intelligence dashboards</strong> — Tracking overall personalization effectiveness</li>
+</ul>
+<div class="callout callout-important"><p><span class="callout-label">⚠️ Important:</span> If you skip engagement tracking, you will still receive personalization decisions, but you will have <strong>no visibility into their effectiveness</strong>. Always implement impression and click tracking for production deployments.</p></div>
+<hr>
+<h2 id="summary" tabindex="-1">Summary</h2>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Topic</th>
+<th>Key Takeaway</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Pipeline Flow</strong></td>
+<td>Request → Augment (fetch profile DG) → Qualify (match decision/experiment) → Personalize (generate content) → Respond &amp; Log</td>
+</tr>
+<tr>
+<td><strong>Client-Side Fetch</strong></td>
+<td>Use <code>SalesforceInteractions.Personalization.fetch([&quot;point_name&quot;])</code> — returns a Promise with the decision response</td>
+</tr>
+<tr>
+<td><strong>Data Space</strong></td>
+<td>Configure in <code>SalesforceInteractions.init()</code> under <code>personalization.dataspace</code>; cannot mix data spaces on one site</td>
+</tr>
+<tr>
+<td><strong>Authentication</strong></td>
+<td>Mark points as &quot;Authentication Required&quot;; use OAuth 2.0 for server-side requests; never expose secrets client-side</td>
+</tr>
+<tr>
+<td><strong>Response Shape</strong></td>
+<td><code>personalizations[]</code> array with <code>personalizationId</code>, <code>personalizationPointName</code>, <code>dmoName</code>, and <code>data[]</code> containing item fields</td>
+</tr>
+<tr>
+<td><strong>Credits</strong></td>
+<td>1 decision credit per personalization point per request</td>
+</tr>
+<tr>
+<td><strong>Diagnostics</strong></td>
+<td>Check Profile DG in Data Explorer, verify recommender training, review targeting rules and filters, confirm decision/experiment config</td>
+</tr>
+<tr>
+<td><strong>Engagement Tracking</strong></td>
+<td>Always track impressions and clicks with <code>personalizationId</code> and <code>personalizationContentId</code> for attribution and analytics</td>
+</tr>
+</tbody>
+</table></div>
+<hr>
+<h2 id="learn-more" tabindex="-1">Learn More</h2>
+<ul>
+<li><a href="https://developer.salesforce.com/docs/marketing/einstein-personalization/guide/request-personalization-through-sitemap.html" target="_blank" rel="noopener noreferrer">Request Personalization Through the Sitemap</a> — Official Salesforce Developer documentation on the <code>Personalization.fetch()</code> method</li>
+<li><a href="https://help.salesforce.com/s/articleView?id=sf.mc_perso_personalization_point.htm" target="_blank" rel="noopener noreferrer">Personalization Points</a> — Salesforce Help article on creating and configuring personalization points</li>
+<li><a href="https://developer.salesforce.com/docs/marketing/einstein-personalization/guide/decisioning-api.html" target="_blank" rel="noopener noreferrer">Decisioning API</a> — Official API reference documentation</li>
+</ul>
+<div class="callout callout-validation"><p><span class="callout-label">🔍 Needs Validation:</span> The &quot;Learn More&quot; links above are based on known Salesforce documentation URL patterns as of March 2026. Verify these URLs are current, as Salesforce periodically reorganizes its documentation structure.</p></div>
+<hr>
+<p><em>Next: <a href="/experimentation/">Experimentation</a> — Learn how to set up A/B tests on your personalization points.</em></p>
+<p><em>Previous: <a href="/mobile-implementation/">Mobile Implementation</a> — Delivering personalized experiences in native mobile apps.</em></p>
+
+      </article>
+
+      <!-- Previous / Next Navigation -->
+      <nav class="prev-next" aria-label="Page navigation">
+        <a href="/mobile-implementation/" class="prev-next-btn pn-prev">
+      <span class="pn-direction">← Previous</span>
+      <span class="pn-title">Mobile App Implementation</span>
+    </a><a href="/experimentation/" class="prev-next-btn pn-next">
+      <span class="pn-direction">Next →</span>
+      <span class="pn-title">Experimentation Setup</span>
+    </a>
+      </nav>
+
+      <!-- End-of-page Donation CTA -->
+      <div class="donate-cta">
+        <p>Found this guide helpful?</p>
+        <a href="https://buymeacoffee.com/YOUR_USERNAME" target="_blank" rel="noopener noreferrer" class="donate-btn donate-btn-cta">Buy Me a Latte ☕</a>
+      </div>
+    </main>
+  </div>
+
+  <!-- ==================== FOOTER AD ==================== -->
+  <div class="ad-container ad-footer">
+    <span class="ad-label">Advertisement</span>
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+         data-ad-slot="XXXXXXXXXX"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p class="footer-title">Salesforce Personalization Implementation Guide</p>
+      <p class="footer-subtitle">Based on documentation as of March 2026</p>
+      <p class="footer-disclaimer">This is an educational resource. Verify all information against the latest <a href="https://help.salesforce.com/" target="_blank" rel="noopener noreferrer">Salesforce documentation</a>. Salesforce releases updates three times per year.</p>
+      <p class="footer-donate">
+        <a href="https://buymeacoffee.com/YOUR_USERNAME" target="_blank" rel="noopener noreferrer">Support this project — Buy Me a Latte ☕</a>
+      </p>
+    </div>
+  </footer>
+
+  <script src="../js/main.js"></script>
+  <script src="../js/copy-code.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (typeof mermaid !== 'undefined') {
+        mermaid.initialize({ startOnLoad: false, theme: 'default' });
+        document.querySelectorAll('pre > code.language-mermaid').forEach(function(el) {
+          var pre = el.parentElement;
+          var container = document.createElement('div');
+          container.className = 'mermaid';
+          container.textContent = el.textContent;
+          pre.parentNode.replaceChild(container, pre);
+        });
+        mermaid.run();
+      }
+    });
+  </script>
+</body>
+</html>

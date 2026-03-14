@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mobile Data Capturing — Salesforce Personalization Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/style.css">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body>
+
+  <!-- ==================== TOP NAV BAR ==================== -->
+  <nav class="navbar" id="navbar">
+    <div class="navbar-inner">
+      <a href="../../" class="navbar-brand">Salesforce Personalization Guide</a>
+
+      <button class="hamburger" id="hamburger" aria-label="Toggle navigation" aria-expanded="false">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+      </button>
+
+      <div class="navbar-menu" id="navbar-menu">
+        <ul class="nav-list">
+          <li class="nav-item"><a href="../../" class="nav-link">Home</a></li>
+          <li class="nav-item"><a href="../../setup-permissions/" class="nav-link">Setup &amp; Permissions</a></li>
+
+          <li class="nav-item has-dropdown">
+            <a href="../../data-capturing-modeling/" class="nav-link dropdown-toggle">Data Capturing &amp; Modeling <span class="dropdown-arrow">▾</span></a>
+            <ul class="dropdown-menu">
+              <li><a href="../../data-capturing-modeling/">Overview</a></li>
+              <li><a href="../../data-capturing-modeling/web-data-capturing/">Web Data Capturing</a></li>
+              <li><a href="../../data-capturing-modeling/mobile-data-capturing/">Mobile Data Capturing</a></li>
+              <li><a href="../../data-capturing-modeling/dlo-dmo-mapping-ir/">DLO-DMO Mapping &amp; IR</a></li>
+              <li><a href="../../data-capturing-modeling/data-graphs/">Data Graphs</a></li>
+              <li><a href="../../data-capturing-modeling/calculated-insights/">Calculated Insights</a></li>
+            </ul>
+          </li>
+
+          <li class="nav-item has-dropdown">
+            <a href="../../web-implementation/" class="nav-link dropdown-toggle">Web Implementation <span class="dropdown-arrow">▾</span></a>
+            <ul class="dropdown-menu">
+              <li><a href="../../web-implementation/">Overview</a></li>
+              <li><a href="../../web-implementation/personalization-types/">Personalization Types</a></li>
+              <li><a href="../../web-implementation/recommenders/">Recommenders</a></li>
+              <li><a href="../../web-implementation/response-templates/">Response Templates</a></li>
+              <li><a href="../../web-implementation/personalization-points/">Personalization Points</a></li>
+              <li><a href="../../web-implementation/decisions/">Decisions</a></li>
+              <li><a href="../../web-implementation/experiments/">Experiments</a></li>
+              <li><a href="../../web-implementation/web-templates/">Web Templates</a></li>
+              <li><a href="../../web-implementation/web-personalization-manager/">Web Personalization Manager</a></li>
+            </ul>
+          </li>
+
+          <li class="nav-item"><a href="../../mobile-implementation/" class="nav-link">Mobile Implementation</a></li>
+          <li class="nav-item"><a href="../../personalization-api/" class="nav-link">Personalization API</a></li>
+          <li class="nav-item"><a href="../../experimentation/" class="nav-link">Experimentation</a></li>
+          <li class="nav-item"><a href="../../batch-personalization/" class="nav-link">Batch Personalization</a></li>
+        </ul>
+
+        <a href="https://buymeacoffee.com/YOUR_USERNAME" target="_blank" rel="noopener noreferrer" class="donate-btn donate-btn-nav">
+          <span class="donate-btn-label">Buy Me a Latte ☕</span>
+          <span class="donate-btn-emoji">☕</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ==================== HEADER AD ==================== -->
+  <div class="ad-container ad-header">
+    <span class="ad-label">Advertisement</span>
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+         data-ad-slot="XXXXXXXXXX"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+
+  <!-- ==================== PAGE LAYOUT ==================== -->
+  <div class="page-wrapper">
+
+    <!-- ---- SIDEBAR ---- -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-inner">
+        <nav class="toc" id="toc" aria-label="Table of Contents">
+          <h3 class="toc-title">On This Page</h3>
+          <ul>
+  <li><a href="#overview">Overview</a></li>
+  <li><a href="#1-create-a-mobile-app-connector">1. Create a Mobile App Connector</a></li>
+  <li class="toc-h3"><a href="#steps">Steps</a></li>
+  <li><a href="#2-upload-mobile-event-schema">2. Upload Mobile Event Schema</a></li>
+  <li class="toc-h3"><a href="#steps-1">Steps</a></li>
+  <li><a href="#3-ios-sdk-integration">3. iOS SDK Integration</a></li>
+  <li class="toc-h3"><a href="#installation">Installation</a></li>
+  <li class="toc-h3"><a href="#initialization">Initialization</a></li>
+  <li class="toc-h3"><a href="#sending-events">Sending Events</a></li>
+  <li><a href="#4-android-sdk-integration">4. Android SDK Integration</a></li>
+  <li class="toc-h3"><a href="#installation-1">Installation</a></li>
+  <li class="toc-h3"><a href="#initialization-1">Initialization</a></li>
+  <li class="toc-h3"><a href="#sending-events-1">Sending Events</a></li>
+  <li><a href="#5-mobile-event-tracking-patterns">5. Mobile Event Tracking Patterns</a></li>
+  <li class="toc-h3"><a href="#screen-types-equivalent-to-web-page-types">Screen Types (Equivalent to Web Page Types)</a></li>
+  <li class="toc-h3"><a href="#engagement-vs-profile-events">Engagement vs. Profile Events</a></li>
+  <li class="toc-h3"><a href="#event-type-splitting">Event Type Splitting</a></li>
+  <li><a href="#6-deploy-mobile-data-streams">6. Deploy Mobile Data Streams</a></li>
+  <li class="toc-h3"><a href="#steps-2">Steps</a></li>
+  <li><a href="#summary-checklist">Summary Checklist</a></li>
+  <li><a href="#whats-next">What's Next?</a></li>
+  <li><a href="#additional-resources">Additional Resources</a></li>
+</ul>
+        </nav>
+
+        <!-- Sidebar Donation Card -->
+        <div class="donate-card">
+          <span class="donate-card-emoji">☕</span>
+          <p class="donate-card-heading">Enjoying this guide?</p>
+          <a href="https://buymeacoffee.com/YOUR_USERNAME" target="_blank" rel="noopener noreferrer" class="donate-btn donate-btn-sidebar">Buy Me a Latte</a>
+        </div>
+
+        <!-- Sidebar Ad -->
+        <div class="ad-container ad-sidebar">
+          <span class="ad-label">Advertisement</span>
+          <ins class="adsbygoogle"
+               style="display:block"
+               data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+               data-ad-slot="XXXXXXXXXX"
+               data-ad-format="auto"
+               data-full-width-responsive="true"></ins>
+          <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ---- MAIN CONTENT ---- -->
+    <main class="content" id="content">
+      <!-- Breadcrumbs -->
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <a href="/">Home</a><span class="breadcrumb-sep"> &gt; </span><a href="/data-capturing-modeling/">Data Capturing &amp; Modeling</a><span class="breadcrumb-sep"> &gt; </span><span class="breadcrumb-current">Mobile Data Capturing</span>
+      </nav>
+
+      <!-- Page Content (H1 + body from Markdown) -->
+      <article class="article">
+        <h1 id="mobile-data-capturing" tabindex="-1">Mobile Data Capturing</h1>
+<p>This section covers how to capture real-time user interactions from your native mobile app (iOS and Android) and send them to Data Cloud. The overall flow mirrors the web data capturing process — create a connector, upload a schema, integrate the SDK, and deploy data streams — but adapted for the mobile context.</p>
+<div class="callout callout-note"><p><span class="callout-label">📝 Note:</span> Acronyms used in this section — <strong>SDK</strong> = Software Development Kit, <strong>DLO</strong> = Data Lake Object, <strong>DMO</strong> = Data Model Object, <strong>DC</strong> = Data Cloud, <strong>SPM</strong> = Swift Package Manager.</p></div>
+<div class="callout callout-validation"><p><span class="callout-label">🔍 Needs Validation:</span> Mobile SDK features and APIs evolve rapidly. The content in this section is authored based on the web SDK patterns documented in the core implementation guide and general Salesforce Mobile SDK conventions. Verify all code examples and configuration steps against the <a href="https://developer.salesforce.com/docs/marketing/einstein-personalization/guide/personalize-mobile-experiences.html" target="_blank" rel="noopener noreferrer">latest official Salesforce Mobile SDK documentation</a> before implementing in production.</p></div>
+<hr>
+<h2 id="overview" tabindex="-1">Overview</h2>
+<p>Mobile data capturing follows a similar pattern to web data capturing:</p>
+<ol>
+<li>Create a Mobile App Connector</li>
+<li>Upload a Mobile Event Schema</li>
+<li>Integrate the SDK (iOS or Android)</li>
+<li>Configure Mobile Event Tracking</li>
+<li>Deploy Mobile Data Streams</li>
+</ol>
+<hr>
+<h2 id="1-create-a-mobile-app-connector" tabindex="-1">1. Create a Mobile App Connector</h2>
+<p>A mobile app connector links your native mobile application to Data Cloud, similar to how a website connector links a website.</p>
+<h3 id="steps" tabindex="-1">Steps</h3>
+<ol>
+<li>Navigate to <strong>Data Cloud Setup</strong>.</li>
+<li>Under <strong>CONFIGURATION</strong>, click <strong>Websites &amp; Mobile Apps</strong>.</li>
+<li>Click <strong>New</strong>.</li>
+<li>Provide a <strong>Connector Name</strong> (e.g., &quot;NTO iOS App&quot; or &quot;NTO Mobile&quot;).</li>
+<li>From the <strong>Connector Type</strong> dropdown, select <strong>Mobile App</strong>.</li>
+<li>Click <strong>Save</strong>.</li>
+</ol>
+<div class="callout callout-tip"><p><span class="callout-label">💡 Tip:</span> If you have both an iOS and Android app with shared user experiences and data requirements, you can use a single mobile connector for both platforms. If the apps serve significantly different purposes or brands, consider separate connectors.</p></div>
+<hr>
+<h2 id="2-upload-mobile-event-schema" tabindex="-1">2. Upload Mobile Event Schema</h2>
+<p>Just like the web connector, your mobile app connector needs an event schema defining the structure of the events your mobile app will track.</p>
+<h3 id="steps-1" tabindex="-1">Steps</h3>
+<ol>
+<li>Download the recommended mobile event schema file from the connector setup page, or prepare a custom schema file tailored to your app's event structure.</li>
+<li>On the mobile app connector setup page, scroll to the <strong>Schema</strong> section.</li>
+<li>Click <strong>Upload Schema</strong> and select your schema file.</li>
+<li>Confirm that all events and their associated fields are populated correctly.</li>
+<li>Click <strong>Save</strong>.</li>
+</ol>
+<p>The recommended mobile schema covers event types similar to the web schema:</p>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Event Category</th>
+<th>Typical Events</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Engagement Events</strong></td>
+<td>Product browse, add to cart, purchase, content view, search</td>
+</tr>
+<tr>
+<td><strong>Profile Events</strong></td>
+<td>Contact point email, contact point phone, identity, party identification</td>
+</tr>
+</tbody>
+</table></div>
+<div class="callout callout-important"><p><span class="callout-label">⚠️ Important:</span> Schema updates are additive only — you can add new events and fields but cannot remove existing ones. Plan your schema carefully, considering all the events your app will track across current and near-future use cases.</p></div>
+<hr>
+
+  <div class="ad-container ad-in-content">
+    <span class="ad-label">Advertisement</span>
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+         data-ad-slot="XXXXXXXXXX"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+<h2 id="3-ios-sdk-integration" tabindex="-1">3. iOS SDK Integration</h2>
+<p>The Salesforce Interactions Mobile SDK for iOS allows you to capture user interactions from your iOS app and send them to Data Cloud in real time.</p>
+<div class="callout callout-validation"><p><span class="callout-label">🔍 Needs Validation:</span> The iOS SDK code examples below are based on documented patterns and may require adjustment based on the latest SDK version. Consult the <a href="https://developer.salesforce.com/docs/marketing/einstein-personalization/guide/personalize-mobile-experiences.html" target="_blank" rel="noopener noreferrer">official iOS SDK documentation</a> for the most current API signatures and initialization patterns.</p></div>
+<h3 id="installation" tabindex="-1">Installation</h3>
+<p>You can install the Salesforce Interactions Mobile SDK via <strong>CocoaPods</strong> or <strong>Swift Package Manager (SPM)</strong>.</p>
+<h4 id="cocoapods" tabindex="-1">CocoaPods</h4>
+<p>Add the SDK to your <code>Podfile</code>:</p>
+<pre><span class="code-lang">ruby</span><button class="copy-btn" aria-label="Copy code">Copy</button><code class="language-ruby">pod 'SalesforceInteractionsMobile'
+</code></pre>
+<p>Then run:</p>
+<pre><span class="code-lang">bash</span><button class="copy-btn" aria-label="Copy code">Copy</button><code class="language-bash">pod install
+</code></pre>
+<h4 id="swift-package-manager" tabindex="-1">Swift Package Manager</h4>
+<ol>
+<li>Open your Xcode project.</li>
+<li>Navigate to <strong>File</strong> → <strong>Add Package Dependencies</strong>.</li>
+<li>Enter the Salesforce Interactions Mobile SDK repository URL.</li>
+<li>Select the appropriate version and add the package to your target.</li>
+</ol>
+<h3 id="initialization" tabindex="-1">Initialization</h3>
+<p>Initialize the SDK early in your app's lifecycle — typically in your <code>AppDelegate</code> or <code>App</code> struct:</p>
+<pre><span class="code-lang">swift</span><button class="copy-btn" aria-label="Copy code">Copy</button><code class="language-swift">import SalesforceInteractionsMobile
+
+// In your AppDelegate or App initialization
+SalesforceInteractions.initialize(
+    connectorId: &quot;YOUR_CONNECTOR_ID&quot;,
+    consents: [
+        Consent(
+            provider: &quot;YourConsentProvider&quot;,
+            purpose: &quot;Tracking&quot;,
+            status: .optIn
+        )
+    ]
+)
+</code></pre>
+<div class="callout callout-important"><p><span class="callout-label">⚠️ Important:</span> Replace <code>YOUR_CONNECTOR_ID</code> with the actual connector ID from your mobile app connector setup page in Data Cloud.</p></div>
+<h3 id="sending-events" tabindex="-1">Sending Events</h3>
+<p>Send engagement events when users perform actions in your app:</p>
+<pre><span class="code-lang">swift</span><button class="copy-btn" aria-label="Copy code">Copy</button><code class="language-swift">// Track a product view
+SalesforceInteractions.sendEvent(
+    interaction: Interaction(
+        name: &quot;product_view&quot;,
+        eventType: &quot;catalogEngagement&quot;,
+        attributes: [
+            &quot;id&quot;: productId,
+            &quot;name&quot;: productName,
+            &quot;category&quot;: productCategory
+        ]
+    )
+)
+
+// Track an add-to-cart action
+SalesforceInteractions.sendEvent(
+    interaction: Interaction(
+        name: &quot;add_to_cart&quot;,
+        eventType: &quot;cartEngagement&quot;,
+        attributes: [
+            &quot;catalogObjectId&quot;: productId,
+            &quot;price&quot;: price,
+            &quot;quantity&quot;: quantity
+        ]
+    )
+)
+</code></pre>
+<p>Send profile events to capture user identifying information:</p>
+<pre><span class="code-lang">swift</span><button class="copy-btn" aria-label="Copy code">Copy</button><code class="language-swift">// Capture user email (profile event)
+SalesforceInteractions.sendEvent(
+    user: UserAttributes(
+        eventType: &quot;contactPointEmail&quot;,
+        attributes: [
+            &quot;email&quot;: userEmail
+        ]
+    )
+)
+</code></pre>
+<hr>
+<h2 id="4-android-sdk-integration" tabindex="-1">4. Android SDK Integration</h2>
+<p>The Salesforce Interactions Mobile SDK for Android captures user interactions from your Android app.</p>
+<div class="callout callout-validation"><p><span class="callout-label">🔍 Needs Validation:</span> The Android SDK code examples below are based on documented patterns and may require adjustment based on the latest SDK version. Consult the <a href="https://developer.salesforce.com/docs/marketing/einstein-personalization/guide/personalize-mobile-experiences.html" target="_blank" rel="noopener noreferrer">official Android SDK documentation</a> for the most current API signatures.</p></div>
+<h3 id="installation-1" tabindex="-1">Installation</h3>
+<p>Add the SDK dependency to your module-level <code>build.gradle</code> file:</p>
+<pre><span class="code-lang">kotlin</span><button class="copy-btn" aria-label="Copy code">Copy</button><code class="language-kotlin">dependencies {
+    implementation(&quot;com.salesforce.interactions:mobile-sdk:LATEST_VERSION&quot;)
+}
+</code></pre>
+<p>Sync your Gradle project after adding the dependency.</p>
+<h3 id="initialization-1" tabindex="-1">Initialization</h3>
+<p>Initialize the SDK in your <code>Application</code> class:</p>
+<pre><span class="code-lang">kotlin</span><button class="copy-btn" aria-label="Copy code">Copy</button><code class="language-kotlin">import com.salesforce.interactions.SalesforceInteractions
+
+class MyApplication : Application() {
+    override fun onCreate() {
+        super.onCreate()
+
+        SalesforceInteractions.initialize(
+            context = this,
+            connectorId = &quot;YOUR_CONNECTOR_ID&quot;,
+            consents = listOf(
+                Consent(
+                    provider = &quot;YourConsentProvider&quot;,
+                    purpose = &quot;Tracking&quot;,
+                    status = ConsentStatus.OPT_IN
+                )
+            )
+        )
+    }
+}
+</code></pre>
+<h3 id="sending-events-1" tabindex="-1">Sending Events</h3>
+<p>Send engagement events when users perform actions:</p>
+<pre><span class="code-lang">kotlin</span><button class="copy-btn" aria-label="Copy code">Copy</button><code class="language-kotlin">// Track a product view
+SalesforceInteractions.sendEvent(
+    interaction = Interaction(
+        name = &quot;product_view&quot;,
+        eventType = &quot;catalogEngagement&quot;,
+        attributes = mapOf(
+            &quot;id&quot; to productId,
+            &quot;name&quot; to productName,
+            &quot;category&quot; to productCategory
+        )
+    )
+)
+
+// Track an add-to-cart action
+SalesforceInteractions.sendEvent(
+    interaction = Interaction(
+        name = &quot;add_to_cart&quot;,
+        eventType = &quot;cartEngagement&quot;,
+        attributes = mapOf(
+            &quot;catalogObjectId&quot; to productId,
+            &quot;price&quot; to price,
+            &quot;quantity&quot; to quantity
+        )
+    )
+)
+</code></pre>
+<p>Send profile events to capture user identity data:</p>
+<pre><span class="code-lang">kotlin</span><button class="copy-btn" aria-label="Copy code">Copy</button><code class="language-kotlin">// Capture user email (profile event)
+SalesforceInteractions.sendEvent(
+    userAttributes = UserAttributes(
+        eventType = &quot;contactPointEmail&quot;,
+        attributes = mapOf(
+            &quot;email&quot; to userEmail
+        )
+    )
+)
+</code></pre>
+<hr>
+<h2 id="5-mobile-event-tracking-patterns" tabindex="-1">5. Mobile Event Tracking Patterns</h2>
+<p>While mobile apps don't use a &quot;sitemap&quot; file like the web SDK, the same data structuring concepts apply. You need to think about:</p>
+<h3 id="screen-types-equivalent-to-web-page-types" tabindex="-1">Screen Types (Equivalent to Web Page Types)</h3>
+<p>Map your app's screen types to event categories, just as you would map page types in a web sitemap:</p>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Screen Type</th>
+<th>Equivalent Web Page Type</th>
+<th>Event Examples</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Home Screen</td>
+<td>Home</td>
+<td>App open, featured content view</td>
+</tr>
+<tr>
+<td>Product Detail Screen</td>
+<td>Product Display Page</td>
+<td>Product view, add to cart, add to wishlist</td>
+</tr>
+<tr>
+<td>Category/Browse Screen</td>
+<td>Category Page</td>
+<td>Category browse, search, filter</td>
+</tr>
+<tr>
+<td>Cart Screen</td>
+<td>Cart Page</td>
+<td>Cart view, quantity change, remove item</td>
+</tr>
+<tr>
+<td>Checkout/Order Screen</td>
+<td>Order Confirmation</td>
+<td>Purchase complete, payment method</td>
+</tr>
+<tr>
+<td>Profile/Account Screen</td>
+<td>Account Page</td>
+<td>Login, profile update, email capture</td>
+</tr>
+<tr>
+<td>Article/Content Screen</td>
+<td>Article Page</td>
+<td>Article view, share, bookmark</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="engagement-vs-profile-events" tabindex="-1">Engagement vs. Profile Events</h3>
+<p>The same distinction from web data capturing applies:</p>
+<ul>
+<li><strong>Engagement events:</strong> Use <code>eventType</code> on the <code>interaction</code> object — product views, cart actions, purchases, screen views</li>
+<li><strong>Profile events:</strong> Use <code>eventType</code> on the <code>user.attributes</code> object — email capture, phone number, login credentials</li>
+</ul>
+<h3 id="event-type-splitting" tabindex="-1">Event Type Splitting</h3>
+<p>The mobile SDK performs the same event type splitting as the web SDK. A single event containing both engagement and profile data is automatically split into separate events before being sent to Data Cloud.</p>
+<hr>
+<h2 id="6-deploy-mobile-data-streams" tabindex="-1">6. Deploy Mobile Data Streams</h2>
+<p>Deploying mobile data streams follows the same process as web data streams.</p>
+<h3 id="steps-2" tabindex="-1">Steps</h3>
+<ol>
+<li>In Data Cloud, navigate to the <strong>Data Streams</strong> tab and click <strong>New</strong>.</li>
+<li>Under <strong>Connected Sources</strong>, select <strong>Mobile App</strong> and click <strong>Next</strong>.</li>
+<li>From the <strong>Mobile App</strong> dropdown, select the mobile app connector you configured.</li>
+<li>Select the events you'd like to capture and click <strong>Next</strong>.</li>
+<li>Review and verify the events and their associated fields.</li>
+<li>Click <strong>Next</strong>.</li>
+<li>Select the target <strong>Data Space</strong> if you have more than one.</li>
+<li>Set the <strong>Refresh Mode</strong> to <strong>Partial</strong> for each profile event.</li>
+<li>Click <strong>Deploy</strong>.</li>
+</ol>
+<div class="callout callout-warning"><p><span class="callout-label">🚨 Warning:</span> Always use <strong>Partial</strong> refresh mode for mobile data streams, just as with web data streams. Incremental mode will overwrite or clear values not included in each event.</p></div>
+<p>After deployment, map the mobile data stream DLO fields to DMOs using the same approach described in <a href="/data-capturing-modeling/web-data-capturing/#7-map-dlos-to-dmos">Web Data Capturing — Map DLOs to DMOs</a>. The mapping patterns (behavioral events, contact point email, contact point phone, identity, party identification) are identical.</p>
+<div class="callout callout-tip"><p><span class="callout-label">💡 Tip:</span> If your mobile connector uses the same recommended schema as your web connector, the DLO-to-DMO mappings will follow the same patterns. You can reference the mapping tables in <a href="/data-capturing-modeling/web-data-capturing/">Web Data Capturing</a> as a guide.</p></div>
+<hr>
+<h2 id="summary-checklist" tabindex="-1">Summary Checklist</h2>
+<ul>
+<li>[ ] <strong>Mobile app connector created</strong> — Connector type set to &quot;Mobile App&quot;</li>
+<li>[ ] <strong>Mobile event schema uploaded</strong> — Schema covering all engagement and profile events your app will track</li>
+<li>[ ] <strong>iOS SDK integrated</strong> <em>(if applicable)</em> — SDK installed via CocoaPods or SPM, initialized with consent config, events sending correctly</li>
+<li>[ ] <strong>Android SDK integrated</strong> <em>(if applicable)</em> — SDK added via Gradle, initialized in Application class, events sending correctly</li>
+<li>[ ] <strong>Mobile event tracking patterns defined</strong> — Screen types mapped to event categories, engagement vs. profile events structured correctly</li>
+<li>[ ] <strong>Mobile data streams deployed</strong> — All event definitions selected, Partial refresh mode set, DLOs mapped to DMOs</li>
+</ul>
+<hr>
+<h2 id="whats-next" tabindex="-1">What's Next?</h2>
+<p>With web and/or mobile data flowing into Data Cloud, it's time to structure that data and unify customer identities. Head to the next section to learn about DLO-to-DMO mapping strategies and Identity Resolution configuration.</p>
+<p><strong><a href="/data-capturing-modeling/web-data-capturing/">← Previous: Web Data Capturing</a></strong> | <strong><a href="/data-capturing-modeling/dlo-dmo-mapping-ir/">Next: DLO-DMO Mapping &amp; Identity Resolution →</a></strong></p>
+<hr>
+<h2 id="additional-resources" tabindex="-1">Additional Resources</h2>
+<ul>
+<li><a href="https://developer.salesforce.com/docs/marketing/einstein-personalization/guide/personalize-mobile-experiences.html" target="_blank" rel="noopener noreferrer">Salesforce Personalization: Personalize Mobile Experiences</a></li>
+<li><a href="https://help.salesforce.com/s/articleView?id=sf.c360_a_data_mapping.htm" target="_blank" rel="noopener noreferrer">Salesforce Help: Data Mapping</a></li>
+<li><a href="https://help.salesforce.com/s/articleView?id=sf.c360_a_data_streams.htm" target="_blank" rel="noopener noreferrer">Salesforce Help: Data Streams</a></li>
+</ul>
+
+      </article>
+
+      <!-- Previous / Next Navigation -->
+      <nav class="prev-next" aria-label="Page navigation">
+        <a href="/data-capturing-modeling/web-data-capturing/" class="prev-next-btn pn-prev">
+      <span class="pn-direction">← Previous</span>
+      <span class="pn-title">Web Data Capturing</span>
+    </a><a href="/data-capturing-modeling/dlo-dmo-mapping-ir/" class="prev-next-btn pn-next">
+      <span class="pn-direction">Next →</span>
+      <span class="pn-title">DLO-DMO Mapping &amp; Identity Resolution</span>
+    </a>
+      </nav>
+
+      <!-- End-of-page Donation CTA -->
+      <div class="donate-cta">
+        <p>Found this guide helpful?</p>
+        <a href="https://buymeacoffee.com/YOUR_USERNAME" target="_blank" rel="noopener noreferrer" class="donate-btn donate-btn-cta">Buy Me a Latte ☕</a>
+      </div>
+    </main>
+  </div>
+
+  <!-- ==================== FOOTER AD ==================== -->
+  <div class="ad-container ad-footer">
+    <span class="ad-label">Advertisement</span>
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+         data-ad-slot="XXXXXXXXXX"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p class="footer-title">Salesforce Personalization Implementation Guide</p>
+      <p class="footer-subtitle">Based on documentation as of March 2026</p>
+      <p class="footer-disclaimer">This is an educational resource. Verify all information against the latest <a href="https://help.salesforce.com/" target="_blank" rel="noopener noreferrer">Salesforce documentation</a>. Salesforce releases updates three times per year.</p>
+      <p class="footer-donate">
+        <a href="https://buymeacoffee.com/YOUR_USERNAME" target="_blank" rel="noopener noreferrer">Support this project — Buy Me a Latte ☕</a>
+      </p>
+    </div>
+  </footer>
+
+  <script src="../../js/main.js"></script>
+  <script src="../../js/copy-code.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (typeof mermaid !== 'undefined') {
+        mermaid.initialize({ startOnLoad: false, theme: 'default' });
+        document.querySelectorAll('pre > code.language-mermaid').forEach(function(el) {
+          var pre = el.parentElement;
+          var container = document.createElement('div');
+          container.className = 'mermaid';
+          container.textContent = el.textContent;
+          pre.parentNode.replaceChild(container, pre);
+        });
+        mermaid.run();
+      }
+    });
+  </script>
+</body>
+</html>

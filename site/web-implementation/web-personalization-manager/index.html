@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Web Personalization Manager (WPM) — Salesforce Personalization Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/style.css">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body>
+
+  <!-- ==================== TOP NAV BAR ==================== -->
+  <nav class="navbar" id="navbar">
+    <div class="navbar-inner">
+      <a href="../../" class="navbar-brand">Salesforce Personalization Guide</a>
+
+      <button class="hamburger" id="hamburger" aria-label="Toggle navigation" aria-expanded="false">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+      </button>
+
+      <div class="navbar-menu" id="navbar-menu">
+        <ul class="nav-list">
+          <li class="nav-item"><a href="../../" class="nav-link">Home</a></li>
+          <li class="nav-item"><a href="../../setup-permissions/" class="nav-link">Setup &amp; Permissions</a></li>
+
+          <li class="nav-item has-dropdown">
+            <a href="../../data-capturing-modeling/" class="nav-link dropdown-toggle">Data Capturing &amp; Modeling <span class="dropdown-arrow">▾</span></a>
+            <ul class="dropdown-menu">
+              <li><a href="../../data-capturing-modeling/">Overview</a></li>
+              <li><a href="../../data-capturing-modeling/web-data-capturing/">Web Data Capturing</a></li>
+              <li><a href="../../data-capturing-modeling/mobile-data-capturing/">Mobile Data Capturing</a></li>
+              <li><a href="../../data-capturing-modeling/dlo-dmo-mapping-ir/">DLO-DMO Mapping &amp; IR</a></li>
+              <li><a href="../../data-capturing-modeling/data-graphs/">Data Graphs</a></li>
+              <li><a href="../../data-capturing-modeling/calculated-insights/">Calculated Insights</a></li>
+            </ul>
+          </li>
+
+          <li class="nav-item has-dropdown">
+            <a href="../../web-implementation/" class="nav-link dropdown-toggle">Web Implementation <span class="dropdown-arrow">▾</span></a>
+            <ul class="dropdown-menu">
+              <li><a href="../../web-implementation/">Overview</a></li>
+              <li><a href="../../web-implementation/personalization-types/">Personalization Types</a></li>
+              <li><a href="../../web-implementation/recommenders/">Recommenders</a></li>
+              <li><a href="../../web-implementation/response-templates/">Response Templates</a></li>
+              <li><a href="../../web-implementation/personalization-points/">Personalization Points</a></li>
+              <li><a href="../../web-implementation/decisions/">Decisions</a></li>
+              <li><a href="../../web-implementation/experiments/">Experiments</a></li>
+              <li><a href="../../web-implementation/web-templates/">Web Templates</a></li>
+              <li><a href="../../web-implementation/web-personalization-manager/">Web Personalization Manager</a></li>
+            </ul>
+          </li>
+
+          <li class="nav-item"><a href="../../mobile-implementation/" class="nav-link">Mobile Implementation</a></li>
+          <li class="nav-item"><a href="../../personalization-api/" class="nav-link">Personalization API</a></li>
+          <li class="nav-item"><a href="../../experimentation/" class="nav-link">Experimentation</a></li>
+          <li class="nav-item"><a href="../../batch-personalization/" class="nav-link">Batch Personalization</a></li>
+        </ul>
+
+        <a href="https://buymeacoffee.com/YOUR_USERNAME" target="_blank" rel="noopener noreferrer" class="donate-btn donate-btn-nav">
+          <span class="donate-btn-label">Buy Me a Latte ☕</span>
+          <span class="donate-btn-emoji">☕</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ==================== HEADER AD ==================== -->
+  <div class="ad-container ad-header">
+    <span class="ad-label">Advertisement</span>
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+         data-ad-slot="XXXXXXXXXX"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+
+  <!-- ==================== PAGE LAYOUT ==================== -->
+  <div class="page-wrapper">
+
+    <!-- ---- SIDEBAR ---- -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-inner">
+        <nav class="toc" id="toc" aria-label="Table of Contents">
+          <h3 class="toc-title">On This Page</h3>
+          <ul>
+  <li><a href="#accessing-the-wpm">Accessing the WPM</a></li>
+  <li><a href="#adding-a-new-experience">Adding a New Experience</a></li>
+  <li class="toc-h3"><a href="#step-1-select-a-personalization-point">Step 1: Select a Personalization Point</a></li>
+  <li class="toc-h3"><a href="#step-2-choose-a-rendering-method">Step 2: Choose a Rendering Method</a></li>
+  <li class="toc-h3"><a href="#step-3-configure-when-page-option">Step 3: Configure WHEN (Page Option)</a></li>
+  <li class="toc-h3"><a href="#step-4-configure-where-display-method">Step 4: Configure WHERE (Display Method)</a></li>
+  <li><a href="#configuring-engagement-data-tracking">Configuring Engagement Data Tracking</a></li>
+  <li class="toc-h3"><a href="#why-engagement-tracking-matters">Why Engagement Tracking Matters</a></li>
+  <li class="toc-h3"><a href="#available-engagement-destinations">Available Engagement Destinations</a></li>
+  <li class="toc-h3"><a href="#key-data-points-tracked">Key Data Points Tracked</a></li>
+  <li><a href="#previewing-the-experience">Previewing the Experience</a></li>
+  <li class="toc-h3"><a href="#preview-options">Preview Options</a></li>
+  <li class="toc-h3"><a href="#preview-workflow">Preview Workflow</a></li>
+  <li><a href="#publishing-the-experience">Publishing the Experience</a></li>
+  <li class="toc-h3"><a href="#experience-states">Experience States</a></li>
+  <li class="toc-h3"><a href="#publishing-steps">Publishing Steps</a></li>
+  <li><a href="#managing-existing-experiences">Managing Existing Experiences</a></li>
+  <li><a href="#end-to-end-workflow-summary">End-to-End Workflow Summary</a></li>
+  <li><a href="#best-practices">Best Practices</a></li>
+</ul>
+        </nav>
+
+        <!-- Sidebar Donation Card -->
+        <div class="donate-card">
+          <span class="donate-card-emoji">☕</span>
+          <p class="donate-card-heading">Enjoying this guide?</p>
+          <a href="https://buymeacoffee.com/YOUR_USERNAME" target="_blank" rel="noopener noreferrer" class="donate-btn donate-btn-sidebar">Buy Me a Latte</a>
+        </div>
+
+        <!-- Sidebar Ad -->
+        <div class="ad-container ad-sidebar">
+          <span class="ad-label">Advertisement</span>
+          <ins class="adsbygoogle"
+               style="display:block"
+               data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+               data-ad-slot="XXXXXXXXXX"
+               data-ad-format="auto"
+               data-full-width-responsive="true"></ins>
+          <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ---- MAIN CONTENT ---- -->
+    <main class="content" id="content">
+      <!-- Breadcrumbs -->
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <a href="/">Home</a><span class="breadcrumb-sep"> &gt; </span><a href="/web-implementation/">Web Implementation</a><span class="breadcrumb-sep"> &gt; </span><span class="breadcrumb-current">Web Personalization Manager</span>
+      </nav>
+
+      <!-- Page Content (H1 + body from Markdown) -->
+      <article class="article">
+        <h1 id="web-personalization-manager-wpm" tabindex="-1">Web Personalization Manager (WPM)</h1>
+<p>The <strong>Web Personalization Manager (WPM)</strong> is a WYSIWYG tool that allows business users to apply personalization points to their websites as <strong>web personalization experiences</strong> — without writing code or modifying the sitemap manually.</p>
+<p>The WPM overlays on top of your website, letting you visually select where personalized content appears, define when it triggers, configure engagement tracking, and preview the experience before publishing.</p>
+<hr>
+<h2 id="accessing-the-wpm" tabindex="-1">Accessing the WPM</h2>
+<ol>
+<li>
+<p>Navigate to your website in a browser</p>
+</li>
+<li>
+<p>Append <code>?sf_personalization_wpm</code> to the URL</p>
+<pre><button class="copy-btn" aria-label="Copy code">Copy</button><code class="language-">https://www.yourwebsite.com?sf_personalization_wpm
+</code></pre>
+</li>
+<li>
+<p>The WPM authentication prompt appears — log in with your Salesforce credentials</p>
+</li>
+<li>
+<p>Once authenticated, the WPM toolbar appears at the top of the page</p>
+</li>
+</ol>
+<div class="callout callout-note"><p><span class="callout-label">📝 Note:</span> You must have the <strong>Personalization Admin</strong> permission set (or equivalent) to access the WPM.</p></div>
+<hr>
+<h2 id="adding-a-new-experience" tabindex="-1">Adding a New Experience</h2>
+<h3 id="step-1-select-a-personalization-point" tabindex="-1">Step 1: Select a Personalization Point</h3>
+<ol>
+<li>Click <strong>&quot;+ New&quot;</strong> from the <strong>Personalization Experiences</strong> dropdown in the top left</li>
+<li>A modal displays all <a href="/web-implementation/personalization-points/">personalization points</a> configured in the data space defined in your sitemap</li>
+<li>Select the personalization point you want to apply to this page</li>
+</ol>
+<div class="callout callout-tip"><p><span class="callout-label">💡 Tip:</span> If you don't see any personalization points listed, verify that your sitemap has the correct data space information included in the <code>SalesforceInteractions.init</code> configuration.</p></div>
+<div class="callout callout-important"><p><span class="callout-label">⚠️ Important:</span> You cannot mix personalization points from <strong>multiple data spaces</strong> on a single website.</p></div>
+<h3 id="step-2-choose-a-rendering-method" tabindex="-1">Step 2: Choose a Rendering Method</h3>
+<p>Once the personalization point is selected, choose how the decision response will be rendered:</p>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Method</th>
+<th>When to Use</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Manually Personalize Page Elements</strong></td>
+<td>Simple text replacement, basic banner changes</td>
+<td>Personalize the site without a pre-created template. Uses string substitution on existing page elements.</td>
+</tr>
+<tr>
+<td><strong>Use a Template Defined in the Sitemap</strong></td>
+<td>Recommendations carousels, hero banners, pop-ups</td>
+<td>Templates contain pre-built logic for rendering different personalization decision responses.</td>
+</tr>
+</tbody>
+</table></div>
+<div class="callout callout-tip"><p><span class="callout-label">💡 Tip:</span> For advanced use cases like product recommendations and overlays, use templates. For quick text swaps and simple banner changes, manual element personalization works well without developer involvement.</p></div>
+<div class="callout callout-important"><p><span class="callout-label">⚠️ Important:</span> When using templates, the template developer and the business user creating the response templates must coordinate. The template's <code>substitutionDefinitions</code> must align with the fields returned in the decision response. For example, if the response template returns a <code>price</code> field, the template needs a corresponding substitution definition and Handlebars code to render it.</p></div>
+<h3 id="step-3-configure-when-page-option" tabindex="-1">Step 3: Configure WHEN (Page Option)</h3>
+<p>The <strong>page option</strong> determines when the personalization request fires from the Personalization module of the SDK.</p>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Page Type</strong></td>
+<td>Maps to page types defined in the sitemap (e.g., &quot;Homepage&quot;, &quot;PDP Page&quot;, &quot;Category Page&quot;, &quot;Global&quot;). Selecting a page type fires the experience on every matching page.</td>
+<td>Select &quot;PDP Page&quot; → recommendations fire on every product detail page</td>
+</tr>
+<tr>
+<td><strong>URL</strong></td>
+<td>Targets a specific URL pattern not mapped to a sitemap page type. Useful for non-standard pages.</td>
+<td>Enter <code>/promotions/summer-sale</code> → experience fires only on that URL</td>
+</tr>
+</tbody>
+</table></div>
+<div class="callout callout-tip"><p><span class="callout-label">💡 Tip:</span> Use <strong>page types</strong> whenever possible. They decouple the experience from specific URLs, so if your site URL structure changes, the experiences still work.</p></div>
+<h3 id="step-4-configure-where-display-method" tabindex="-1">Step 4: Configure WHERE (Display Method)</h3>
+<p>The <strong>display method</strong> determines where on the page the template renders the decision response.</p>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Description</th>
+<th>Best For</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Content Zone</strong></td>
+<td>Select a pre-defined content zone from the sitemap. Replaces the content within that zone.</td>
+<td>Stable, well-defined personalization hotspots</td>
+</tr>
+<tr>
+<td><strong>Element Selection</strong></td>
+<td>Use the WPM's selector detector to manually choose a <code>&lt;div&gt;</code> on the page. Then choose to <strong>replace</strong> the element or <strong>insert</strong> the response before/after it.</td>
+<td>Personalizing areas not pre-defined as content zones</td>
+</tr>
+<tr>
+<td><strong>Overlay</strong></td>
+<td>Render the response as a pop-up overlay, triggered by scroll percentage, exit intent, element click, or other triggers.</td>
+<td>Pop-ups for email capture, promotions, or announcements</td>
+</tr>
+</tbody>
+</table></div>
+<div class="callout callout-tip"><p><span class="callout-label">💡 Tip:</span> Define content zones in your sitemap at the start of implementation. They represent stable, predictable areas of the page where personalization is expected. This reduces reliance on fragile CSS selectors.</p></div>
+<div class="callout callout-tip"><p><span class="callout-label">💡 Tip:</span> <strong>Pop-ups are a powerful use case</strong> for capturing information like email addresses or SMS opt-in numbers. They can convert anonymous individuals to known profiles and grow your list size for outbound communications.</p></div>
+<hr>
+<h2 id="configuring-engagement-data-tracking" tabindex="-1">Configuring Engagement Data Tracking</h2>
+<p>The second tab of the WPM lets you define <strong>where engagement data should be sent</strong> when a user interacts with a personalization experience.</p>
+<h3 id="why-engagement-tracking-matters" tabindex="-1">Why Engagement Tracking Matters</h3>
+<p>While every personalization decision is logged in Data Cloud's <strong>personalization log</strong> automatically, it's critical that engagement data (views and clicks) is captured in the appropriate <strong>engagement DMO</strong> to enable:</p>
+<ul>
+<li>Attribution tracking and analysis</li>
+<li>Experiment measurement</li>
+<li>Recommender training (for objective-based recommenders)</li>
+</ul>
+<h3 id="available-engagement-destinations" tabindex="-1">Available Engagement Destinations</h3>
+<p>Engagement destinations are defined in the sitemap by your developer. Common destinations include:</p>
+<ul>
+<li><strong>Product Browse</strong> engagement DMO — for product recommendation interactions</li>
+<li><strong>Article Browse</strong> engagement DMO — for article recommendation interactions</li>
+<li>Custom engagement destinations for other item types</li>
+</ul>
+<div class="callout callout-tip"><p><span class="callout-label">💡 Tip:</span> For item recommendations, create a unique engagement destination for each item type. If you recommend both articles and products on your site, define separate destinations so engagement data lands in the correct DMO.</p></div>
+<h3 id="key-data-points-tracked" tabindex="-1">Key Data Points Tracked</h3>
+<p>Every engagement event automatically captures:</p>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Data Point</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Personalization ID</strong></td>
+<td>A unique identifier generated for each decision. Recorded in the personalization log. Connecting this value to engagement data links a view or click to a specific decision.</td>
+</tr>
+<tr>
+<td><strong>Personalization Content ID</strong></td>
+<td>For recommendations, identifies which specific item was interacted with. Maps to a value in the personalization log.</td>
+</tr>
+<tr>
+<td><strong>Personalization Point ID</strong></td>
+<td>Optional. The ID of the personalization point.</td>
+</tr>
+<tr>
+<td><strong>Decision ID</strong></td>
+<td>Optional. The ID of the decision that generated the response.</td>
+</tr>
+</tbody>
+</table></div>
+<div class="callout callout-tip"><p><span class="callout-label">💡 Tip:</span> Including the personalization point and decision IDs in your engagement DMO enables <strong>frequency capping</strong>. For example, you could write a targeting rule that only shows a decision if the user has seen it fewer than 3 times in the past 7 days.</p></div>
+<hr>
+
+  <div class="ad-container ad-in-content">
+    <span class="ad-label">Advertisement</span>
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+         data-ad-slot="XXXXXXXXXX"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+<h2 id="previewing-the-experience" tabindex="-1">Previewing the Experience</h2>
+<p>Before publishing, preview the experience to validate rendering and targeting logic.</p>
+<h3 id="preview-options" tabindex="-1">Preview Options</h3>
+<ol>
+<li>
+<p><strong>Individual ID</strong> — By default, the WPM uses your own individual ID. Override this field to preview against a different person's profile.</p>
+</li>
+<li>
+<p><strong>Current User Decision</strong> — Evaluates the experience using the targeting rules against the selected individual's profile data graph. Shows what that specific person would see.</p>
+</li>
+<li>
+<p><strong>Decision Selector</strong> — Choose any decision from a dropdown to preview its content, <strong>ignoring targeting rules</strong>. Use this to verify that the template renders correctly for each decision.</p>
+</li>
+<li>
+<p><strong>Preview Button</strong> — Click to render the preview on the page.</p>
+</li>
+</ol>
+<h3 id="preview-workflow" tabindex="-1">Preview Workflow</h3>
+<ol>
+<li>Enter an <strong>individual ID</strong> (or keep the default)</li>
+<li>Select <strong>&quot;Current User Decision&quot;</strong> to test real targeting, or select a specific decision to test rendering</li>
+<li>Click <strong>Preview</strong></li>
+<li>Verify the rendered experience looks correct</li>
+<li>If issues appear, check:
+<ul>
+<li>Template substitution definitions match the response fields</li>
+<li>Content zone or element selector targets the right area</li>
+<li>Decision targeting rules are configured as expected</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 id="publishing-the-experience" tabindex="-1">Publishing the Experience</h2>
+<h3 id="experience-states" tabindex="-1">Experience States</h3>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>State</th>
+<th>Behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Disabled</strong> (default)</td>
+<td>The experience is saved but will <strong>not</strong> trigger personalization requests or render content</td>
+</tr>
+<tr>
+<td><strong>Live</strong></td>
+<td>The experience is active — personalization requests fire and content renders for qualifying individuals</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="publishing-steps" tabindex="-1">Publishing Steps</h3>
+<ol>
+<li>Toggle the <strong>Experience State</strong> to <strong>Live</strong></li>
+<li>Click <strong>Save</strong></li>
+<li>The WPM automatically adds a <strong>Personalization Experience Configuration</strong> to your sitemap</li>
+<li>The Personalization module of the Web SDK handles all requests associated with this configuration — no additional sitemap modifications are required</li>
+</ol>
+<div class="callout callout-note"><p><span class="callout-label">📝 Note:</span> After saving, the experience is live immediately. There is no separate deployment step.</p></div>
+<hr>
+<h2 id="managing-existing-experiences" tabindex="-1">Managing Existing Experiences</h2>
+<p>To view and manage all experiences on a page:</p>
+<ol>
+<li>Open the WPM on that page (<code>?sf_personalization_wpm</code>)</li>
+<li>Click the <strong>Personalization Experiences</strong> dropdown in the top left</li>
+<li>Below the <strong>&quot;+ New&quot;</strong> button, you'll see a list of all live experiences on the current page</li>
+<li>Click an experience to edit its configuration, preview it, or change its state</li>
+</ol>
+<hr>
+<h2 id="end-to-end-workflow-summary" tabindex="-1">End-to-End Workflow Summary</h2>
+<p>Here's the complete workflow for adding a personalized experience to your website using the WPM:</p>
+<pre><button class="copy-btn" aria-label="Copy code">Copy</button><code class="language-">1. Open WPM                → Append ?sf_personalization_wpm to your site URL
+2. Select a Point          → Choose the personalization point to apply
+3. Choose Rendering        → Template or manual element personalization
+4. Configure WHEN          → Select page type or URL pattern
+5. Configure WHERE         → Content zone, element selector, or overlay
+6. Configure Tracking      → Select engagement destination, map data fields
+7. Preview                 → Test against current user or specific individual
+8. Set State to Live       → Enable the experience
+9. Save                    → Experience config is added to the sitemap automatically
+</code></pre>
+<hr>
+<h2 id="best-practices" tabindex="-1">Best Practices</h2>
+<ol>
+<li><strong>Preview with multiple profiles</strong> — Test the experience against different individual IDs to validate that targeting rules work correctly for various audience segments</li>
+<li><strong>Coordinate with developers</strong> — Ensure templates align with response template fields before building experiences in the WPM</li>
+<li><strong>Start with page types</strong> — Use sitemap-defined page types for the WHEN configuration, rather than specific URLs, for more resilient experiences</li>
+<li><strong>Use content zones</strong> — Pre-define content zones in the sitemap for stable, consistent placement</li>
+<li><strong>Name experiences clearly</strong> — Use descriptive names that indicate the point, audience, and purpose (e.g., &quot;Homepage Hero — VIP Customers — Spring Sale&quot;)</li>
+<li><strong>Track engagement correctly</strong> — Always configure engagement tracking on the second tab to ensure attribution data flows to the right DMO</li>
+</ol>
+<hr>
+<p><strong>Previous:</strong> <a href="/web-implementation/web-templates/">Web Templates (Transformers)</a></p>
+<p><strong>Next:</strong> <a href="/mobile-implementation/">Mobile Implementation</a> — Learn how to deliver personalized experiences in native mobile apps.</p>
+
+      </article>
+
+      <!-- Previous / Next Navigation -->
+      <nav class="prev-next" aria-label="Page navigation">
+        <a href="/web-implementation/web-templates/" class="prev-next-btn pn-prev">
+      <span class="pn-direction">← Previous</span>
+      <span class="pn-title">Web Templates (Transformers)</span>
+    </a><a href="/mobile-implementation/" class="prev-next-btn pn-next">
+      <span class="pn-direction">Next →</span>
+      <span class="pn-title">Mobile App Implementation</span>
+    </a>
+      </nav>
+
+      <!-- End-of-page Donation CTA -->
+      <div class="donate-cta">
+        <p>Found this guide helpful?</p>
+        <a href="https://buymeacoffee.com/YOUR_USERNAME" target="_blank" rel="noopener noreferrer" class="donate-btn donate-btn-cta">Buy Me a Latte ☕</a>
+      </div>
+    </main>
+  </div>
+
+  <!-- ==================== FOOTER AD ==================== -->
+  <div class="ad-container ad-footer">
+    <span class="ad-label">Advertisement</span>
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+         data-ad-slot="XXXXXXXXXX"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p class="footer-title">Salesforce Personalization Implementation Guide</p>
+      <p class="footer-subtitle">Based on documentation as of March 2026</p>
+      <p class="footer-disclaimer">This is an educational resource. Verify all information against the latest <a href="https://help.salesforce.com/" target="_blank" rel="noopener noreferrer">Salesforce documentation</a>. Salesforce releases updates three times per year.</p>
+      <p class="footer-donate">
+        <a href="https://buymeacoffee.com/YOUR_USERNAME" target="_blank" rel="noopener noreferrer">Support this project — Buy Me a Latte ☕</a>
+      </p>
+    </div>
+  </footer>
+
+  <script src="../../js/main.js"></script>
+  <script src="../../js/copy-code.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (typeof mermaid !== 'undefined') {
+        mermaid.initialize({ startOnLoad: false, theme: 'default' });
+        document.querySelectorAll('pre > code.language-mermaid').forEach(function(el) {
+          var pre = el.parentElement;
+          var container = document.createElement('div');
+          container.className = 'mermaid';
+          container.textContent = el.textContent;
+          pre.parentNode.replaceChild(container, pre);
+        });
+        mermaid.run();
+      }
+    });
+  </script>
+</body>
+</html>

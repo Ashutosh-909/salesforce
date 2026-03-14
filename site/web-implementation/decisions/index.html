@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Personalization Decisions — Salesforce Personalization Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/style.css">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body>
+
+  <!-- ==================== TOP NAV BAR ==================== -->
+  <nav class="navbar" id="navbar">
+    <div class="navbar-inner">
+      <a href="../../" class="navbar-brand">Salesforce Personalization Guide</a>
+
+      <button class="hamburger" id="hamburger" aria-label="Toggle navigation" aria-expanded="false">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+      </button>
+
+      <div class="navbar-menu" id="navbar-menu">
+        <ul class="nav-list">
+          <li class="nav-item"><a href="../../" class="nav-link">Home</a></li>
+          <li class="nav-item"><a href="../../setup-permissions/" class="nav-link">Setup &amp; Permissions</a></li>
+
+          <li class="nav-item has-dropdown">
+            <a href="../../data-capturing-modeling/" class="nav-link dropdown-toggle">Data Capturing &amp; Modeling <span class="dropdown-arrow">▾</span></a>
+            <ul class="dropdown-menu">
+              <li><a href="../../data-capturing-modeling/">Overview</a></li>
+              <li><a href="../../data-capturing-modeling/web-data-capturing/">Web Data Capturing</a></li>
+              <li><a href="../../data-capturing-modeling/mobile-data-capturing/">Mobile Data Capturing</a></li>
+              <li><a href="../../data-capturing-modeling/dlo-dmo-mapping-ir/">DLO-DMO Mapping &amp; IR</a></li>
+              <li><a href="../../data-capturing-modeling/data-graphs/">Data Graphs</a></li>
+              <li><a href="../../data-capturing-modeling/calculated-insights/">Calculated Insights</a></li>
+            </ul>
+          </li>
+
+          <li class="nav-item has-dropdown">
+            <a href="../../web-implementation/" class="nav-link dropdown-toggle">Web Implementation <span class="dropdown-arrow">▾</span></a>
+            <ul class="dropdown-menu">
+              <li><a href="../../web-implementation/">Overview</a></li>
+              <li><a href="../../web-implementation/personalization-types/">Personalization Types</a></li>
+              <li><a href="../../web-implementation/recommenders/">Recommenders</a></li>
+              <li><a href="../../web-implementation/response-templates/">Response Templates</a></li>
+              <li><a href="../../web-implementation/personalization-points/">Personalization Points</a></li>
+              <li><a href="../../web-implementation/decisions/">Decisions</a></li>
+              <li><a href="../../web-implementation/experiments/">Experiments</a></li>
+              <li><a href="../../web-implementation/web-templates/">Web Templates</a></li>
+              <li><a href="../../web-implementation/web-personalization-manager/">Web Personalization Manager</a></li>
+            </ul>
+          </li>
+
+          <li class="nav-item"><a href="../../mobile-implementation/" class="nav-link">Mobile Implementation</a></li>
+          <li class="nav-item"><a href="../../personalization-api/" class="nav-link">Personalization API</a></li>
+          <li class="nav-item"><a href="../../experimentation/" class="nav-link">Experimentation</a></li>
+          <li class="nav-item"><a href="../../batch-personalization/" class="nav-link">Batch Personalization</a></li>
+        </ul>
+
+        <a href="https://buymeacoffee.com/YOUR_USERNAME" target="_blank" rel="noopener noreferrer" class="donate-btn donate-btn-nav">
+          <span class="donate-btn-label">Buy Me a Latte ☕</span>
+          <span class="donate-btn-emoji">☕</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ==================== HEADER AD ==================== -->
+  <div class="ad-container ad-header">
+    <span class="ad-label">Advertisement</span>
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+         data-ad-slot="XXXXXXXXXX"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+
+  <!-- ==================== PAGE LAYOUT ==================== -->
+  <div class="page-wrapper">
+
+    <!-- ---- SIDEBAR ---- -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-inner">
+        <nav class="toc" id="toc" aria-label="Table of Contents">
+          <h3 class="toc-title">On This Page</h3>
+          <ul>
+  <li><a href="#anatomy-of-a-decision">Anatomy of a Decision</a></li>
+  <li class="toc-h3"><a href="#1-priority">1. Priority</a></li>
+  <li class="toc-h3"><a href="#2-targeting-rules">2. Targeting Rules</a></li>
+  <li class="toc-h3"><a href="#3-personalization-attributes">3. Personalization Attributes</a></li>
+  <li class="toc-h3"><a href="#4-recommender">4. Recommender</a></li>
+  <li><a href="#creating-a-decision-step-by-step">Creating a Decision — Step by Step</a></li>
+  <li><a href="#multiple-decisions-priority-evaluation">Multiple Decisions — Priority Evaluation</a></li>
+  <li><a href="#run-time-decision-flow">Run-Time Decision Flow</a></li>
+  <li class="toc-h3"><a href="#1-personalization-request">1. Personalization Request</a></li>
+  <li class="toc-h3"><a href="#2-augmenting-phase">2. Augmenting Phase</a></li>
+  <li class="toc-h3"><a href="#3-qualifying-phase">3. Qualifying Phase</a></li>
+  <li class="toc-h3"><a href="#4-personalizing-phase">4. Personalizing Phase</a></li>
+  <li class="toc-h3"><a href="#5-decision-response-logging">5. Decision Response &amp; Logging</a></li>
+  <li><a href="#targeting-rule-examples">Targeting Rule Examples</a></li>
+  <li class="toc-h3"><a href="#segment-based-targeting">Segment-Based Targeting</a></li>
+  <li class="toc-h3"><a href="#attribute-based-targeting">Attribute-Based Targeting</a></li>
+  <li class="toc-h3"><a href="#ci-based-targeting">CI-Based Targeting</a></li>
+  <li class="toc-h3"><a href="#contextual-targeting">Contextual Targeting</a></li>
+  <li><a href="#best-practices">Best Practices</a></li>
+</ul>
+        </nav>
+
+        <!-- Sidebar Donation Card -->
+        <div class="donate-card">
+          <span class="donate-card-emoji">☕</span>
+          <p class="donate-card-heading">Enjoying this guide?</p>
+          <a href="https://buymeacoffee.com/YOUR_USERNAME" target="_blank" rel="noopener noreferrer" class="donate-btn donate-btn-sidebar">Buy Me a Latte</a>
+        </div>
+
+        <!-- Sidebar Ad -->
+        <div class="ad-container ad-sidebar">
+          <span class="ad-label">Advertisement</span>
+          <ins class="adsbygoogle"
+               style="display:block"
+               data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+               data-ad-slot="XXXXXXXXXX"
+               data-ad-format="auto"
+               data-full-width-responsive="true"></ins>
+          <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ---- MAIN CONTENT ---- -->
+    <main class="content" id="content">
+      <!-- Breadcrumbs -->
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <a href="/">Home</a><span class="breadcrumb-sep"> &gt; </span><a href="/web-implementation/">Web Implementation</a><span class="breadcrumb-sep"> &gt; </span><span class="breadcrumb-current">Decisions</span>
+      </nav>
+
+      <!-- Page Content (H1 + body from Markdown) -->
+      <article class="article">
+        <h1 id="personalization-decisions" tabindex="-1">Personalization Decisions</h1>
+<p>A <strong>decision</strong> defines what personalized content a specific audience receives when a personalization point is requested. Each personalization point can have up to <strong>25 decisions</strong>, evaluated by priority to determine the winning response for each individual.</p>
+<hr>
+<h2 id="anatomy-of-a-decision" tabindex="-1">Anatomy of a Decision</h2>
+<p>Every decision has four key components:</p>
+<h3 id="1-priority" tabindex="-1">1. Priority</h3>
+<p>Each decision is assigned a <strong>priority value</strong> that determines evaluation order. Key facts:</p>
+<ul>
+<li>New decisions are automatically assigned the <strong>lowest priority</strong> (evaluated last)</li>
+<li>Priority can be adjusted from the related object list view on the personalization point</li>
+<li>When an individual qualifies for <strong>multiple decisions</strong>, the <strong>highest priority qualifying decision</strong> wins</li>
+<li>Personalization returns <strong>only one decision response</strong> per personalization point — it does not return responses for multiple decisions</li>
+</ul>
+<h3 id="2-targeting-rules" tabindex="-1">2. Targeting Rules</h3>
+<p>Targeting rules are <strong>optional</strong> and determine <strong>who is eligible</strong> to receive a specific decision. If no rules are defined, any individual is eligible.</p>
+<p>Rules can be written against:</p>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Rule Source</th>
+<th>Examples</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Profile DG direct attributes</strong></td>
+<td><code>Unified Individual → Country = &quot;US&quot;</code></td>
+</tr>
+<tr>
+<td><strong>Profile DG related attributes</strong></td>
+<td><code>Contact Point Email → Email Domain contains &quot;enterprise.com&quot;</code></td>
+</tr>
+<tr>
+<td><strong>Calculated Insights</strong></td>
+<td><code>Total Lifetime Value &gt; 500</code></td>
+</tr>
+<tr>
+<td><strong>Segment memberships</strong></td>
+<td><code>Member of &quot;High Value Customers&quot; segment</code></td>
+</tr>
+<tr>
+<td><strong>Contextual rules</strong></td>
+<td><code>Current page URL contains &quot;/sale&quot;</code>, <code>Device type = &quot;mobile&quot;</code></td>
+</tr>
+</tbody>
+</table></div>
+<div class="callout callout-note"><p><span class="callout-label">📝 Note:</span> Up to <strong>50 conditions</strong> can be added to a single decision's targeting rules.</p></div>
+<h3 id="3-personalization-attributes" tabindex="-1">3. Personalization Attributes</h3>
+<p>These are the <strong>string entry text fields</strong> defined by the <a href="/web-implementation/response-templates/">response template</a>. For Manual Content decisions, this is where business users type in the content values (header text, CTA text, image URLs, etc.). The values entered here are returned in the decision response for qualifying individuals.</p>
+<h3 id="4-recommender" tabindex="-1">4. Recommender</h3>
+<p>For decisions on personalization points of type <strong>Recommendations</strong>, you select a <strong>recommender</strong> that determines which items are returned. Available recommenders must:</p>
+<ul>
+<li>Be configured with the <strong>same profile DG</strong> as the personalization point</li>
+<li>Return items from the <strong>same DMO</strong> that the response template is configured against</li>
+</ul>
+<hr>
+<h2 id="creating-a-decision-step-by-step" tabindex="-1">Creating a Decision — Step by Step</h2>
+<ol>
+<li>Navigate to the <strong>Personalization</strong> app → <strong>Personalization Points</strong></li>
+<li>Open the personalization point where you want to add a decision</li>
+<li>In the <strong>Decisions</strong> section, click <strong>New Decision</strong></li>
+<li>Optionally configure <strong>targeting rules</strong> to restrict who qualifies</li>
+<li>Fill in the <strong>personalization attributes</strong> (for Manual Content) or select a <strong>recommender</strong> (for Recommendations)</li>
+<li>Save the decision</li>
+<li>Adjust <strong>priority</strong> if needed from the personalization point's decision list view</li>
+</ol>
+<hr>
+<h2 id="multiple-decisions-priority-evaluation" tabindex="-1">Multiple Decisions — Priority Evaluation</h2>
+<p>When a personalization point has multiple decisions, the evaluation follows a strict priority order:</p>
+<pre><button class="copy-btn" aria-label="Copy code">Copy</button><code class="language-">Individual requests personalization point &quot;home_hero&quot;
+│
+├── Decision 1 (Priority: Highest) — Rules: &quot;VIP Segment&quot;
+│   └── Does the individual qualify? → YES → Return this decision ✓
+│                                    → NO  → Continue ↓
+│
+├── Decision 2 (Priority: Medium) — Rules: &quot;New Customer Segment&quot;
+│   └── Does the individual qualify? → YES → Return this decision ✓
+│                                    → NO  → Continue ↓
+│
+└── Decision 3 (Priority: Lowest) — Rules: None (default/fallback)
+    └── All individuals qualify → Return this decision ✓
+</code></pre>
+<div class="callout callout-tip"><p><span class="callout-label">💡 Tip:</span> Always create a <strong>lowest-priority decision with no targeting rules</strong> as a fallback. This ensures every individual receives some personalized content, even if they don't qualify for higher-priority, more targeted decisions.</p></div>
+<hr>
+
+  <div class="ad-container ad-in-content">
+    <span class="ad-label">Advertisement</span>
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+         data-ad-slot="XXXXXXXXXX"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+<h2 id="run-time-decision-flow" tabindex="-1">Run-Time Decision Flow</h2>
+<p>When a personalization request reaches the decisioning pipeline, it passes through five stages:</p>
+<h3 id="1-personalization-request" tabindex="-1">1. Personalization Request</h3>
+<p>The request contains:</p>
+<ul>
+<li>An <strong>individual ID</strong> (anonymous or known)</li>
+<li>One or more <strong>personalization point IDs</strong></li>
+<li>Optional <strong>context data</strong> (anchor item ID, page URL, category, etc.)</li>
+</ul>
+<p>The Web SDK automatically sends context data required for any contextual rules configured on decisions or experiments.</p>
+<h3 id="2-augmenting-phase" tabindex="-1">2. Augmenting Phase</h3>
+<p>Personalization uses the individual ID to request the corresponding <strong>profile data graph</strong> from the Data Cloud profile API. If no profile exists, the individual is treated as a first-time anonymous visitor.</p>
+<h3 id="3-qualifying-phase" tabindex="-1">3. Qualifying Phase</h3>
+<p>For each personalization point in the request, the pipeline evaluates:</p>
+<ul>
+<li><strong>Experiments first</strong> — Experiments are always the highest-priority item on a point</li>
+<li>Then <strong>decisions by priority</strong> — The highest-priority qualifying decision wins</li>
+</ul>
+<h3 id="4-personalizing-phase" tabindex="-1">4. Personalizing Phase</h3>
+<p>Once the qualifying decision (or experiment cohort) is determined:</p>
+<ul>
+<li><strong>Manual Content</strong> — The text values from the decision are assembled into the response</li>
+<li><strong>Recommendations</strong> — The profile DG is passed to the recommendations service alongside the recommender ID. The service generates personalized 1:1 recommendations based on the real-time profile.</li>
+</ul>
+<h3 id="5-decision-response-logging" tabindex="-1">5. Decision Response &amp; Logging</h3>
+<p>The decision response is returned to the requesting application. Simultaneously, the decision is <strong>logged in Data Cloud</strong> in the personalization log. This logging is critical for analytics and attribution tracking.</p>
+<hr>
+<h2 id="targeting-rule-examples" tabindex="-1">Targeting Rule Examples</h2>
+<h3 id="segment-based-targeting" tabindex="-1">Segment-Based Targeting</h3>
+<blockquote>
+<p>Show a premium product banner only to members of the &quot;High Value Customers&quot; segment.</p>
+</blockquote>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Condition</th>
+<th>Operator</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Segment Membership: High Value Customers</td>
+<td>equals</td>
+<td>true</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="attribute-based-targeting" tabindex="-1">Attribute-Based Targeting</h3>
+<blockquote>
+<p>Show a localized promotion to users in a specific region.</p>
+</blockquote>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Condition</th>
+<th>Operator</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Unified Individual → Country</td>
+<td>equals</td>
+<td>United States</td>
+</tr>
+<tr>
+<td>Unified Individual → State</td>
+<td>is one of</td>
+<td>CA, NY, TX</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="ci-based-targeting" tabindex="-1">CI-Based Targeting</h3>
+<blockquote>
+<p>Show a re-engagement offer to users who haven't purchased recently.</p>
+</blockquote>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Condition</th>
+<th>Operator</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Days Since Last Purchase (CI)</td>
+<td>greater than</td>
+<td>30</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="contextual-targeting" tabindex="-1">Contextual Targeting</h3>
+<blockquote>
+<p>Show a category-specific promotion only on category pages.</p>
+</blockquote>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Condition</th>
+<th>Operator</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Current Page URL</td>
+<td>contains</td>
+<td>/category/outdoor</td>
+</tr>
+</tbody>
+</table></div>
+<hr>
+<h2 id="best-practices" tabindex="-1">Best Practices</h2>
+<ol>
+<li><strong>Start with 2–3 decisions per point</strong> — A targeted decision, a secondary audience, and a fallback</li>
+<li><strong>Use contextual rules sparingly</strong> — They add runtime evaluation overhead</li>
+<li><strong>Test before going live</strong> — Use the WPM preview to validate targeting against specific individuals</li>
+<li><strong>Monitor blank responses</strong> — If a point frequently returns empty responses, add a fallback decision with no targeting rules</li>
+<li><strong>Coordinate with recommender filters</strong> — Decision targeting rules determine <em>who</em> qualifies; recommender filters determine <em>which items</em> are returned. Make sure both are aligned.</li>
+</ol>
+<hr>
+<p><strong>Next:</strong> <a href="/web-implementation/experiments/">Experiments</a> — Learn how to A/B test different decisioning strategies on a personalization point.</p>
+
+      </article>
+
+      <!-- Previous / Next Navigation -->
+      <nav class="prev-next" aria-label="Page navigation">
+        <a href="/web-implementation/personalization-points/" class="prev-next-btn pn-prev">
+      <span class="pn-direction">← Previous</span>
+      <span class="pn-title">Personalization Points</span>
+    </a><a href="/web-implementation/experiments/" class="prev-next-btn pn-next">
+      <span class="pn-direction">Next →</span>
+      <span class="pn-title">Experiments</span>
+    </a>
+      </nav>
+
+      <!-- End-of-page Donation CTA -->
+      <div class="donate-cta">
+        <p>Found this guide helpful?</p>
+        <a href="https://buymeacoffee.com/YOUR_USERNAME" target="_blank" rel="noopener noreferrer" class="donate-btn donate-btn-cta">Buy Me a Latte ☕</a>
+      </div>
+    </main>
+  </div>
+
+  <!-- ==================== FOOTER AD ==================== -->
+  <div class="ad-container ad-footer">
+    <span class="ad-label">Advertisement</span>
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+         data-ad-slot="XXXXXXXXXX"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p class="footer-title">Salesforce Personalization Implementation Guide</p>
+      <p class="footer-subtitle">Based on documentation as of March 2026</p>
+      <p class="footer-disclaimer">This is an educational resource. Verify all information against the latest <a href="https://help.salesforce.com/" target="_blank" rel="noopener noreferrer">Salesforce documentation</a>. Salesforce releases updates three times per year.</p>
+      <p class="footer-donate">
+        <a href="https://buymeacoffee.com/YOUR_USERNAME" target="_blank" rel="noopener noreferrer">Support this project — Buy Me a Latte ☕</a>
+      </p>
+    </div>
+  </footer>
+
+  <script src="../../js/main.js"></script>
+  <script src="../../js/copy-code.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (typeof mermaid !== 'undefined') {
+        mermaid.initialize({ startOnLoad: false, theme: 'default' });
+        document.querySelectorAll('pre > code.language-mermaid').forEach(function(el) {
+          var pre = el.parentElement;
+          var container = document.createElement('div');
+          container.className = 'mermaid';
+          container.textContent = el.textContent;
+          pre.parentNode.replaceChild(container, pre);
+        });
+        mermaid.run();
+      }
+    });
+  </script>
+</body>
+</html>

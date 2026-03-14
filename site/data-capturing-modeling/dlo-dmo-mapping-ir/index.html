@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DLO-DMO Mapping &amp; Identity Resolution — Salesforce Personalization Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/style.css">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body>
+
+  <!-- ==================== TOP NAV BAR ==================== -->
+  <nav class="navbar" id="navbar">
+    <div class="navbar-inner">
+      <a href="../../" class="navbar-brand">Salesforce Personalization Guide</a>
+
+      <button class="hamburger" id="hamburger" aria-label="Toggle navigation" aria-expanded="false">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+      </button>
+
+      <div class="navbar-menu" id="navbar-menu">
+        <ul class="nav-list">
+          <li class="nav-item"><a href="../../" class="nav-link">Home</a></li>
+          <li class="nav-item"><a href="../../setup-permissions/" class="nav-link">Setup &amp; Permissions</a></li>
+
+          <li class="nav-item has-dropdown">
+            <a href="../../data-capturing-modeling/" class="nav-link dropdown-toggle">Data Capturing &amp; Modeling <span class="dropdown-arrow">▾</span></a>
+            <ul class="dropdown-menu">
+              <li><a href="../../data-capturing-modeling/">Overview</a></li>
+              <li><a href="../../data-capturing-modeling/web-data-capturing/">Web Data Capturing</a></li>
+              <li><a href="../../data-capturing-modeling/mobile-data-capturing/">Mobile Data Capturing</a></li>
+              <li><a href="../../data-capturing-modeling/dlo-dmo-mapping-ir/">DLO-DMO Mapping &amp; IR</a></li>
+              <li><a href="../../data-capturing-modeling/data-graphs/">Data Graphs</a></li>
+              <li><a href="../../data-capturing-modeling/calculated-insights/">Calculated Insights</a></li>
+            </ul>
+          </li>
+
+          <li class="nav-item has-dropdown">
+            <a href="../../web-implementation/" class="nav-link dropdown-toggle">Web Implementation <span class="dropdown-arrow">▾</span></a>
+            <ul class="dropdown-menu">
+              <li><a href="../../web-implementation/">Overview</a></li>
+              <li><a href="../../web-implementation/personalization-types/">Personalization Types</a></li>
+              <li><a href="../../web-implementation/recommenders/">Recommenders</a></li>
+              <li><a href="../../web-implementation/response-templates/">Response Templates</a></li>
+              <li><a href="../../web-implementation/personalization-points/">Personalization Points</a></li>
+              <li><a href="../../web-implementation/decisions/">Decisions</a></li>
+              <li><a href="../../web-implementation/experiments/">Experiments</a></li>
+              <li><a href="../../web-implementation/web-templates/">Web Templates</a></li>
+              <li><a href="../../web-implementation/web-personalization-manager/">Web Personalization Manager</a></li>
+            </ul>
+          </li>
+
+          <li class="nav-item"><a href="../../mobile-implementation/" class="nav-link">Mobile Implementation</a></li>
+          <li class="nav-item"><a href="../../personalization-api/" class="nav-link">Personalization API</a></li>
+          <li class="nav-item"><a href="../../experimentation/" class="nav-link">Experimentation</a></li>
+          <li class="nav-item"><a href="../../batch-personalization/" class="nav-link">Batch Personalization</a></li>
+        </ul>
+
+        <a href="https://buymeacoffee.com/YOUR_USERNAME" target="_blank" rel="noopener noreferrer" class="donate-btn donate-btn-nav">
+          <span class="donate-btn-label">Buy Me a Latte ☕</span>
+          <span class="donate-btn-emoji">☕</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ==================== HEADER AD ==================== -->
+  <div class="ad-container ad-header">
+    <span class="ad-label">Advertisement</span>
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+         data-ad-slot="XXXXXXXXXX"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+
+  <!-- ==================== PAGE LAYOUT ==================== -->
+  <div class="page-wrapper">
+
+    <!-- ---- SIDEBAR ---- -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-inner">
+        <nav class="toc" id="toc" aria-label="Table of Contents">
+          <h3 class="toc-title">On This Page</h3>
+          <ul>
+  <li><a href="#1-understanding-dlos-and-dmos">1. Understanding DLOs and DMOs</a></li>
+  <li class="toc-h3"><a href="#how-they-relate">How They Relate</a></li>
+  <li class="toc-h3"><a href="#why-mapping-matters">Why Mapping Matters</a></li>
+  <li><a href="#2-progressive-mapping-strategy">2. Progressive Mapping Strategy</a></li>
+  <li class="toc-h3"><a href="#how-it-works">How It Works</a></li>
+  <li class="toc-h3"><a href="#benefits">Benefits</a></li>
+  <li class="toc-h3"><a href="#leveraging-auto-mapping">Leveraging Auto-Mapping</a></li>
+  <li><a href="#3-identity-resolution">3. Identity Resolution</a></li>
+  <li class="toc-h3"><a href="#why-ir-matters-for-personalization">Why IR Matters for Personalization</a></li>
+  <li class="toc-h3"><a href="#31-plan-your-identifiers">3.1. Plan Your Identifiers</a></li>
+  <li class="toc-h3"><a href="#32-create-an-ir-ruleset">3.2. Create an IR Ruleset</a></li>
+  <li class="toc-h3"><a href="#33-real-time-ir-considerations">3.3. Real-Time IR Considerations</a></li>
+  <li class="toc-h3"><a href="#34-deploy-the-ir-ruleset">3.4. Deploy the IR Ruleset</a></li>
+  <li><a href="#4-mapping-best-practices">4. Mapping Best Practices</a></li>
+  <li class="toc-h3"><a href="#mapping">Mapping</a></li>
+  <li class="toc-h3"><a href="#identity-resolution">Identity Resolution</a></li>
+  <li><a href="#summary-checklist">Summary Checklist</a></li>
+  <li><a href="#whats-next">What's Next?</a></li>
+  <li><a href="#additional-resources">Additional Resources</a></li>
+</ul>
+        </nav>
+
+        <!-- Sidebar Donation Card -->
+        <div class="donate-card">
+          <span class="donate-card-emoji">☕</span>
+          <p class="donate-card-heading">Enjoying this guide?</p>
+          <a href="https://buymeacoffee.com/YOUR_USERNAME" target="_blank" rel="noopener noreferrer" class="donate-btn donate-btn-sidebar">Buy Me a Latte</a>
+        </div>
+
+        <!-- Sidebar Ad -->
+        <div class="ad-container ad-sidebar">
+          <span class="ad-label">Advertisement</span>
+          <ins class="adsbygoogle"
+               style="display:block"
+               data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+               data-ad-slot="XXXXXXXXXX"
+               data-ad-format="auto"
+               data-full-width-responsive="true"></ins>
+          <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ---- MAIN CONTENT ---- -->
+    <main class="content" id="content">
+      <!-- Breadcrumbs -->
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <a href="/">Home</a><span class="breadcrumb-sep"> &gt; </span><a href="/data-capturing-modeling/">Data Capturing &amp; Modeling</a><span class="breadcrumb-sep"> &gt; </span><span class="breadcrumb-current">DLO-DMO Mapping &amp; IR</span>
+      </nav>
+
+      <!-- Page Content (H1 + body from Markdown) -->
+      <article class="article">
+        <h1 id="dlo-dmo-mapping-identity-resolution" tabindex="-1">DLO-DMO Mapping &amp; Identity Resolution</h1>
+<p>This section dives deeper into how data flows from Data Lake Objects (DLOs) into Data Model Objects (DMOs), explains a progressive mapping strategy that simplifies the process, and walks you through configuring Identity Resolution (IR) to unify anonymous and known profiles into a single view of each customer.</p>
+<div class="callout callout-note"><p><span class="callout-label">📝 Note:</span> Acronyms used in this section — <strong>DLO</strong> = Data Lake Object, <strong>DMO</strong> = Data Model Object, <strong>IR</strong> = Identity Resolution, <strong>SDK</strong> = Software Development Kit, <strong>DC</strong> = Data Cloud, <strong>RT</strong> = Real-Time, <strong>NRT</strong> = Near Real-Time.</p></div>
+<hr>
+<h2 id="1-understanding-dlos-and-dmos" tabindex="-1">1. Understanding DLOs and DMOs</h2>
+<p>When data arrives in Data Cloud — whether from the Web SDK, Mobile SDK, or any other connector — it first lands in <strong>Data Lake Objects (DLOs)</strong>. DLOs are raw staging tables that mirror the structure of the incoming data. They are not directly usable by Personalization.</p>
+<p>To make the data useful, you map DLO fields to <strong>Data Model Objects (DMOs)</strong>. DMOs are the structured, canonical representation of your data within a data space. They follow Salesforce's standard data model and are the direct fuel for:</p>
+<ul>
+<li><strong>Identity Resolution</strong> — matching identifiers across DLOs to unify profiles</li>
+<li><strong>Data Graphs</strong> — pre-calculated views used by the Personalization decisioning engine</li>
+<li><strong>Segments and Calculated Insights</strong> — audience groupings and computed metrics</li>
+<li><strong>Personalization decisions</strong> — targeting rules, recommender inputs, and decision responses</li>
+</ul>
+<h3 id="how-they-relate" tabindex="-1">How They Relate</h3>
+<pre><button class="copy-btn" aria-label="Copy code">Copy</button><code class="language-">Website / Mobile App
+        │
+        ▼
+  Events (via SDK)
+        │
+        ▼
+  Data Lake Objects (DLOs)         ← Raw staging tables
+        │                            (one per schema event type)
+        ▼
+  Data Model Objects (DMOs)        ← Structured, canonical objects
+        │                            (Product Browse Engagement,
+        │                             Shopping Cart Engagement,
+        │                             Individual, Contact Point Email, etc.)
+        ▼
+  Identity Resolution → Unified Individual
+        │
+        ▼
+  Data Graphs → Personalization
+</code></pre>
+<h3 id="why-mapping-matters" tabindex="-1">Why Mapping Matters</h3>
+<p>If a DLO field is not mapped to a DMO field, the data exists in the data lake but is <strong>invisible</strong> to Personalization. Mapping errors — such as mapping to the wrong DMO or missing required fields — can result in:</p>
+<ul>
+<li>Events appearing in Data Cloud but not being usable for personalization</li>
+<li>Engagement data not associating with the correct individual</li>
+<li>Identity Resolution failing to match profiles</li>
+</ul>
+<div class="callout callout-important"><p><span class="callout-label">⚠️ Important:</span> Take time to get your mappings right. Correcting mapping errors after data has been flowing can require remapping data streams and potentially reprocessing historical data.</p></div>
+<hr>
+<h2 id="2-progressive-mapping-strategy" tabindex="-1">2. Progressive Mapping Strategy</h2>
+<p>The standard approach of mapping all DLO fields at once can be overwhelming, especially when your web schema covers many event types. A <strong>progressive mapping strategy</strong> simplifies the process by handling <strong>one event type at a time</strong>.</p>
+<h3 id="how-it-works" tabindex="-1">How It Works</h3>
+<ol>
+<li><strong>Split your schema file.</strong> Break your full web connector schema into separate JSON files, one per event type. Each behavioral event type should have a separate schema file.</li>
+<li><strong>Upload the first event type.</strong> Add the first behavioral event type schema file to the web connector schema configuration.</li>
+<li><strong>Create or update the data stream.</strong> Create a new behavioral event data stream (or add the event type to an existing data stream).</li>
+<li><strong>Map all required fields.</strong> Complete the DLO-to-DMO mapping for this single event type.</li>
+<li><strong>Validate in Data Explorer.</strong> Confirm events are landing correctly and data appears in the target DMO.</li>
+<li><strong>Repeat.</strong> Add the next event type schema file and repeat the process.</li>
+</ol>
+<h3 id="benefits" tabindex="-1">Benefits</h3>
+<ul>
+<li><strong>Focus:</strong> You deal with one schema object and one DMO at a time</li>
+<li><strong>Auto-mapping:</strong> You can take advantage of Data Cloud's automated mapping capabilities more effectively</li>
+<li><strong>Validation:</strong> You can verify each mapping independently before moving on</li>
+<li><strong>Reduced errors:</strong> Smaller scope means fewer opportunities for mapping mistakes</li>
+</ul>
+<h3 id="leveraging-auto-mapping" tabindex="-1">Leveraging Auto-Mapping</h3>
+<p>Data Cloud can automatically map DLO fields to DMO fields when the web schema field's <code>masterLabel</code> value exactly matches the DMO field label. To take advantage of this:</p>
+<ul>
+<li>When defining custom fields in your schema, use <code>masterLabel</code> values that match the target DMO field labels exactly</li>
+<li>Check auto-mapped fields after each data stream creation — some may map automatically, saving manual effort</li>
+</ul>
+<div class="callout callout-tip"><p><span class="callout-label">💡 Tip:</span> The progressive approach also makes debugging easier. If an event type isn't landing correctly in Data Cloud, you only need to troubleshoot one schema object and one set of mappings rather than the entire schema.</p></div>
+<hr>
+<h2 id="3-identity-resolution" tabindex="-1">3. Identity Resolution</h2>
+<p>Identity Resolution (IR) is the process of matching different identifiers — across sessions, devices, and channels — to create a single, unified view of each customer. It's a critical step for Personalization because:</p>
+<ul>
+<li><strong>Anonymous → Known conversion:</strong> When a visitor who was browsing anonymously logs in or provides an email, IR connects their anonymous browsing history with their known profile</li>
+<li><strong>Cross-channel consistency:</strong> IR ensures that a customer who browses on mobile, purchases on desktop, and contacts support via email is recognized as the same person</li>
+<li><strong>Richer personalization inputs:</strong> A unified profile gives the decisioning engine access to the full breadth of a customer's interactions, leading to more relevant recommendations and targeting</li>
+</ul>
+<h3 id="why-ir-matters-for-personalization" tabindex="-1">Why IR Matters for Personalization</h3>
+<p>Without IR, each <code>deviceId</code> is treated as a separate individual. A single person browsing on their phone and laptop would appear as two anonymous visitors, each with a thin engagement history. With IR, their interactions are unified, giving the Personalization engine a richer signal to work with.</p>
+<h3 id="31-plan-your-identifiers" tabindex="-1">3.1. Plan Your Identifiers</h3>
+<p>Before configuring IR, identify the data points available on your website or app that can be used to recognize individuals. Common identifiers include:</p>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Identifier</th>
+<th>Source</th>
+<th>IR Match Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>deviceId</code></td>
+<td>Auto-generated by the SDK for each browser/device</td>
+<td>Exact match</td>
+</tr>
+<tr>
+<td>Email address</td>
+<td>Login, checkout, email capture forms, newsletter sign-up</td>
+<td>Exact normalized</td>
+</tr>
+<tr>
+<td>Phone number</td>
+<td>Checkout forms, account profile, SMS opt-in</td>
+<td>Exact normalized</td>
+</tr>
+<tr>
+<td><code>userId</code> / Login ID</td>
+<td>Authentication system</td>
+<td>Exact match</td>
+</tr>
+<tr>
+<td>Loyalty card number</td>
+<td>Loyalty program registration</td>
+<td>Exact match</td>
+</tr>
+<tr>
+<td>Customer ID</td>
+<td>CRM system, imported via connector</td>
+<td>Exact match</td>
+</tr>
+</tbody>
+</table></div>
+<div class="callout callout-tip"><p><span class="callout-label">💡 Tip:</span> Map out every location on your website or app where a user provides identifying information — login pages, checkout flows, email capture pop-ups, newsletter sign-ups, account creation forms. Make sure your sitemap captures these data points so they're available for IR.</p></div>
+<h3 id="32-create-an-ir-ruleset" tabindex="-1">3.2. Create an IR Ruleset</h3>
+<p>An IR ruleset defines the rules Data Cloud uses to match identifiers and unify profiles.</p>
+<h4 id="steps" tabindex="-1">Steps</h4>
+<ol>
+<li>In Data Cloud, navigate to <strong>Identity Resolution</strong>.</li>
+<li>Click <strong>New Ruleset</strong>.</li>
+<li><strong>Select the target DMO</strong> — typically the Individual object.</li>
+<li><strong>Add match rules</strong> for each identifier you want to use. For each rule, configure:
+<ul>
+<li><strong>Match field:</strong> The DMO field to match on (e.g., Email Address on Contact Point Email)</li>
+<li><strong>Match type:</strong> The matching logic to apply (see below)</li>
+</ul>
+</li>
+<li><strong>Order your rules</strong> by specificity — most precise rules first.</li>
+<li><strong>Save</strong> the ruleset.</li>
+</ol>
+<h4 id="match-types" tabindex="-1">Match Types</h4>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Match Type</th>
+<th>Description</th>
+<th>Real-Time Support</th>
+<th>Best For</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Exact Match</strong></td>
+<td>Values must be identical (case-sensitive)</td>
+<td>Yes</td>
+<td>DeviceId, userId, loyalty numbers</td>
+</tr>
+<tr>
+<td><strong>Exact Normalized</strong></td>
+<td>Values are normalized before comparison (lowercased, whitespace trimmed)</td>
+<td>Yes (email and phone only)</td>
+<td>Email addresses, phone numbers</td>
+</tr>
+<tr>
+<td><strong>Fuzzy</strong></td>
+<td>Approximate matching using algorithms</td>
+<td>No (batch only)</td>
+<td>Names, addresses (not recommended as primary strategy for RT personalization)</td>
+</tr>
+</tbody>
+</table></div>
+<div class="callout callout-important"><p><span class="callout-label">⚠️ Important:</span> For real-time personalization, focus on <strong>Exact Match</strong> and <strong>Exact Normalized</strong> match types. Fuzzy matching only runs during batch processing in the Lakehouse and will not unify profiles in real time. The RT layer treats fuzzy rules as exact match rules.</p></div>
+<h3 id="33-real-time-ir-considerations" tabindex="-1">3.3. Real-Time IR Considerations</h3>
+<p>There is <strong>no explicit setting</strong> that makes an IR strategy &quot;real-time.&quot; For IR to run in real time:</p>
+<ol>
+<li>The Unified Individual object created by the IR ruleset must be <strong>selected as the root of a Real-Time Profile Data Graph</strong></li>
+<li>Data must be ingested via a real-time mechanism (Web SDK, Mobile SDK, Ingestion API, or Server-Server API)</li>
+</ol>
+<p>When these conditions are met, Data Cloud applies IR logic in real time as events arrive — matching incoming identifiers against existing profiles and either linking to an existing Unified Individual or creating a new one.</p>
+<h3 id="34-deploy-the-ir-ruleset" tabindex="-1">3.4. Deploy the IR Ruleset</h3>
+<p>Once your ruleset is configured, deploy it:</p>
+<ol>
+<li>Review all match rules for accuracy.</li>
+<li>Click <strong>Deploy</strong> (or <strong>Activate</strong>, depending on your Data Cloud version).</li>
+<li>After deployment, a corresponding <strong>Unified Individual</strong> DMO becomes available.</li>
+</ol>
+<div class="callout callout-warning"><p><span class="callout-label">🚨 Warning:</span> Deploying an IR ruleset is a significant action. Once deployed, it begins matching and unifying profiles. While the ruleset can be modified after deployment, changes affect how future data is processed. Plan your IR strategy carefully before deploying.</p></div>
+<p>The Unified Individual object will serve as the <strong>root DMO</strong> for your Profile Data Graph, which is covered in the next section: <a href="/data-capturing-modeling/data-graphs/">Data Graphs</a>.</p>
+<hr>
+
+  <div class="ad-container ad-in-content">
+    <span class="ad-label">Advertisement</span>
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+         data-ad-slot="XXXXXXXXXX"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+<h2 id="4-mapping-best-practices" tabindex="-1">4. Mapping Best Practices</h2>
+<p>Here are consolidated best practices for both DLO-DMO mapping and IR configuration:</p>
+<h3 id="mapping" tabindex="-1">Mapping</h3>
+<ol>
+<li><strong>Use Partial refresh mode</strong> for all web and mobile data streams — never Incremental.</li>
+<li><strong>Map <code>eventType</code> to the target DMO</strong> for every behavioral event data stream. This is required for Data Cloud to route events correctly.</li>
+<li><strong>Map the <code>deviceId</code> field to the Individual field</strong> on every engagement DMO. This is how events are associated with a specific person.</li>
+<li><strong>Map <code>eventId</code> to the DMO's primary key field.</strong> Each event needs a unique identifier.</li>
+<li><strong>Check for auto-mapped fields</strong> after creating each data stream. Fields where the schema <code>masterLabel</code> matches the DMO field label may already be mapped.</li>
+<li><strong>Validate events in Data Explorer</strong> after each mapping. Confirm that events are landing in the expected DMOs with the correct field values.</li>
+</ol>
+<h3 id="identity-resolution" tabindex="-1">Identity Resolution</h3>
+<ol>
+<li><strong>Start with <code>deviceId</code> + email</strong> as your minimum IR strategy. These two identifiers cover the most common anonymous-to-known conversion scenario.</li>
+<li><strong>Add additional identifiers progressively</strong> — phone number, userId, loyalty number — as you instrument more capture points in your sitemap.</li>
+<li><strong>Use Exact Match for system-generated IDs</strong> (deviceId, userId) and <strong>Exact Normalized for human-entered values</strong> (email, phone).</li>
+<li><strong>Avoid overly aggressive fuzzy matching</strong> for web implementations. Fuzzy matching runs only in batch and can create false unifications if configured too broadly.</li>
+<li><strong>Test IR by checking unified profiles</strong> in Data Explorer after deploying your ruleset. Verify that profiles are being correctly unified by searching for known test users.</li>
+</ol>
+<hr>
+<h2 id="summary-checklist" tabindex="-1">Summary Checklist</h2>
+<ul>
+<li>[ ] <strong>DLO-to-DMO mappings complete</strong> — All event types mapped to correct DMOs using the progressive approach</li>
+<li>[ ] <strong>Mappings validated</strong> — Events confirmed in Data Explorer for each mapped event type</li>
+<li>[ ] <strong>IR identifiers planned</strong> — All capture points on the website/app identified (login, checkout, email forms, etc.)</li>
+<li>[ ] <strong>IR ruleset configured</strong> — Match rules created for each identifier with appropriate match types</li>
+<li>[ ] <strong>IR ruleset deployed</strong> — Unified Individual DMO is available for use as the root of a Profile Data Graph</li>
+<li>[ ] <strong>RT IR verified</strong> — Exact match and exact normalized rules in place for real-time profile unification</li>
+</ul>
+<hr>
+<h2 id="whats-next" tabindex="-1">What's Next?</h2>
+<p>With your data mapped to DMOs and Identity Resolution unifying customer profiles, you're ready to build Data Graphs — the pre-calculated views that the Personalization decisioning engine uses at run-time.</p>
+<p><strong><a href="/data-capturing-modeling/mobile-data-capturing/">← Previous: Mobile Data Capturing</a></strong> | <strong><a href="/data-capturing-modeling/data-graphs/">Next: Data Graphs →</a></strong></p>
+<hr>
+<h2 id="additional-resources" tabindex="-1">Additional Resources</h2>
+<ul>
+<li><a href="https://help.salesforce.com/s/articleView?id=sf.c360_a_identity_resolution.htm" target="_blank" rel="noopener noreferrer">Salesforce Help: Identity Resolution</a></li>
+<li><a href="https://help.salesforce.com/s/articleView?id=sf.c360_a_data_mapping.htm" target="_blank" rel="noopener noreferrer">Salesforce Help: Data Mapping</a></li>
+<li><a href="https://help.salesforce.com/s/articleView?id=sf.c360_a_data_model_objects.htm" target="_blank" rel="noopener noreferrer">Salesforce Help: Data Model Objects</a></li>
+</ul>
+
+      </article>
+
+      <!-- Previous / Next Navigation -->
+      <nav class="prev-next" aria-label="Page navigation">
+        <a href="/data-capturing-modeling/mobile-data-capturing/" class="prev-next-btn pn-prev">
+      <span class="pn-direction">← Previous</span>
+      <span class="pn-title">Mobile Data Capturing</span>
+    </a><a href="/data-capturing-modeling/data-graphs/" class="prev-next-btn pn-next">
+      <span class="pn-direction">Next →</span>
+      <span class="pn-title">Data Graphs</span>
+    </a>
+      </nav>
+
+      <!-- End-of-page Donation CTA -->
+      <div class="donate-cta">
+        <p>Found this guide helpful?</p>
+        <a href="https://buymeacoffee.com/YOUR_USERNAME" target="_blank" rel="noopener noreferrer" class="donate-btn donate-btn-cta">Buy Me a Latte ☕</a>
+      </div>
+    </main>
+  </div>
+
+  <!-- ==================== FOOTER AD ==================== -->
+  <div class="ad-container ad-footer">
+    <span class="ad-label">Advertisement</span>
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+         data-ad-slot="XXXXXXXXXX"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p class="footer-title">Salesforce Personalization Implementation Guide</p>
+      <p class="footer-subtitle">Based on documentation as of March 2026</p>
+      <p class="footer-disclaimer">This is an educational resource. Verify all information against the latest <a href="https://help.salesforce.com/" target="_blank" rel="noopener noreferrer">Salesforce documentation</a>. Salesforce releases updates three times per year.</p>
+      <p class="footer-donate">
+        <a href="https://buymeacoffee.com/YOUR_USERNAME" target="_blank" rel="noopener noreferrer">Support this project — Buy Me a Latte ☕</a>
+      </p>
+    </div>
+  </footer>
+
+  <script src="../../js/main.js"></script>
+  <script src="../../js/copy-code.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (typeof mermaid !== 'undefined') {
+        mermaid.initialize({ startOnLoad: false, theme: 'default' });
+        document.querySelectorAll('pre > code.language-mermaid').forEach(function(el) {
+          var pre = el.parentElement;
+          var container = document.createElement('div');
+          container.className = 'mermaid';
+          container.textContent = el.textContent;
+          pre.parentNode.replaceChild(container, pre);
+        });
+        mermaid.run();
+      }
+    });
+  </script>
+</body>
+</html>

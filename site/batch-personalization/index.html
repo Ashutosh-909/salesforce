@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Batch Personalization — Salesforce Personalization Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body>
+
+  <!-- ==================== TOP NAV BAR ==================== -->
+  <nav class="navbar" id="navbar">
+    <div class="navbar-inner">
+      <a href="../" class="navbar-brand">Salesforce Personalization Guide</a>
+
+      <button class="hamburger" id="hamburger" aria-label="Toggle navigation" aria-expanded="false">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+      </button>
+
+      <div class="navbar-menu" id="navbar-menu">
+        <ul class="nav-list">
+          <li class="nav-item"><a href="../" class="nav-link">Home</a></li>
+          <li class="nav-item"><a href="../setup-permissions/" class="nav-link">Setup &amp; Permissions</a></li>
+
+          <li class="nav-item has-dropdown">
+            <a href="../data-capturing-modeling/" class="nav-link dropdown-toggle">Data Capturing &amp; Modeling <span class="dropdown-arrow">▾</span></a>
+            <ul class="dropdown-menu">
+              <li><a href="../data-capturing-modeling/">Overview</a></li>
+              <li><a href="../data-capturing-modeling/web-data-capturing/">Web Data Capturing</a></li>
+              <li><a href="../data-capturing-modeling/mobile-data-capturing/">Mobile Data Capturing</a></li>
+              <li><a href="../data-capturing-modeling/dlo-dmo-mapping-ir/">DLO-DMO Mapping &amp; IR</a></li>
+              <li><a href="../data-capturing-modeling/data-graphs/">Data Graphs</a></li>
+              <li><a href="../data-capturing-modeling/calculated-insights/">Calculated Insights</a></li>
+            </ul>
+          </li>
+
+          <li class="nav-item has-dropdown">
+            <a href="../web-implementation/" class="nav-link dropdown-toggle">Web Implementation <span class="dropdown-arrow">▾</span></a>
+            <ul class="dropdown-menu">
+              <li><a href="../web-implementation/">Overview</a></li>
+              <li><a href="../web-implementation/personalization-types/">Personalization Types</a></li>
+              <li><a href="../web-implementation/recommenders/">Recommenders</a></li>
+              <li><a href="../web-implementation/response-templates/">Response Templates</a></li>
+              <li><a href="../web-implementation/personalization-points/">Personalization Points</a></li>
+              <li><a href="../web-implementation/decisions/">Decisions</a></li>
+              <li><a href="../web-implementation/experiments/">Experiments</a></li>
+              <li><a href="../web-implementation/web-templates/">Web Templates</a></li>
+              <li><a href="../web-implementation/web-personalization-manager/">Web Personalization Manager</a></li>
+            </ul>
+          </li>
+
+          <li class="nav-item"><a href="../mobile-implementation/" class="nav-link">Mobile Implementation</a></li>
+          <li class="nav-item"><a href="../personalization-api/" class="nav-link">Personalization API</a></li>
+          <li class="nav-item"><a href="../experimentation/" class="nav-link">Experimentation</a></li>
+          <li class="nav-item"><a href="../batch-personalization/" class="nav-link">Batch Personalization</a></li>
+        </ul>
+
+        <a href="https://buymeacoffee.com/YOUR_USERNAME" target="_blank" rel="noopener noreferrer" class="donate-btn donate-btn-nav">
+          <span class="donate-btn-label">Buy Me a Latte ☕</span>
+          <span class="donate-btn-emoji">☕</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ==================== HEADER AD ==================== -->
+  <div class="ad-container ad-header">
+    <span class="ad-label">Advertisement</span>
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+         data-ad-slot="XXXXXXXXXX"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+
+  <!-- ==================== PAGE LAYOUT ==================== -->
+  <div class="page-wrapper">
+
+    <!-- ---- SIDEBAR ---- -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-inner">
+        <nav class="toc" id="toc" aria-label="Table of Contents">
+          <h3 class="toc-title">On This Page</h3>
+          <ul>
+  <li><a href="#1-what-is-batch-personalization">1. What Is Batch Personalization?</a></li>
+  <li><a href="#2-use-cases">2. Use Cases</a></li>
+  <li class="toc-h3"><a href="#personalized-email-content">Personalized Email Content</a></li>
+  <li class="toc-h3"><a href="#pre-computed-recommendations-for-push-notifications">Pre-Computed Recommendations for Push Notifications</a></li>
+  <li class="toc-h3"><a href="#crm-driven-next-best-action">CRM-Driven Next-Best-Action</a></li>
+  <li class="toc-h3"><a href="#agentforce-integration">Agentforce Integration</a></li>
+  <li><a href="#3-prerequisites">3. Prerequisites</a></li>
+  <li><a href="#4-personalization-points-across-channels">4. Personalization Points Across Channels</a></li>
+  <li class="toc-h3"><a href="#how-the-decisioning-pipeline-works-in-batch">How the Decisioning Pipeline Works in Batch</a></li>
+  <li><a href="#5-invocable-actions-get-personalization-decision">5. Invocable Actions — Get Personalization Decision</a></li>
+  <li class="toc-h3"><a href="#what-is-an-invocable-action">What Is an Invocable Action?</a></li>
+  <li class="toc-h3"><a href="#when-to-use-the-invocable-action">When to Use the Invocable Action</a></li>
+  <li class="toc-h3"><a href="#setting-up-the-get-personalization-decision-invocable-action-in-flow">Setting Up the Get Personalization Decision Invocable Action in Flow</a></li>
+  <li><a href="#6-scheduled-batch-personalization-with-flow">6. Scheduled Batch Personalization with Flow</a></li>
+  <li class="toc-h3"><a href="#example-nightly-product-recommendations-for-email">Example: Nightly Product Recommendations for Email</a></li>
+  <li><a href="#7-marketing-cloud-integration">7. Marketing Cloud Integration</a></li>
+  <li class="toc-h3"><a href="#how-it-works">How It Works</a></li>
+  <li><a href="#8-output-consumption">8. Output &amp; Consumption</a></li>
+  <li class="toc-h3"><a href="#decision-response-storage">Decision Response Storage</a></li>
+  <li class="toc-h3"><a href="#decision-logging-in-data-cloud">Decision Logging in Data Cloud</a></li>
+  <li><a href="#9-best-practices">9. Best Practices</a></li>
+  <li class="toc-h3"><a href="#manage-decision-credit-consumption">Manage Decision Credit Consumption</a></li>
+  <li class="toc-h3"><a href="#optimize-data-freshness">Optimize Data Freshness</a></li>
+  <li class="toc-h3"><a href="#plan-for-fallbacks">Plan for Fallbacks</a></li>
+  <li class="toc-h3"><a href="#security-considerations">Security Considerations</a></li>
+  <li><a href="#10-putting-it-all-together-end-to-end-example">10. Putting It All Together — End-to-End Example</a></li>
+  <li class="toc-h3"><a href="#scenario">Scenario</a></li>
+  <li class="toc-h3"><a href="#steps">Steps</a></li>
+  <li><a href="#summary">Summary</a></li>
+</ul>
+        </nav>
+
+        <!-- Sidebar Donation Card -->
+        <div class="donate-card">
+          <span class="donate-card-emoji">☕</span>
+          <p class="donate-card-heading">Enjoying this guide?</p>
+          <a href="https://buymeacoffee.com/YOUR_USERNAME" target="_blank" rel="noopener noreferrer" class="donate-btn donate-btn-sidebar">Buy Me a Latte</a>
+        </div>
+
+        <!-- Sidebar Ad -->
+        <div class="ad-container ad-sidebar">
+          <span class="ad-label">Advertisement</span>
+          <ins class="adsbygoogle"
+               style="display:block"
+               data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+               data-ad-slot="XXXXXXXXXX"
+               data-ad-format="auto"
+               data-full-width-responsive="true"></ins>
+          <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ---- MAIN CONTENT ---- -->
+    <main class="content" id="content">
+      <!-- Breadcrumbs -->
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <a href="/">Home</a><span class="breadcrumb-sep"> &gt; </span><span class="breadcrumb-current">Batch Personalization</span>
+      </nav>
+
+      <!-- Page Content (H1 + body from Markdown) -->
+      <article class="article">
+        <h1 id="batch-personalization" tabindex="-1">Batch Personalization</h1>
+<p>Run personalization at scale outside of real-time decisioning. Batch personalization lets you generate personalized recommendations and content for large audiences on a schedule — ideal for email campaigns, push notifications, CRM-driven workflows, and other offline or asynchronous channels.</p>
+<div class="callout callout-note"><p><span class="callout-label">📝 Note:</span> Acronyms used in this section — <strong>SP</strong> = Salesforce Personalization, <strong>DMO</strong> = Data Model Object, <strong>DG</strong> = Data Graph, <strong>CI</strong> = Calculated Insight, <strong>IR</strong> = Identity Resolution, <strong>IA</strong> = Invocable Action, <strong>WPM</strong> = Web Personalization Manager.</p></div>
+<hr>
+<h2 id="1-what-is-batch-personalization" tabindex="-1">1. What Is Batch Personalization?</h2>
+<p>Real-time personalization evaluates decisions at the moment a user interacts with your website or mobile app. <strong>Batch personalization</strong>, by contrast, generates personalized decisions for a set of individuals ahead of time — either on a recurring schedule or triggered by a specific event — so the results can be consumed by downstream systems.</p>
+<p>Key differences from real-time personalization:</p>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>Real-Time</th>
+<th>Batch</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>When decisions run</strong></td>
+<td>At the moment of interaction (sub-second)</td>
+<td>On a schedule or triggered by a Flow</td>
+</tr>
+<tr>
+<td><strong>Typical channels</strong></td>
+<td>Web, mobile app</td>
+<td>Email, push notifications, CRM workflows, agentic conversations</td>
+</tr>
+<tr>
+<td><strong>Profile data source</strong></td>
+<td>Hot-store (real-time profile data graph)</td>
+<td>Lakehouse (standard data graph refresh cycle)</td>
+</tr>
+<tr>
+<td><strong>Primary use case</strong></td>
+<td>In-session experiences (banners, recommendations, pop-ups)</td>
+<td>Pre-computed personalization for offline or asynchronous delivery</td>
+</tr>
+</tbody>
+</table></div>
+<div class="callout callout-tip"><p><span class="callout-label">💡 Tip:</span> Batch personalization complements real-time personalization — it extends the same personalization points and recommenders you've already configured to channels where a real-time round-trip isn't practical.</p></div>
+<hr>
+<h2 id="2-use-cases" tabindex="-1">2. Use Cases</h2>
+<p>Batch personalization unlocks a wide range of scenarios where decisions need to be made ahead of time or at scale:</p>
+<h3 id="personalized-email-content" tabindex="-1">Personalized Email Content</h3>
+<p>Generate individualized product recommendations or content for each recipient in an email campaign. For example:</p>
+<ul>
+<li><strong>&quot;You may also like&quot;</strong> product recommendations in a weekly newsletter</li>
+<li><strong>Abandoned cart follow-up</strong> emails with the specific products the customer left behind</li>
+<li><strong>Post-purchase cross-sell</strong> emails recommending complementary items</li>
+</ul>
+<div class="callout callout-note"><p><span class="callout-label">📝 Note:</span> Personalization points created via the email builder in <strong>Marketing Cloud Growth</strong> or <strong>Marketing Cloud Advanced</strong> appear in the Personalization app with a source of <strong>&quot;CMS Content&quot;</strong>. These points use the same decisioning pipeline as web and mobile personalization.</p></div>
+<h3 id="pre-computed-recommendations-for-push-notifications" tabindex="-1">Pre-Computed Recommendations for Push Notifications</h3>
+<p>Mobile push notifications can include personalized product or content recommendations that were pre-computed via batch personalization. This avoids the latency of making a real-time API call at send time.</p>
+<h3 id="crm-driven-next-best-action" tabindex="-1">CRM-Driven Next-Best-Action</h3>
+<p>Use batch personalization to feed personalized recommendations into CRM workflows — for example, surfacing the next-best-offer for a sales representative to discuss during a customer call. By pre-computing decisions, the recommendations are available instantly when the rep opens the account record.</p>
+<h3 id="agentforce-integration" tabindex="-1">Agentforce Integration</h3>
+<p>Salesforce Personalization extends decisioning services into the <strong>Agentforce</strong> ecosystem through agent actions. Available actions include:</p>
+<ul>
+<li><strong>Get Recommendations:</strong> Allows an agent to request a personalized decision configured in Salesforce Personalization and inject individualized, ML-powered relevance into the agentic conversation.</li>
+<li><strong>Get Context:</strong> Personalization's context curation service ensures that your agent is always armed with the relevant data needed to address the customer's question.</li>
+</ul>
+<div class="callout callout-tip"><p><span class="callout-label">💡 Tip:</span> Start with a simple batch use case — such as adding personalized product recommendations to a recurring email campaign — before tackling more complex scenarios like real-time Agentforce integrations.</p></div>
+<hr>
+<h2 id="3-prerequisites" tabindex="-1">3. Prerequisites</h2>
+<p>Before configuring batch personalization, ensure the following are in place:</p>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Prerequisite</th>
+<th>Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Personalization point</strong></td>
+<td>At least one personalization point must be created with decisions or experiments configured. See <a href="/web-implementation/personalization-points/">Personalization Points</a> for setup steps.</td>
+</tr>
+<tr>
+<td><strong>Recommender</strong> (for Recommendations type)</td>
+<td>A trained recommender (rules-based or objective-based) must be associated with the decisions on your personalization point. See <a href="/web-implementation/recommenders/">Recommenders</a>.</td>
+</tr>
+<tr>
+<td><strong>Profile data graph</strong></td>
+<td>A profile data graph (standard or real-time) must be configured and associated with the personalization point. Batch decisioning reads profile data from the <strong>Lakehouse</strong>, not the hot-store. See <a href="/data-capturing-modeling/data-graphs/">Data Graphs</a>.</td>
+</tr>
+<tr>
+<td><strong>Item data graph</strong> (for Recommendations type)</td>
+<td>An item data graph must be configured for the DMO you want to recommend (e.g., Goods Product, Knowledge Article). See <a href="/data-capturing-modeling/data-graphs/">Data Graphs</a>.</td>
+</tr>
+<tr>
+<td><strong>Identity resolution</strong></td>
+<td>Your IR ruleset must be deployed so that unified individual records exist in the Lakehouse. See <a href="/data-capturing-modeling/dlo-dmo-mapping-ir/">DLO-DMO Mapping &amp; IR</a>.</td>
+</tr>
+<tr>
+<td><strong>Calculated insights</strong> (for rules-based recommenders)</td>
+<td>Any CIs powering your rules-based recommenders must be scheduled and refreshed. See <a href="/data-capturing-modeling/calculated-insights/">Calculated Insights</a>.</td>
+</tr>
+</tbody>
+</table></div>
+<div class="callout callout-important"><p><span class="callout-label">⚠️ Important:</span> Batch personalization relies on profile data from the <strong>Lakehouse</strong> (not the real-time hot-store). This means profile data used for batch decisions reflects the most recent standard data graph refresh cycle (typically every 30 minutes) rather than sub-second real-time updates.</p></div>
+<hr>
+
+  <div class="ad-container ad-in-content">
+    <span class="ad-label">Advertisement</span>
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+         data-ad-slot="XXXXXXXXXX"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+<h2 id="4-personalization-points-across-channels" tabindex="-1">4. Personalization Points Across Channels</h2>
+<p>A key concept in Salesforce Personalization is that <strong>personalization points are reusable across channels</strong>. Any channel that can be configured to call the Personalization decisioning API can make a request against a personalization point. This means:</p>
+<ul>
+<li>The <strong>same personalization point</strong> you created for your website homepage recommendations can also be used in an email campaign, a mobile push notification, or an Agentforce conversation.</li>
+<li><strong>Channel-specific logic</strong> (when to make the request, where to render, how to display) is handled by the consuming application — not by the personalization point itself.</li>
+<li>Each decision request requires an <strong>individual ID</strong> and one or more <strong>personalization point IDs</strong>. Context data (such as an anchor item ID) can be included for recommendations filtering.</li>
+</ul>
+<h3 id="how-the-decisioning-pipeline-works-in-batch" tabindex="-1">How the Decisioning Pipeline Works in Batch</h3>
+<p>The decisioning pipeline follows the same stages whether the request is real-time or batch:</p>
+<ol>
+<li><strong>Personalization Request</strong> — The request includes an individual ID and personalization point ID(s). Context data can optionally be provided.</li>
+<li><strong>Augmenting Phase</strong> — Personalization retrieves the individual's profile data graph from Data Cloud. For batch requests, this is read from the Lakehouse.</li>
+<li><strong>Qualifying Phase</strong> — The pipeline evaluates targeting rules on each decision to determine which decision the individual qualifies for. Experiments are treated as the highest-priority object on a personalization point.</li>
+<li><strong>Personalizing Phase</strong> — For manual content, the configured text/image values are returned. For recommendations, the profile is passed to the recommendations service to generate 1:1 personalized results.</li>
+<li><strong>Decision Response</strong> — The response is returned to the requesting application and logged to the personalization log in Data Cloud.</li>
+</ol>
+<div class="callout callout-note"><p><span class="callout-label">📝 Note:</span> Each decision made by personalization consumes <strong>1 decision credit</strong>. If a batch request includes 2 personalization points, that's 2 decision credits per individual.</p></div>
+<hr>
+<h2 id="5-invocable-actions-get-personalization-decision" tabindex="-1">5. Invocable Actions — Get Personalization Decision</h2>
+<p>The primary mechanism for triggering batch personalization is the <strong>&quot;Get Personalization Decision&quot;</strong> invocable action. This action can be used in <strong>Salesforce Flow</strong> and <strong>Agentforce</strong> to request a personalization decision programmatically for a specific individual.</p>
+<h3 id="what-is-an-invocable-action" tabindex="-1">What Is an Invocable Action?</h3>
+<p>An invocable action (IA) is a reusable unit of logic that can be called from Flows, Process Builder, Agentforce agents, Apex, and the REST API. The <strong>Get Personalization Decision</strong> IA calls the Personalization decisioning pipeline and returns the decision response — just like a real-time request from the Web SDK, but triggered from server-side logic.</p>
+<h3 id="when-to-use-the-invocable-action" tabindex="-1">When to Use the Invocable Action</h3>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Flow-triggered personalization</strong></td>
+<td>A record-triggered Flow fires when a new Contact is created and requests personalized onboarding content</td>
+</tr>
+<tr>
+<td><strong>Scheduled batch personalization</strong></td>
+<td>A scheduled Flow runs nightly, iterates over a segment of customers, and requests product recommendations for each</td>
+</tr>
+<tr>
+<td><strong>Agentforce agent</strong></td>
+<td>An agent requests personalized recommendations during a customer conversation</td>
+</tr>
+<tr>
+<td><strong>Apex-driven workflows</strong></td>
+<td>Custom Apex code calls the IA to embed personalized decisions in a business process</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="setting-up-the-get-personalization-decision-invocable-action-in-flow" tabindex="-1">Setting Up the Get Personalization Decision Invocable Action in Flow</h3>
+<p>Follow these steps to use the invocable action in a Salesforce Flow:</p>
+<ol>
+<li>Navigate to <strong>Setup</strong> → <strong>Flows</strong> and create a new Flow (Auto-Launched or Scheduled, depending on your use case).</li>
+<li>Add an <strong>Action</strong> element to your Flow canvas.</li>
+<li>Search for and select the <strong>&quot;Get Personalization Decision&quot;</strong> invocable action.</li>
+<li>Configure the input parameters:</li>
+</ol>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Individual ID</strong></td>
+<td>String</td>
+<td>The Unified Individual ID (from your identity resolution output) for the person to personalize for</td>
+</tr>
+<tr>
+<td><strong>Personalization Point Name(s)</strong></td>
+<td>String</td>
+<td>The API name(s) of the personalization point(s) to evaluate</td>
+</tr>
+<tr>
+<td><strong>Data Space Name</strong></td>
+<td>String</td>
+<td>The API name of the data space where the personalization point is configured</td>
+</tr>
+<tr>
+<td><strong>Context Data</strong> <em>(optional)</em></td>
+<td>String / JSON</td>
+<td>Additional context for recommendation filtering (e.g., anchor item ID, category)</td>
+</tr>
+</tbody>
+</table></div>
+<ol start="5">
+<li>Map the <strong>output</strong> of the action to Flow variables to capture the decision response.</li>
+<li>Add downstream logic (e.g., send an email, update a record, call another service) that consumes the personalized decision data.</li>
+<li>Activate the Flow.</li>
+</ol>
+<pre><span class="code-lang">json</span><button class="copy-btn" aria-label="Copy code">Copy</button><code class="language-json">// Example: Decision response structure returned by the invocable action
+{
+  &quot;personalizations&quot;: [
+    {
+      &quot;personalizationPointId&quot;: &quot;home_page_recs&quot;,
+      &quot;personalizationId&quot;: &quot;0ppxx000000ABCDEF&quot;,
+      &quot;contentId&quot;: &quot;decision_001&quot;,
+      &quot;data&quot;: {
+        &quot;recommendations&quot;: [
+          {
+            &quot;itemId&quot;: &quot;prod_12345&quot;,
+            &quot;name&quot;: &quot;Running Shoes Pro&quot;,
+            &quot;imageUrl&quot;: &quot;https://example.com/images/shoes-pro.jpg&quot;,
+            &quot;price&quot;: 129.99,
+            &quot;url&quot;: &quot;/products/running-shoes-pro&quot;
+          },
+          {
+            &quot;itemId&quot;: &quot;prod_67890&quot;,
+            &quot;name&quot;: &quot;Trail Running Jacket&quot;,
+            &quot;imageUrl&quot;: &quot;https://example.com/images/trail-jacket.jpg&quot;,
+            &quot;price&quot;: 89.99,
+            &quot;url&quot;: &quot;/products/trail-running-jacket&quot;
+          }
+        ]
+      }
+    }
+  ]
+}
+</code></pre>
+<div class="callout callout-validation"><p><span class="callout-label">🔍 Needs Validation:</span> The exact parameter names and response structure for the Get Personalization Decision invocable action should be verified against the latest <a href="https://developer.salesforce.com/docs/atlas.en-us.dc_personalization.meta/dc_personalization/dc-personalization-invocable-actions.htm" target="_blank" rel="noopener noreferrer">Salesforce Personalization Invocable Actions documentation</a>. The structure shown above is representative and based on the standard decisioning response format.</p></div>
+<div class="callout callout-important"><p><span class="callout-label">⚠️ Important:</span> When using the invocable action in a scheduled Flow that iterates over a large number of records, be mindful of <strong>decision credit consumption</strong>. Each individual × personalization point combination consumes 1 decision credit. For example, a batch of 10,000 individuals with 2 personalization points = 20,000 decision credits.</p></div>
+<hr>
+<h2 id="6-scheduled-batch-personalization-with-flow" tabindex="-1">6. Scheduled Batch Personalization with Flow</h2>
+<p>One of the most common batch personalization patterns is a <strong>scheduled Flow</strong> that runs on a recurring basis and generates personalized decisions for a target segment of customers.</p>
+<h3 id="example-nightly-product-recommendations-for-email" tabindex="-1">Example: Nightly Product Recommendations for Email</h3>
+<p><strong>Goal:</strong> Every night at 8 PM, generate personalized product recommendations for all customers in the &quot;Active Shoppers&quot; segment, then store the results for the morning email send.</p>
+<h4 id="step-by-step-setup" tabindex="-1">Step-by-Step Setup</h4>
+<ol>
+<li>
+<p><strong>Create or confirm your segment</strong> in Data Cloud:</p>
+<ul>
+<li>Navigate to <strong>Data Cloud</strong> → <strong>Segments</strong>.</li>
+<li>Create a segment called &quot;Active Shoppers&quot; targeting Unified Individuals who have browsed products in the last 30 days.</li>
+</ul>
+</li>
+<li>
+<p><strong>Confirm your personalization point</strong> has an active decision with a recommender:</p>
+<ul>
+<li>Navigate to the <strong>Personalization</strong> app → <strong>Personalization Points</strong>.</li>
+<li>Verify that your point (e.g., &quot;Email Product Recs&quot;) has at least one active decision with a trained recommender.</li>
+</ul>
+</li>
+<li>
+<p><strong>Create a Scheduled Flow:</strong></p>
+<ul>
+<li>Navigate to <strong>Setup</strong> → <strong>Flows</strong> → <strong>New Flow</strong> → <strong>Schedule-Triggered Flow</strong>.</li>
+<li>Set the schedule to run daily at 8:00 PM.</li>
+<li>Add a <strong>Get Records</strong> element to retrieve Unified Individual records from the &quot;Active Shoppers&quot; segment.</li>
+<li>Add a <strong>Loop</strong> element to iterate over each individual.</li>
+<li>Inside the loop, add an <strong>Action</strong> element using the <strong>&quot;Get Personalization Decision&quot;</strong> invocable action.
+<ul>
+<li>Pass the individual's Unified Individual ID as the Individual ID input.</li>
+<li>Pass the personalization point API name (e.g., <code>email_product_recs</code>).</li>
+</ul>
+</li>
+<li>After the action, add logic to store or route the decision response:
+<ul>
+<li><strong>Option A:</strong> Update a custom object record with the recommendation data for later consumption by your email platform.</li>
+<li><strong>Option B:</strong> Use a <strong>Send Email</strong> action (if using Marketing Cloud on Core) to send the personalized email inline.</li>
+</ul>
+</li>
+<li>Activate the Flow.</li>
+</ul>
+</li>
+</ol>
+<div class="callout callout-tip"><p><span class="callout-label">💡 Tip:</span> For large audiences, consider breaking the batch into smaller segments to avoid hitting Flow governor limits and to manage decision credit consumption. You can also use <strong>Batch Apex</strong> to call the invocable action at scale, which provides better error handling and can process larger data volumes.</p></div>
+<div class="callout callout-validation"><p><span class="callout-label">🔍 Needs Validation:</span> The specific interaction pattern between Scheduled Flows, the Get Personalization Decision invocable action, and Marketing Cloud email sends should be verified against the latest Salesforce documentation, as integration capabilities may vary by edition and release.</p></div>
+<hr>
+<h2 id="7-marketing-cloud-integration" tabindex="-1">7. Marketing Cloud Integration</h2>
+<p>For customers using <strong>Marketing Cloud Growth</strong> or <strong>Marketing Cloud Advanced</strong> (both built on the Salesforce Platform with Data Cloud), personalization integrates directly into the email authoring experience.</p>
+<h3 id="how-it-works" tabindex="-1">How It Works</h3>
+<ol>
+<li>When building an email in Marketing Cloud Growth or Advanced, use the email builder's <strong>personalization component</strong> to add a personalization block.</li>
+<li>Behind the scenes, this creates a <strong>personalization point</strong> in the Personalization app with a source of <strong>&quot;CMS Content&quot;</strong>.</li>
+<li>The email builder provides a visual interface for selecting:
+<ul>
+<li>The personalization point to use</li>
+<li>The response template and decision configuration</li>
+<li>Fallback content for recipients who don't qualify for any decision</li>
+</ul>
+</li>
+<li>At send time, the email system calls the Personalization decisioning pipeline for each recipient to generate individualized content.</li>
+</ol>
+<div class="callout callout-note"><p><span class="callout-label">📝 Note:</span> Profile data graph attributes from the root DMO (Unified Individual) are automatically available for <strong>merge field personalization</strong> in Marketing Cloud on Core. This means you can use profile attributes for both decisioning logic and email content personalization within the same email.</p></div>
+<div class="callout callout-validation"><p><span class="callout-label">🔍 Needs Validation:</span> The specific email builder integration steps and available configuration options should be verified against the latest <a href="https://help.salesforce.com/s/articleView?id=sf.mc_pers_personalization.htm" target="_blank" rel="noopener noreferrer">Marketing Cloud Growth</a> and <a href="https://help.salesforce.com/s/articleView?id=sf.mc_pers_personalization.htm" target="_blank" rel="noopener noreferrer">Marketing Cloud Advanced</a> documentation, as these capabilities are evolving with each Salesforce release.</p></div>
+<hr>
+<h2 id="8-output-consumption" tabindex="-1">8. Output &amp; Consumption</h2>
+<p>Batch personalization results can be consumed by downstream systems in several ways, depending on the integration pattern:</p>
+<h3 id="decision-response-storage" tabindex="-1">Decision Response Storage</h3>
+<p>When using a Flow or Apex to call the Get Personalization Decision invocable action, the decision response is returned as a structured JSON object. You control where and how this data is stored:</p>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Storage Option</th>
+<th>When to Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Custom object records</strong></td>
+<td>Store recommendations per individual in a custom Salesforce object. Useful when downstream systems (email platforms, CRM UIs) read from Salesforce records.</td>
+</tr>
+<tr>
+<td><strong>Platform events</strong></td>
+<td>Publish decision responses as platform events for real-time consumption by subscriber systems.</td>
+</tr>
+<tr>
+<td><strong>External systems</strong></td>
+<td>Use an outbound HTTP callout (from Flow or Apex) to push decision data to external systems like a data warehouse, CDP, or custom application.</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="decision-logging-in-data-cloud" tabindex="-1">Decision Logging in Data Cloud</h3>
+<p>Regardless of how you consume the results, every decision made by the Personalization pipeline is <strong>automatically logged</strong> in Data Cloud's personalization log. This logging is critical for:</p>
+<ul>
+<li><strong>Attribution analytics</strong> — Understanding which personalized experiences drive revenue and conversions.</li>
+<li><strong>Pipeline Intelligence dashboards</strong> — Monitoring total personalization requests, unique individuals targeted, and decision distribution across personalization points.</li>
+<li><strong>Experiment analytics</strong> — If the personalization point has an active experiment, batch decisions are included in experiment cohort analytics.</li>
+</ul>
+<div class="callout callout-tip"><p><span class="callout-label">💡 Tip:</span> Even if you store decision results in a custom object for your email platform, the automatic decision logging in Data Cloud means you get attribution and analytics out of the box — no additional setup required.</p></div>
+<hr>
+<h2 id="9-best-practices" tabindex="-1">9. Best Practices</h2>
+<h3 id="manage-decision-credit-consumption" tabindex="-1">Manage Decision Credit Consumption</h3>
+<ul>
+<li><strong>Segment-first approach:</strong> Always target a specific segment of customers rather than running batch personalization against your entire customer base. Focus on individuals most likely to engage.</li>
+<li><strong>Limit personalization points per request:</strong> Each personalization point in a request consumes a separate decision credit. Only request what you need.</li>
+<li><strong>Monitor usage:</strong> Use the <strong>Pipeline Intelligence dashboard</strong> to track total personalization requests and unique individuals targeted over time.</li>
+</ul>
+<h3 id="optimize-data-freshness" tabindex="-1">Optimize Data Freshness</h3>
+<ul>
+<li><strong>Calculated Insight refresh:</strong> For rules-based recommenders, the fastest automated refresh window for a batch CI is <strong>1 hour</strong>. If new items need to appear in recommendations quickly, consider manually triggering CI refreshes via Data Cloud APIs or Flow orchestration.</li>
+<li><strong>Item data graph refresh:</strong> The standard NRT (near-real-time) data graph refresh cycle is <strong>30 minutes</strong>. New items added to a DMO will be available for rules-based recommender decisions after both a CI refresh and a DG refresh complete.</li>
+<li><strong>Recommender training:</strong> Objective-based recommenders train on a <strong>24-hour cycle</strong>. New items require at least one training cycle to generate the embeddings needed for objective-based decisioning.</li>
+</ul>
+<div class="callout callout-note"><p><span class="callout-label">📝 Note:</span> For rules-based recommenders, you can set a Batch CI to <strong>&quot;No Schedule&quot;</strong> and use Data Cloud APIs or Flow to trigger the CI manually. This is useful when you need to orchestrate a CI refresh as soon as a new record arrives in the target DMO, rather than waiting for the next scheduled refresh window.</p></div>
+<h3 id="plan-for-fallbacks" tabindex="-1">Plan for Fallbacks</h3>
+<ul>
+<li><strong>Fallback content:</strong> Always configure fallback or default content on your personalization decisions for individuals who don't qualify for any targeting rules. This ensures every individual in your batch run receives some content rather than a blank response.</li>
+<li><strong>Error handling in Flow:</strong> Add fault paths to your Flow to handle scenarios where the invocable action fails (e.g., the personalization point is misconfigured, the recommender hasn't trained, or the individual doesn't exist in the profile data graph).</li>
+</ul>
+<h3 id="security-considerations" tabindex="-1">Security Considerations</h3>
+<ul>
+<li><strong>Authenticated personalization points:</strong> If your personalization point is marked as authentication required, batch requests via the invocable action must include proper credentials. The invocable action handles authentication within the Salesforce platform context, so this is typically seamless for server-side Flow execution.</li>
+<li><strong>Data access:</strong> Ensure that the user running the scheduled Flow has the appropriate <strong>Personalization</strong> and <strong>Data Cloud</strong> permission sets assigned. See <a href="/setup-permissions/">Setup &amp; Permissions</a> for details.</li>
+</ul>
+<div class="callout callout-warning"><p><span class="callout-label">🚨 Warning:</span> Never hardcode credentials or access tokens in Flow variables, Apex code, or custom metadata. Use Salesforce's <strong>Named Credentials</strong> for any external callouts, and rely on the platform's built-in authentication when calling invocable actions.</p></div>
+<hr>
+<h2 id="10-putting-it-all-together-end-to-end-example" tabindex="-1">10. Putting It All Together — End-to-End Example</h2>
+<p>Here's a high-level walkthrough of setting up batch personalization for a weekly personalized email campaign:</p>
+<h3 id="scenario" tabindex="-1">Scenario</h3>
+<p>You want to send a weekly email to customers in the &quot;Loyalty Members&quot; segment with personalized product recommendations based on their browsing and purchase history.</p>
+<h3 id="steps" tabindex="-1">Steps</h3>
+<ol>
+<li>
+<p><strong>Data Foundation</strong> (already in place):</p>
+<ul>
+<li>Web SDK is capturing browse, cart, and purchase events → mapped to DMOs in Data Cloud.</li>
+<li>Identity resolution is deployed → Unified Individual records exist.</li>
+<li>Profile data graph includes engagement objects (Product Browse, Shopping Cart, Product Order).</li>
+<li>Item data graph is configured for Goods Product with fields: name, image URL, price, product URL.</li>
+<li>An objective-based recommender is trained and active.</li>
+</ul>
+</li>
+<li>
+<p><strong>Create the Personalization Point:</strong></p>
+<ul>
+<li>Navigate to the <strong>Personalization</strong> app → <strong>Personalization Points</strong> → <strong>New</strong>.</li>
+<li>Select your data space, profile data graph, personalization type = <strong>Recommendations</strong>, and the appropriate response template.</li>
+<li>Name it <code>loyalty_email_recs</code>.</li>
+</ul>
+</li>
+<li>
+<p><strong>Add a Decision:</strong></p>
+<ul>
+<li>On the <code>loyalty_email_recs</code> personalization point, add a decision.</li>
+<li>Optionally add targeting rules (e.g., only target individuals with segment membership = &quot;Loyalty Members&quot;).</li>
+<li>Select your trained recommender.</li>
+<li>Configure a fallback decision with top-selling products for individuals who don't qualify for the primary decision.</li>
+</ul>
+</li>
+<li>
+<p><strong>Build the Scheduled Flow:</strong></p>
+<ul>
+<li>Create a Schedule-Triggered Flow set to run weekly (e.g., every Monday at 6:00 AM).</li>
+<li>Retrieve Unified Individual records from the &quot;Loyalty Members&quot; segment.</li>
+<li>Loop through each individual and call the <strong>Get Personalization Decision</strong> IA with <code>loyalty_email_recs</code>.</li>
+<li>Store each individual's recommendation results in a custom object (e.g., <code>Personalized_Email_Content__c</code>).</li>
+</ul>
+</li>
+<li>
+<p><strong>Consume in Email Campaign:</strong></p>
+<ul>
+<li>Your email platform (Marketing Cloud or other) reads from the <code>Personalized_Email_Content__c</code> records to populate each recipient's email with their personalized product recommendations.</li>
+<li>Send the campaign.</li>
+</ul>
+</li>
+<li>
+<p><strong>Measure Performance:</strong></p>
+<ul>
+<li>Review the <strong>Pipeline Intelligence dashboard</strong> to see total batch decisions made.</li>
+<li>Set up an <strong>attribution model</strong> to measure whether personalized email recipients convert at a higher rate than non-personalized recipients.</li>
+<li>If you configured an experiment on the personalization point, review <strong>experiment analytics</strong> after the 24-hour data processing window.</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 id="summary" tabindex="-1">Summary</h2>
+<p>Batch personalization extends the power of Salesforce Personalization beyond real-time web and mobile experiences. By leveraging personalization points, the Decisioning API, invocable actions, and Salesforce Flow, you can deliver individualized recommendations and content through email, push notifications, CRM workflows, and Agentforce conversations.</p>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>What You Learned</th>
+<th>Where to Go Next</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Batch vs. real-time personalization differences</td>
+<td><a href="/personalization-api/">Personalization API</a> — for headless/server-side real-time requests</td>
+</tr>
+<tr>
+<td>Invocable actions for Flow and Agentforce</td>
+<td><a href="/web-implementation/personalization-points/">Personalization Points</a> — to create or modify points</td>
+</tr>
+<tr>
+<td>Scheduled batch patterns with Flow</td>
+<td><a href="/web-implementation/recommenders/">Recommenders</a> — to configure the recommender powering your decisions</td>
+</tr>
+<tr>
+<td>Marketing Cloud email integration</td>
+<td><a href="/experimentation/">Experimentation</a> — to A/B test your batch personalization strategies</td>
+</tr>
+<tr>
+<td>Decision credit management</td>
+<td><a href="/setup-permissions/">Setup &amp; Permissions</a> — for permission set configuration</td>
+</tr>
+</tbody>
+</table></div>
+<div class="callout callout-validation"><p><span class="callout-label">🔍 Needs Validation:</span> This guide is based on documentation as of March 2026. Batch personalization capabilities, invocable action parameters, and Marketing Cloud integration options are actively evolving. Verify configuration details against the latest <a href="https://help.salesforce.com/s/articleView?id=sf.dc_personalization_overview.htm" target="_blank" rel="noopener noreferrer">Salesforce Personalization documentation</a> and <a href="https://help.salesforce.com/s/articleView?id=release-notes.salesforce_release_notes.htm" target="_blank" rel="noopener noreferrer">release notes</a>.</p></div>
+
+      </article>
+
+      <!-- Previous / Next Navigation -->
+      <nav class="prev-next" aria-label="Page navigation">
+        <a href="/experimentation/" class="prev-next-btn pn-prev">
+      <span class="pn-direction">← Previous</span>
+      <span class="pn-title">Experimentation Setup</span>
+    </a>
+      </nav>
+
+      <!-- End-of-page Donation CTA -->
+      <div class="donate-cta">
+        <p>Found this guide helpful?</p>
+        <a href="https://buymeacoffee.com/YOUR_USERNAME" target="_blank" rel="noopener noreferrer" class="donate-btn donate-btn-cta">Buy Me a Latte ☕</a>
+      </div>
+    </main>
+  </div>
+
+  <!-- ==================== FOOTER AD ==================== -->
+  <div class="ad-container ad-footer">
+    <span class="ad-label">Advertisement</span>
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+         data-ad-slot="XXXXXXXXXX"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p class="footer-title">Salesforce Personalization Implementation Guide</p>
+      <p class="footer-subtitle">Based on documentation as of March 2026</p>
+      <p class="footer-disclaimer">This is an educational resource. Verify all information against the latest <a href="https://help.salesforce.com/" target="_blank" rel="noopener noreferrer">Salesforce documentation</a>. Salesforce releases updates three times per year.</p>
+      <p class="footer-donate">
+        <a href="https://buymeacoffee.com/YOUR_USERNAME" target="_blank" rel="noopener noreferrer">Support this project — Buy Me a Latte ☕</a>
+      </p>
+    </div>
+  </footer>
+
+  <script src="../js/main.js"></script>
+  <script src="../js/copy-code.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (typeof mermaid !== 'undefined') {
+        mermaid.initialize({ startOnLoad: false, theme: 'default' });
+        document.querySelectorAll('pre > code.language-mermaid').forEach(function(el) {
+          var pre = el.parentElement;
+          var container = document.createElement('div');
+          container.className = 'mermaid';
+          container.textContent = el.textContent;
+          pre.parentNode.replaceChild(container, pre);
+        });
+        mermaid.run();
+      }
+    });
+  </script>
+</body>
+</html>

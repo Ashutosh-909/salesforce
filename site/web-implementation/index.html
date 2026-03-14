@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Web Campaign Configuration — Salesforce Personalization Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body>
+
+  <!-- ==================== TOP NAV BAR ==================== -->
+  <nav class="navbar" id="navbar">
+    <div class="navbar-inner">
+      <a href="../" class="navbar-brand">Salesforce Personalization Guide</a>
+
+      <button class="hamburger" id="hamburger" aria-label="Toggle navigation" aria-expanded="false">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+      </button>
+
+      <div class="navbar-menu" id="navbar-menu">
+        <ul class="nav-list">
+          <li class="nav-item"><a href="../" class="nav-link">Home</a></li>
+          <li class="nav-item"><a href="../setup-permissions/" class="nav-link">Setup &amp; Permissions</a></li>
+
+          <li class="nav-item has-dropdown">
+            <a href="../data-capturing-modeling/" class="nav-link dropdown-toggle">Data Capturing &amp; Modeling <span class="dropdown-arrow">▾</span></a>
+            <ul class="dropdown-menu">
+              <li><a href="../data-capturing-modeling/">Overview</a></li>
+              <li><a href="../data-capturing-modeling/web-data-capturing/">Web Data Capturing</a></li>
+              <li><a href="../data-capturing-modeling/mobile-data-capturing/">Mobile Data Capturing</a></li>
+              <li><a href="../data-capturing-modeling/dlo-dmo-mapping-ir/">DLO-DMO Mapping &amp; IR</a></li>
+              <li><a href="../data-capturing-modeling/data-graphs/">Data Graphs</a></li>
+              <li><a href="../data-capturing-modeling/calculated-insights/">Calculated Insights</a></li>
+            </ul>
+          </li>
+
+          <li class="nav-item has-dropdown">
+            <a href="../web-implementation/" class="nav-link dropdown-toggle">Web Implementation <span class="dropdown-arrow">▾</span></a>
+            <ul class="dropdown-menu">
+              <li><a href="../web-implementation/">Overview</a></li>
+              <li><a href="../web-implementation/personalization-types/">Personalization Types</a></li>
+              <li><a href="../web-implementation/recommenders/">Recommenders</a></li>
+              <li><a href="../web-implementation/response-templates/">Response Templates</a></li>
+              <li><a href="../web-implementation/personalization-points/">Personalization Points</a></li>
+              <li><a href="../web-implementation/decisions/">Decisions</a></li>
+              <li><a href="../web-implementation/experiments/">Experiments</a></li>
+              <li><a href="../web-implementation/web-templates/">Web Templates</a></li>
+              <li><a href="../web-implementation/web-personalization-manager/">Web Personalization Manager</a></li>
+            </ul>
+          </li>
+
+          <li class="nav-item"><a href="../mobile-implementation/" class="nav-link">Mobile Implementation</a></li>
+          <li class="nav-item"><a href="../personalization-api/" class="nav-link">Personalization API</a></li>
+          <li class="nav-item"><a href="../experimentation/" class="nav-link">Experimentation</a></li>
+          <li class="nav-item"><a href="../batch-personalization/" class="nav-link">Batch Personalization</a></li>
+        </ul>
+
+        <a href="https://buymeacoffee.com/YOUR_USERNAME" target="_blank" rel="noopener noreferrer" class="donate-btn donate-btn-nav">
+          <span class="donate-btn-label">Buy Me a Latte ☕</span>
+          <span class="donate-btn-emoji">☕</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ==================== HEADER AD ==================== -->
+  <div class="ad-container ad-header">
+    <span class="ad-label">Advertisement</span>
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+         data-ad-slot="XXXXXXXXXX"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+
+  <!-- ==================== PAGE LAYOUT ==================== -->
+  <div class="page-wrapper">
+
+    <!-- ---- SIDEBAR ---- -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-inner">
+        <nav class="toc" id="toc" aria-label="Table of Contents">
+          <h3 class="toc-title">On This Page</h3>
+          <ul>
+  <li><a href="#prerequisites">Prerequisites</a></li>
+  <li><a href="#the-building-blocks">The Building Blocks</a></li>
+  <li><a href="#section-index">Section Index</a></li>
+  <li><a href="#recommended-reading-order">Recommended Reading Order</a></li>
+</ul>
+        </nav>
+
+        <!-- Sidebar Donation Card -->
+        <div class="donate-card">
+          <span class="donate-card-emoji">☕</span>
+          <p class="donate-card-heading">Enjoying this guide?</p>
+          <a href="https://buymeacoffee.com/YOUR_USERNAME" target="_blank" rel="noopener noreferrer" class="donate-btn donate-btn-sidebar">Buy Me a Latte</a>
+        </div>
+
+        <!-- Sidebar Ad -->
+        <div class="ad-container ad-sidebar">
+          <span class="ad-label">Advertisement</span>
+          <ins class="adsbygoogle"
+               style="display:block"
+               data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+               data-ad-slot="XXXXXXXXXX"
+               data-ad-format="auto"
+               data-full-width-responsive="true"></ins>
+          <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ---- MAIN CONTENT ---- -->
+    <main class="content" id="content">
+      <!-- Breadcrumbs -->
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <a href="/">Home</a><span class="breadcrumb-sep"> &gt; </span><span class="breadcrumb-current">Web Implementation</span>
+      </nav>
+
+      <!-- Page Content (H1 + body from Markdown) -->
+      <article class="article">
+        <h1 id="web-campaign-configuration" tabindex="-1">Web Campaign Configuration</h1>
+<p>This section covers the <strong>personalization building blocks</strong> you configure in the Salesforce Personalization application to deliver personalized web experiences. By the end of this section, you'll know how to set up every component needed to go from a configured Data Cloud environment to live personalized content on your website.</p>
+<div class="callout callout-note"><p><span class="callout-label">📝 Note:</span> Acronyms used in this section — <strong>WPM</strong> = Web Personalization Manager, <strong>DG</strong> = Data Graph, <strong>DMO</strong> = Data Model Object, <strong>CI</strong> = Calculated Insight, <strong>CTA</strong> = Call to Action.</p></div>
+<hr>
+<h2 id="prerequisites" tabindex="-1">Prerequisites</h2>
+<p>Before you begin, make sure you've completed the following from the <a href="/data-capturing-modeling/">Data Capturing &amp; Modeling</a> section:</p>
+<ul>
+<li><strong>Salesforce Interactions SDK</strong> is installed and capturing events on your website</li>
+<li><strong>Data streams</strong> are deployed and mapping DLOs to DMOs</li>
+<li><strong>Identity Resolution</strong> is configured and running</li>
+<li><strong>Profile Data Graph</strong> (real-time) is built with engagement objects, segments, and CIs</li>
+<li><strong>Item Data Graph</strong> (standard) is built for the items you plan to recommend (products, articles, etc.)</li>
+</ul>
+<hr>
+<h2 id="the-building-blocks" tabindex="-1">The Building Blocks</h2>
+<p>Configuring a personalized web experience involves several interconnected components. Here's the order you'll work through them:</p>
+<pre><button class="copy-btn" aria-label="Copy code">Copy</button><code class="language-">┌─────────────────────────────────────────────────────────────────────┐
+│                    Personalization Building Blocks                   │
+│                                                                     │
+│   1. Personalization Types ─── Manual Content or Recommendations    │
+│                                                                     │
+│   2. Recommenders ─────────── Rules-Based or Objective-Based        │
+│       ├── Engagement Signals                                        │
+│       ├── Engagement Signal Metrics                                 │
+│       └── Recommender Filters                                       │
+│                                                                     │
+│   3. Response Templates ───── Define what data is returned          │
+│                                                                     │
+│   4. Personalization Points ─ Where decisions are requested         │
+│                                                                     │
+│   5. Decisions ────────────── Who gets what (targeting + priority)   │
+│                                                                     │
+│   6. Experiments ──────────── A/B test different strategies          │
+│                                                                     │
+│   7. Web Templates ───────── Convert JSON responses to HTML         │
+│                                                                     │
+│   8. Web Personalization      Apply experiences to your website     │
+│      Manager (WPM)            via a WYSIWYG tool                    │
+└─────────────────────────────────────────────────────────────────────┘
+</code></pre>
+<div class="callout callout-tip"><p><span class="callout-label">💡 Tip:</span> You don't need all of these components for your first personalization experience. A simple <strong>Manual Content</strong> experience (like an infobar or banner) only requires a response template, a personalization point, a decision, and the WPM — no recommenders or item data graphs needed. Start simple and layer in recommendations later.</p></div>
+<hr>
+<h2 id="section-index" tabindex="-1">Section Index</h2>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Sub-Section</th>
+<th>What You'll Learn</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="/web-implementation/personalization-types/">Personalization Types</a></td>
+<td>The two types of personalization — Manual Content and Recommendations — and when to use each</td>
+</tr>
+<tr>
+<td><a href="/web-implementation/recommenders/">Recommenders</a></td>
+<td>Rules-based and objective-based recommenders, engagement signals, metrics, filters, and training</td>
+</tr>
+<tr>
+<td><a href="/web-implementation/response-templates/">Response Templates</a></td>
+<td>How to define the shape of data returned in a decision response</td>
+</tr>
+<tr>
+<td><a href="/web-implementation/personalization-points/">Personalization Points</a></td>
+<td>Creating the decision endpoints that map to parts of your experience</td>
+</tr>
+<tr>
+<td><a href="/web-implementation/decisions/">Decisions</a></td>
+<td>Configuring targeting rules, priority, and content for each personalization point</td>
+</tr>
+<tr>
+<td><a href="/web-implementation/experiments/">Experiments</a></td>
+<td>Setting up A/B tests to compare different decisioning strategies</td>
+</tr>
+<tr>
+<td><a href="/web-implementation/web-templates/">Web Templates (Transformers)</a></td>
+<td>Building Handlebars templates to convert JSON decision responses into HTML</td>
+</tr>
+<tr>
+<td><a href="/web-implementation/web-personalization-manager/">Web Personalization Manager</a></td>
+<td>Using the WYSIWYG tool to apply personalization experiences to your website</td>
+</tr>
+</tbody>
+</table></div>
+<hr>
+
+  <div class="ad-container ad-in-content">
+    <span class="ad-label">Advertisement</span>
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+         data-ad-slot="XXXXXXXXXX"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+<h2 id="recommended-reading-order" tabindex="-1">Recommended Reading Order</h2>
+<p>For your first implementation, we recommend following the sub-sections in order from top to bottom. Each section builds on concepts introduced in the previous one. If you're looking to ship a quick win, jump directly to:</p>
+<ol>
+<li><a href="/web-implementation/personalization-types/">Personalization Types</a> — understand the difference between Manual Content and Recommendations</li>
+<li><a href="/web-implementation/response-templates/">Response Templates</a> — create a Manual Content response template</li>
+<li><a href="/web-implementation/personalization-points/">Personalization Points</a> — create your first personalization point</li>
+<li><a href="/web-implementation/decisions/">Decisions</a> — configure a decision with targeting rules</li>
+<li><a href="/web-implementation/web-personalization-manager/">Web Personalization Manager</a> — apply the experience to your website</li>
+</ol>
+<p>You can return to <a href="/web-implementation/recommenders/">Recommenders</a>, <a href="/web-implementation/experiments/">Experiments</a>, and <a href="/web-implementation/web-templates/">Web Templates</a> when you're ready for ML-powered recommendations and A/B testing.</p>
+
+      </article>
+
+      <!-- Previous / Next Navigation -->
+      <nav class="prev-next" aria-label="Page navigation">
+        <a href="/data-capturing-modeling/calculated-insights/" class="prev-next-btn pn-prev">
+      <span class="pn-direction">← Previous</span>
+      <span class="pn-title">Calculated Insights</span>
+    </a><a href="/web-implementation/personalization-types/" class="prev-next-btn pn-next">
+      <span class="pn-direction">Next →</span>
+      <span class="pn-title">Personalization Types</span>
+    </a>
+      </nav>
+
+      <!-- End-of-page Donation CTA -->
+      <div class="donate-cta">
+        <p>Found this guide helpful?</p>
+        <a href="https://buymeacoffee.com/YOUR_USERNAME" target="_blank" rel="noopener noreferrer" class="donate-btn donate-btn-cta">Buy Me a Latte ☕</a>
+      </div>
+    </main>
+  </div>
+
+  <!-- ==================== FOOTER AD ==================== -->
+  <div class="ad-container ad-footer">
+    <span class="ad-label">Advertisement</span>
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+         data-ad-slot="XXXXXXXXXX"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p class="footer-title">Salesforce Personalization Implementation Guide</p>
+      <p class="footer-subtitle">Based on documentation as of March 2026</p>
+      <p class="footer-disclaimer">This is an educational resource. Verify all information against the latest <a href="https://help.salesforce.com/" target="_blank" rel="noopener noreferrer">Salesforce documentation</a>. Salesforce releases updates three times per year.</p>
+      <p class="footer-donate">
+        <a href="https://buymeacoffee.com/YOUR_USERNAME" target="_blank" rel="noopener noreferrer">Support this project — Buy Me a Latte ☕</a>
+      </p>
+    </div>
+  </footer>
+
+  <script src="../js/main.js"></script>
+  <script src="../js/copy-code.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (typeof mermaid !== 'undefined') {
+        mermaid.initialize({ startOnLoad: false, theme: 'default' });
+        document.querySelectorAll('pre > code.language-mermaid').forEach(function(el) {
+          var pre = el.parentElement;
+          var container = document.createElement('div');
+          container.className = 'mermaid';
+          container.textContent = el.textContent;
+          pre.parentNode.replaceChild(container, pre);
+        });
+        mermaid.run();
+      }
+    });
+  </script>
+</body>
+</html>

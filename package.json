@@ -1,0 +1,16 @@
+{
+  "name": "salesforce-personalization-guide",
+  "version": "1.0.0",
+  "description": "Static site build for Salesforce Personalization Implementation Guide",
+  "private": true,
+  "scripts": {
+    "build": "node build/build.js",
+    "serve": "npx serve site"
+  },
+  "devDependencies": {
+    "markdown-it": "^14.1.0",
+    "markdown-it-anchor": "^9.2.0",
+    "prismjs": "^1.29.0",
+    "glob": "^10.3.0"
+  }
+}

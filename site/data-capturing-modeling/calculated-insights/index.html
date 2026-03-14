@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculated Insights — Salesforce Personalization Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/style.css">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body>
+
+  <!-- ==================== TOP NAV BAR ==================== -->
+  <nav class="navbar" id="navbar">
+    <div class="navbar-inner">
+      <a href="../../" class="navbar-brand">Salesforce Personalization Guide</a>
+
+      <button class="hamburger" id="hamburger" aria-label="Toggle navigation" aria-expanded="false">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+      </button>
+
+      <div class="navbar-menu" id="navbar-menu">
+        <ul class="nav-list">
+          <li class="nav-item"><a href="../../" class="nav-link">Home</a></li>
+          <li class="nav-item"><a href="../../setup-permissions/" class="nav-link">Setup &amp; Permissions</a></li>
+
+          <li class="nav-item has-dropdown">
+            <a href="../../data-capturing-modeling/" class="nav-link dropdown-toggle">Data Capturing &amp; Modeling <span class="dropdown-arrow">▾</span></a>
+            <ul class="dropdown-menu">
+              <li><a href="../../data-capturing-modeling/">Overview</a></li>
+              <li><a href="../../data-capturing-modeling/web-data-capturing/">Web Data Capturing</a></li>
+              <li><a href="../../data-capturing-modeling/mobile-data-capturing/">Mobile Data Capturing</a></li>
+              <li><a href="../../data-capturing-modeling/dlo-dmo-mapping-ir/">DLO-DMO Mapping &amp; IR</a></li>
+              <li><a href="../../data-capturing-modeling/data-graphs/">Data Graphs</a></li>
+              <li><a href="../../data-capturing-modeling/calculated-insights/">Calculated Insights</a></li>
+            </ul>
+          </li>
+
+          <li class="nav-item has-dropdown">
+            <a href="../../web-implementation/" class="nav-link dropdown-toggle">Web Implementation <span class="dropdown-arrow">▾</span></a>
+            <ul class="dropdown-menu">
+              <li><a href="../../web-implementation/">Overview</a></li>
+              <li><a href="../../web-implementation/personalization-types/">Personalization Types</a></li>
+              <li><a href="../../web-implementation/recommenders/">Recommenders</a></li>
+              <li><a href="../../web-implementation/response-templates/">Response Templates</a></li>
+              <li><a href="../../web-implementation/personalization-points/">Personalization Points</a></li>
+              <li><a href="../../web-implementation/decisions/">Decisions</a></li>
+              <li><a href="../../web-implementation/experiments/">Experiments</a></li>
+              <li><a href="../../web-implementation/web-templates/">Web Templates</a></li>
+              <li><a href="../../web-implementation/web-personalization-manager/">Web Personalization Manager</a></li>
+            </ul>
+          </li>
+
+          <li class="nav-item"><a href="../../mobile-implementation/" class="nav-link">Mobile Implementation</a></li>
+          <li class="nav-item"><a href="../../personalization-api/" class="nav-link">Personalization API</a></li>
+          <li class="nav-item"><a href="../../experimentation/" class="nav-link">Experimentation</a></li>
+          <li class="nav-item"><a href="../../batch-personalization/" class="nav-link">Batch Personalization</a></li>
+        </ul>
+
+        <a href="https://buymeacoffee.com/YOUR_USERNAME" target="_blank" rel="noopener noreferrer" class="donate-btn donate-btn-nav">
+          <span class="donate-btn-label">Buy Me a Latte ☕</span>
+          <span class="donate-btn-emoji">☕</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ==================== HEADER AD ==================== -->
+  <div class="ad-container ad-header">
+    <span class="ad-label">Advertisement</span>
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+         data-ad-slot="XXXXXXXXXX"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+
+  <!-- ==================== PAGE LAYOUT ==================== -->
+  <div class="page-wrapper">
+
+    <!-- ---- SIDEBAR ---- -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-inner">
+        <nav class="toc" id="toc" aria-label="Table of Contents">
+          <h3 class="toc-title">On This Page</h3>
+          <ul>
+  <li><a href="#1-what-are-calculated-insights">1. What Are Calculated Insights?</a></li>
+  <li class="toc-h3"><a href="#ci-vs-segments">CI vs. Segments</a></li>
+  <li><a href="#2-cis-for-rules-based-recommenders">2. CIs for Rules-Based Recommenders</a></li>
+  <li class="toc-h3"><a href="#top-sellers">Top Sellers</a></li>
+  <li class="toc-h3"><a href="#most-viewed">Most Viewed</a></li>
+  <li class="toc-h3"><a href="#co-browse">Co-Browse</a></li>
+  <li class="toc-h3"><a href="#co-buy">Co-Buy</a></li>
+  <li class="toc-h3"><a href="#requirements-for-recommender-cis">Requirements for Recommender CIs</a></li>
+  <li><a href="#3-cis-for-targeting-and-filtering">3. CIs for Targeting and Filtering</a></li>
+  <li class="toc-h3"><a href="#targeting-examples">Targeting Examples</a></li>
+  <li class="toc-h3"><a href="#filtering-examples">Filtering Examples</a></li>
+  <li><a href="#4-adding-cis-to-data-graphs">4. Adding CIs to Data Graphs</a></li>
+  <li class="toc-h3"><a href="#adding-a-ci-to-a-profile-data-graph">Adding a CI to a Profile Data Graph</a></li>
+  <li class="toc-h3"><a href="#adding-a-ci-to-an-item-data-graph">Adding a CI to an Item Data Graph</a></li>
+  <li class="toc-h3"><a href="#ci-refresh-schedules">CI Refresh Schedules</a></li>
+  <li><a href="#5-creating-a-calculated-insight">5. Creating a Calculated Insight</a></li>
+  <li class="toc-h3"><a href="#steps">Steps</a></li>
+  <li><a href="#summary-checklist">Summary Checklist</a></li>
+  <li><a href="#whats-next">What's Next?</a></li>
+  <li><a href="#additional-resources">Additional Resources</a></li>
+</ul>
+        </nav>
+
+        <!-- Sidebar Donation Card -->
+        <div class="donate-card">
+          <span class="donate-card-emoji">☕</span>
+          <p class="donate-card-heading">Enjoying this guide?</p>
+          <a href="https://buymeacoffee.com/YOUR_USERNAME" target="_blank" rel="noopener noreferrer" class="donate-btn donate-btn-sidebar">Buy Me a Latte</a>
+        </div>
+
+        <!-- Sidebar Ad -->
+        <div class="ad-container ad-sidebar">
+          <span class="ad-label">Advertisement</span>
+          <ins class="adsbygoogle"
+               style="display:block"
+               data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+               data-ad-slot="XXXXXXXXXX"
+               data-ad-format="auto"
+               data-full-width-responsive="true"></ins>
+          <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ---- MAIN CONTENT ---- -->
+    <main class="content" id="content">
+      <!-- Breadcrumbs -->
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <a href="/">Home</a><span class="breadcrumb-sep"> &gt; </span><a href="/data-capturing-modeling/">Data Capturing &amp; Modeling</a><span class="breadcrumb-sep"> &gt; </span><span class="breadcrumb-current">Calculated Insights</span>
+      </nav>
+
+      <!-- Page Content (H1 + body from Markdown) -->
+      <article class="article">
+        <h1 id="calculated-insights" tabindex="-1">Calculated Insights</h1>
+<p>Calculated Insights (CIs) are multidimensional metrics computed over your Data Model Objects (DMOs). They provide a flexible mechanism to analyze data, define custom metrics, and make computed values available for personalization targeting, recommendation strategies, and filtering. This section explains what CIs are, how to use them for different personalization scenarios, and how to add them to your Data Graphs.</p>
+<div class="callout callout-note"><p><span class="callout-label">📝 Note:</span> Acronyms used in this section — <strong>CI</strong> = Calculated Insight, <strong>DMO</strong> = Data Model Object, <strong>DG</strong> = Data Graph, <strong>PK</strong> = Primary Key, <strong>ML</strong> = Machine Learning.</p></div>
+<hr>
+<h2 id="1-what-are-calculated-insights" tabindex="-1">1. What Are Calculated Insights?</h2>
+<p>A Calculated Insight is a Data Cloud feature that lets you define and calculate <strong>multidimensional metrics</strong> across your DMOs. Think of CIs as custom aggregations — counts, sums, averages, min/max values — computed over your data on a configurable schedule.</p>
+<p>CIs are useful because they turn raw data into <strong>actionable signals</strong> that Personalization can use for:</p>
+<ul>
+<li><strong>Rules-based recommendation strategies</strong> — &quot;Show top-selling products&quot; or &quot;Show most-viewed articles&quot;</li>
+<li><strong>Personalization decision targeting</strong> — &quot;Show this decision only to customers with lifetime purchase count &gt; 5&quot;</li>
+<li><strong>Recommendation filtering</strong> — &quot;Only recommend products with an average rating above 4.0&quot;</li>
+</ul>
+<h3 id="ci-vs-segments" tabindex="-1">CI vs. Segments</h3>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Calculated Insights</th>
+<th>Segments</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Output</strong></td>
+<td>Numeric metrics (count, sum, average, ratio) attached to individual records</td>
+<td>Boolean membership (individual is in or out of the segment)</td>
+</tr>
+<tr>
+<td><strong>Granularity</strong></td>
+<td>Can be computed per individual, per item, or per any DMO dimension</td>
+<td>Always per individual</td>
+</tr>
+<tr>
+<td><strong>Use in targeting</strong></td>
+<td>Yes, via DG — numeric comparisons (e.g., &quot;total purchases &gt; 10&quot;)</td>
+<td>Yes, via DG — membership checks (e.g., &quot;is member of 'VIP' segment&quot;)</td>
+</tr>
+<tr>
+<td><strong>Use in recommendations</strong></td>
+<td>Yes — powers rules-based recommenders and recommendation filters</td>
+<td>Yes — can filter recommendations by segment membership</td>
+</tr>
+<tr>
+<td><strong>Refresh</strong></td>
+<td>Batch schedule (minimum 1 hour)</td>
+<td>Batch or streaming schedule</td>
+</tr>
+</tbody>
+</table></div>
+<hr>
+<h2 id="2-cis-for-rules-based-recommenders" tabindex="-1">2. CIs for Rules-Based Recommenders</h2>
+<p>Rules-based recommenders use CIs to determine what items to show. Unlike objective-based recommenders that use ML, rules-based recommenders rely entirely on mathematical calculations — making them simpler to set up and easier to reason about.</p>
+<p>Any CI defined on an <strong>Item Data Graph</strong> can be used to power a rules-based recommendation strategy. Common examples:</p>
+<h3 id="top-sellers" tabindex="-1">Top Sellers</h3>
+<p>Shows products with the highest purchase count.</p>
+<p><strong>CI definition:</strong></p>
+<ul>
+<li><strong>Root DMO:</strong> Goods Product (or your item DMO)</li>
+<li><strong>Metric:</strong> Count of Product Order Engagement rows per product</li>
+<li><strong>Dimension:</strong> Product ID (PK of the root DMO)</li>
+<li><strong>Sort:</strong> Descending by count</li>
+</ul>
+<p><strong>What it answers:</strong> &quot;Which products are purchased most frequently?&quot;</p>
+<h3 id="most-viewed" tabindex="-1">Most Viewed</h3>
+<p>Shows products or articles that receive the most page views.</p>
+<p><strong>CI definition:</strong></p>
+<ul>
+<li><strong>Root DMO:</strong> Goods Product or Knowledge Article Version</li>
+<li><strong>Metric:</strong> Count of Product Browse Engagement (or Article Engagement) rows per item</li>
+<li><strong>Dimension:</strong> Item ID (PK of the root DMO)</li>
+<li><strong>Sort:</strong> Descending by count</li>
+</ul>
+<p><strong>What it answers:</strong> &quot;Which items are viewed most often?&quot;</p>
+<h3 id="co-browse" tabindex="-1">Co-Browse</h3>
+<p>Shows products frequently viewed together with the product currently being viewed.</p>
+<p><strong>CI definition:</strong></p>
+<ul>
+<li><strong>Root DMO:</strong> Goods Product</li>
+<li><strong>Metric:</strong> Count of co-occurrence — for a given pair of products, how many unique individuals viewed both</li>
+<li><strong>Dimensions:</strong> Product A ID, Product B ID</li>
+<li><strong>Filter at decision time:</strong> Anchor item = Product A → return all Product B items sorted by co-occurrence count</li>
+</ul>
+<p><strong>What it answers:</strong> &quot;What other products do people view when they view this product?&quot;</p>
+<h3 id="co-buy" tabindex="-1">Co-Buy</h3>
+<p>Shows products frequently purchased together.</p>
+<p><strong>CI definition:</strong></p>
+<ul>
+<li><strong>Root DMO:</strong> Goods Product</li>
+<li><strong>Metric:</strong> Count of co-purchase — for a given pair of products, how many unique individuals purchased both</li>
+<li><strong>Dimensions:</strong> Product A ID, Product B ID</li>
+</ul>
+<p><strong>What it answers:</strong> &quot;What products are commonly bought together?&quot;</p>
+<div class="callout callout-tip"><p><span class="callout-label">💡 Tip:</span> Start with simpler CIs like <strong>Top Sellers</strong> and <strong>Most Viewed</strong> for your first rules-based recommenders. These require only a single dimension (item ID) and a count metric, making them straightforward to create and validate. Co-browse and co-buy CIs involve pair-wise calculations and are more complex.</p></div>
+<h3 id="requirements-for-recommender-cis" tabindex="-1">Requirements for Recommender CIs</h3>
+<p>When creating CIs intended for use in a rules-based recommender:</p>
+<ol>
+<li><strong>At least one dimension must be the PK of the root DMO</strong> of your Item Data Graph. This ensures the CI can be added to the DG definition and that the recommender can match CI values to specific items.</li>
+<li>The CI must be <strong>added to the Item Data Graph</strong> definition (see Section 4 below).</li>
+<li>The CI metric should output a <strong>date or integer value</strong> suitable for sorting. The recommender uses this value to rank items.</li>
+</ol>
+<hr>
+<h2 id="3-cis-for-targeting-and-filtering" tabindex="-1">3. CIs for Targeting and Filtering</h2>
+<p>Beyond powering recommenders, CIs are valuable for personalization decision targeting and recommendation filtering.</p>
+<h3 id="targeting-examples" tabindex="-1">Targeting Examples</h3>
+<p>CIs added to the <strong>Profile Data Graph</strong> enable numeric targeting rules on personalization decisions:</p>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>CI Metric</th>
+<th>Targeting Rule Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Lifetime purchase count</td>
+<td>Show VIP decision only if purchase count ≥ 10</td>
+</tr>
+<tr>
+<td>Total revenue</td>
+<td>Show premium offer only if total spend &gt; $500</td>
+</tr>
+<tr>
+<td>Days since last purchase</td>
+<td>Show re-engagement banner if last purchase &gt; 30 days ago</td>
+</tr>
+<tr>
+<td>Average order value</td>
+<td>Show high-value recommendations if AOV &gt; $100</td>
+</tr>
+<tr>
+<td>Page views in last 7 days</td>
+<td>Show loyalty prompt if weekly visits ≥ 5</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="filtering-examples" tabindex="-1">Filtering Examples</h3>
+<p>CIs added to the <strong>Item Data Graph</strong> enable item-level filtering in recommendations:</p>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>CI Metric</th>
+<th>Filter Rule Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Average product rating</td>
+<td>Only recommend products with rating ≥ 4.0</td>
+</tr>
+<tr>
+<td>Stock level</td>
+<td>Exclude products with stock = 0</td>
+</tr>
+<tr>
+<td>Trending score (views in last 24h)</td>
+<td>Only recommend items with trending score &gt; threshold</td>
+</tr>
+<tr>
+<td>Margin percentage</td>
+<td>Only recommend items with margin above a business-defined minimum</td>
+</tr>
+</tbody>
+</table></div>
+<div class="callout callout-tip"><p><span class="callout-label">💡 Tip:</span> CIs provide flexibility that segments alone cannot offer. While a segment tells you whether someone is <em>in</em> or <em>out</em> of a group, a CI gives you a <strong>numeric value</strong> that can be used in range comparisons, threshold checks, and sorting — enabling more nuanced targeting and filtering logic.</p></div>
+<hr>
+
+  <div class="ad-container ad-in-content">
+    <span class="ad-label">Advertisement</span>
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+         data-ad-slot="XXXXXXXXXX"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+<h2 id="4-adding-cis-to-data-graphs" tabindex="-1">4. Adding CIs to Data Graphs</h2>
+<p>A CI must be added to a Data Graph definition before it can be used by Personalization. CIs are <strong>not automatically available</strong> — you must explicitly select them.</p>
+<h3 id="adding-a-ci-to-a-profile-data-graph" tabindex="-1">Adding a CI to a Profile Data Graph</h3>
+<ol>
+<li>Open the <strong>Profile Data Graph</strong> configuration.</li>
+<li>In the object selection pane, locate the <strong>Calculated Insights</strong> section.</li>
+<li>CIs written against the <strong>root DMO</strong> of the DG (Unified Individual) are available for selection.</li>
+<li>Select the CI and choose the specific fields/metrics you want available.</li>
+<li><strong>Save</strong> the DG.</li>
+</ol>
+<p>Once added, the CI values are available for:</p>
+<ul>
+<li>Personalization decision targeting rules</li>
+<li>Recommendation filters (Profile DG type)</li>
+</ul>
+<h3 id="adding-a-ci-to-an-item-data-graph" tabindex="-1">Adding a CI to an Item Data Graph</h3>
+<ol>
+<li>Open the <strong>Item Data Graph</strong> configuration.</li>
+<li>Locate the <strong>Calculated Insights</strong> section.</li>
+<li>CIs written against the <strong>root DMO</strong> of the Item DG (e.g., Goods Product) are available for selection.</li>
+<li>Select the CI and choose the specific metrics you want available.</li>
+<li><strong>Save</strong> the DG.</li>
+</ol>
+<p>Once added, the CI values are available for:</p>
+<ul>
+<li>Rules-based recommender strategies (the CI metric drives the recommendation ranking)</li>
+<li>Recommendation filters (Item DG type)</li>
+</ul>
+<div class="callout callout-important"><p><span class="callout-label">⚠️ Important:</span> After adding a CI to a DG, the CI values won't appear on the DG immediately. The CI must complete a <strong>batch refresh</strong>, and then a <strong>DG refresh</strong> must occur. For a CI on a 1-hour schedule with a 30-minute DG refresh, it could take up to 1.5 hours for new CI values to be reflected.</p></div>
+<h3 id="ci-refresh-schedules" tabindex="-1">CI Refresh Schedules</h3>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Schedule Option</th>
+<th>Refresh Frequency</th>
+<th>Best For</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>1 hour</strong></td>
+<td>Fastest available</td>
+<td>CIs powering real-time recommendations where freshness matters (e.g., trending items)</td>
+</tr>
+<tr>
+<td><strong>4 hours</strong></td>
+<td>Balanced frequency</td>
+<td>General-purpose CIs (e.g., top sellers, most viewed)</td>
+</tr>
+<tr>
+<td><strong>12 hours / Daily</strong></td>
+<td>Less frequent</td>
+<td>CIs with stable values that don't change rapidly (e.g., lifetime purchase count)</td>
+</tr>
+<tr>
+<td><strong>No Schedule</strong></td>
+<td>Manual/API trigger only</td>
+<td>CIs where you want to control the exact refresh timing via Data Cloud APIs or Flow orchestration</td>
+</tr>
+</tbody>
+</table></div>
+<div class="callout callout-tip"><p><span class="callout-label">💡 Tip:</span> For CIs powering recommendation strategies where <strong>new items</strong> need to be included quickly (e.g., a new product added to your catalog), use the 1-hour schedule. The recommendation pipeline requires the CI to refresh (up to 1hr) → Item DG to refresh (up to 30min) before the new item appears in rules-based recommendations. See <a href="/data-capturing-modeling/data-graphs/#3-data-graph-refresh-cycles">Data Graphs — Refresh Cycles</a> for the full timeline.</p></div>
+<hr>
+<h2 id="5-creating-a-calculated-insight" tabindex="-1">5. Creating a Calculated Insight</h2>
+<h3 id="steps" tabindex="-1">Steps</h3>
+<ol>
+<li>In Data Cloud, navigate to <strong>Calculated Insights</strong> (under Data Management or Analytics).</li>
+<li>Click <strong>New Calculated Insight</strong>.</li>
+<li><strong>Name</strong> the CI descriptively (e.g., &quot;Product Total Sales Count&quot;, &quot;Customer Lifetime Purchase Count&quot;).</li>
+<li><strong>Define the data source</strong> — select the DMO(s) the CI will compute over.</li>
+<li><strong>Define dimensions</strong> — the grouping keys for the metric:
+<ul>
+<li>For Item DG CIs: Include the PK of the root DMO (e.g., Product ID)</li>
+<li>For Profile DG CIs: Include the Individual ID or Unified Individual ID</li>
+</ul>
+</li>
+<li><strong>Define the metric</strong> — the aggregation to compute:
+<ul>
+<li>Count, Sum, Average, Min, Max, or a custom expression</li>
+</ul>
+</li>
+<li><strong>Set the schedule</strong> — how frequently the CI should refresh.</li>
+<li><strong>Save and activate</strong> the CI.</li>
+</ol>
+<div class="callout callout-note"><p><span class="callout-label">📝 Note:</span> CIs won't compute or be available until they are both activated and scheduled (or manually triggered).</p></div>
+<hr>
+<h2 id="summary-checklist" tabindex="-1">Summary Checklist</h2>
+<ul>
+<li>[ ] <strong>CIs for rules-based recommenders created</strong> <em>(if applicable)</em> — Top sellers, most viewed, co-browse, co-buy, or other item-level metrics defined</li>
+<li>[ ] <strong>CIs for targeting created</strong> <em>(if applicable)</em> — Profile-level metrics for decision targeting rules defined</li>
+<li>[ ] <strong>CIs for filtering created</strong> <em>(if applicable)</em> — Item-level or profile-level metrics for recommendation filters defined</li>
+<li>[ ] <strong>CIs added to Data Graphs</strong> — Each CI added to the appropriate Profile DG or Item DG</li>
+<li>[ ] <strong>CI schedules configured</strong> — Refresh frequency set based on data freshness requirements</li>
+<li>[ ] <strong>CI values validated</strong> — Confirmed in Data Explorer or DG preview that CI values are computing correctly</li>
+</ul>
+<hr>
+<h2 id="whats-next" tabindex="-1">What's Next?</h2>
+<p>With your data pipeline complete — data capturing, modeling, identity resolution, data graphs, and calculated insights — you're ready to start building personalization experiences. Head to the Web Implementation section to learn about personalization types, recommenders, response templates, and more.</p>
+<p><strong><a href="/data-capturing-modeling/data-graphs/">← Previous: Data Graphs</a></strong> | <strong><a href="/web-implementation/">Next: Web Implementation Overview →</a></strong></p>
+<hr>
+<h2 id="additional-resources" tabindex="-1">Additional Resources</h2>
+<ul>
+<li><a href="https://help.salesforce.com/s/articleView?id=sf.c360_a_insights.htm" target="_blank" rel="noopener noreferrer">Salesforce Help: Calculated Insights</a></li>
+<li><a href="https://help.salesforce.com/s/articleView?id=sf.c360_a_calculated_insights_create.htm" target="_blank" rel="noopener noreferrer">Salesforce Help: Create Calculated Insights</a></li>
+<li><a href="https://help.salesforce.com/s/articleView?id=sf.c360_a_data_graphs.htm" target="_blank" rel="noopener noreferrer">Salesforce Help: Data Graphs</a></li>
+</ul>
+
+      </article>
+
+      <!-- Previous / Next Navigation -->
+      <nav class="prev-next" aria-label="Page navigation">
+        <a href="/data-capturing-modeling/data-graphs/" class="prev-next-btn pn-prev">
+      <span class="pn-direction">← Previous</span>
+      <span class="pn-title">Data Graphs</span>
+    </a><a href="/web-implementation/" class="prev-next-btn pn-next">
+      <span class="pn-direction">Next →</span>
+      <span class="pn-title">Web Campaign Configuration</span>
+    </a>
+      </nav>
+
+      <!-- End-of-page Donation CTA -->
+      <div class="donate-cta">
+        <p>Found this guide helpful?</p>
+        <a href="https://buymeacoffee.com/YOUR_USERNAME" target="_blank" rel="noopener noreferrer" class="donate-btn donate-btn-cta">Buy Me a Latte ☕</a>
+      </div>
+    </main>
+  </div>
+
+  <!-- ==================== FOOTER AD ==================== -->
+  <div class="ad-container ad-footer">
+    <span class="ad-label">Advertisement</span>
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+         data-ad-slot="XXXXXXXXXX"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p class="footer-title">Salesforce Personalization Implementation Guide</p>
+      <p class="footer-subtitle">Based on documentation as of March 2026</p>
+      <p class="footer-disclaimer">This is an educational resource. Verify all information against the latest <a href="https://help.salesforce.com/" target="_blank" rel="noopener noreferrer">Salesforce documentation</a>. Salesforce releases updates three times per year.</p>
+      <p class="footer-donate">
+        <a href="https://buymeacoffee.com/YOUR_USERNAME" target="_blank" rel="noopener noreferrer">Support this project — Buy Me a Latte ☕</a>
+      </p>
+    </div>
+  </footer>
+
+  <script src="../../js/main.js"></script>
+  <script src="../../js/copy-code.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (typeof mermaid !== 'undefined') {
+        mermaid.initialize({ startOnLoad: false, theme: 'default' });
+        document.querySelectorAll('pre > code.language-mermaid').forEach(function(el) {
+          var pre = el.parentElement;
+          var container = document.createElement('div');
+          container.className = 'mermaid';
+          container.textContent = el.textContent;
+          pre.parentNode.replaceChild(container, pre);
+        });
+        mermaid.run();
+      }
+    });
+  </script>
+</body>
+</html>

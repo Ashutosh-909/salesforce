@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Experimentation Setup — Salesforce Personalization Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body>
+
+  <!-- ==================== TOP NAV BAR ==================== -->
+  <nav class="navbar" id="navbar">
+    <div class="navbar-inner">
+      <a href="../" class="navbar-brand">Salesforce Personalization Guide</a>
+
+      <button class="hamburger" id="hamburger" aria-label="Toggle navigation" aria-expanded="false">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+      </button>
+
+      <div class="navbar-menu" id="navbar-menu">
+        <ul class="nav-list">
+          <li class="nav-item"><a href="../" class="nav-link">Home</a></li>
+          <li class="nav-item"><a href="../setup-permissions/" class="nav-link">Setup &amp; Permissions</a></li>
+
+          <li class="nav-item has-dropdown">
+            <a href="../data-capturing-modeling/" class="nav-link dropdown-toggle">Data Capturing &amp; Modeling <span class="dropdown-arrow">▾</span></a>
+            <ul class="dropdown-menu">
+              <li><a href="../data-capturing-modeling/">Overview</a></li>
+              <li><a href="../data-capturing-modeling/web-data-capturing/">Web Data Capturing</a></li>
+              <li><a href="../data-capturing-modeling/mobile-data-capturing/">Mobile Data Capturing</a></li>
+              <li><a href="../data-capturing-modeling/dlo-dmo-mapping-ir/">DLO-DMO Mapping &amp; IR</a></li>
+              <li><a href="../data-capturing-modeling/data-graphs/">Data Graphs</a></li>
+              <li><a href="../data-capturing-modeling/calculated-insights/">Calculated Insights</a></li>
+            </ul>
+          </li>
+
+          <li class="nav-item has-dropdown">
+            <a href="../web-implementation/" class="nav-link dropdown-toggle">Web Implementation <span class="dropdown-arrow">▾</span></a>
+            <ul class="dropdown-menu">
+              <li><a href="../web-implementation/">Overview</a></li>
+              <li><a href="../web-implementation/personalization-types/">Personalization Types</a></li>
+              <li><a href="../web-implementation/recommenders/">Recommenders</a></li>
+              <li><a href="../web-implementation/response-templates/">Response Templates</a></li>
+              <li><a href="../web-implementation/personalization-points/">Personalization Points</a></li>
+              <li><a href="../web-implementation/decisions/">Decisions</a></li>
+              <li><a href="../web-implementation/experiments/">Experiments</a></li>
+              <li><a href="../web-implementation/web-templates/">Web Templates</a></li>
+              <li><a href="../web-implementation/web-personalization-manager/">Web Personalization Manager</a></li>
+            </ul>
+          </li>
+
+          <li class="nav-item"><a href="../mobile-implementation/" class="nav-link">Mobile Implementation</a></li>
+          <li class="nav-item"><a href="../personalization-api/" class="nav-link">Personalization API</a></li>
+          <li class="nav-item"><a href="../experimentation/" class="nav-link">Experimentation</a></li>
+          <li class="nav-item"><a href="../batch-personalization/" class="nav-link">Batch Personalization</a></li>
+        </ul>
+
+        <a href="https://buymeacoffee.com/YOUR_USERNAME" target="_blank" rel="noopener noreferrer" class="donate-btn donate-btn-nav">
+          <span class="donate-btn-label">Buy Me a Latte ☕</span>
+          <span class="donate-btn-emoji">☕</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ==================== HEADER AD ==================== -->
+  <div class="ad-container ad-header">
+    <span class="ad-label">Advertisement</span>
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+         data-ad-slot="XXXXXXXXXX"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+
+  <!-- ==================== PAGE LAYOUT ==================== -->
+  <div class="page-wrapper">
+
+    <!-- ---- SIDEBAR ---- -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-inner">
+        <nav class="toc" id="toc" aria-label="Table of Contents">
+          <h3 class="toc-title">On This Page</h3>
+          <ul>
+  <li><a href="#what-is-experimentation">What is Experimentation?</a></li>
+  <li><a href="#prerequisites">Prerequisites</a></li>
+  <li><a href="#creating-an-experiment">Creating an Experiment</a></li>
+  <li class="toc-h3"><a href="#step-1-navigate-to-the-personalization-point">Step 1: Navigate to the Personalization Point</a></li>
+  <li class="toc-h3"><a href="#step-2-define-metrics">Step 2: Define Metrics</a></li>
+  <li class="toc-h3"><a href="#step-3-configure-targeting-rules-optional">Step 3: Configure Targeting Rules (Optional)</a></li>
+  <li class="toc-h3"><a href="#step-4-create-cohorts">Step 4: Create Cohorts</a></li>
+  <li class="toc-h3"><a href="#step-5-add-a-control-cohort-optional">Step 5: Add a Control Cohort (Optional)</a></li>
+  <li class="toc-h3"><a href="#step-6-activate-the-experiment">Step 6: Activate the Experiment</a></li>
+  <li><a href="#experiment-behavior-at-runtime">Experiment Behavior at Runtime</a></li>
+  <li class="toc-h3"><a href="#experiments-are-highest-priority">Experiments Are Highest Priority</a></li>
+  <li class="toc-h3"><a href="#traffic-impact-on-existing-decisions">Traffic Impact on Existing Decisions</a></li>
+  <li class="toc-h3"><a href="#random-assignment">Random Assignment</a></li>
+  <li><a href="#viewing-experiment-analytics">Viewing Experiment Analytics</a></li>
+  <li class="toc-h3"><a href="#accessing-analytics">Accessing Analytics</a></li>
+  <li class="toc-h3"><a href="#what-youll-see">What You'll See</a></li>
+  <li class="toc-h3"><a href="#data-processing-delay">Data Processing Delay</a></li>
+  <li><a href="#experiment-lifecycle-management">Experiment Lifecycle Management</a></li>
+  <li class="toc-h3"><a href="#experiment-duration">Experiment Duration</a></li>
+  <li class="toc-h3"><a href="#ending-an-experiment">Ending an Experiment</a></li>
+  <li class="toc-h3"><a href="#creating-a-new-experiment">Creating a New Experiment</a></li>
+  <li><a href="#best-practices-for-experimentation">Best Practices for Experimentation</a></li>
+  <li class="toc-h3"><a href="#planning-your-experiment">Planning Your Experiment</a></li>
+  <li class="toc-h3"><a href="#traffic-allocation">Traffic Allocation</a></li>
+  <li class="toc-h3"><a href="#managing-impact-on-existing-decisions">Managing Impact on Existing Decisions</a></li>
+  <li class="toc-h3"><a href="#after-the-experiment">After the Experiment</a></li>
+  <li><a href="#example-running-a-recommendations-ab-test">Example: Running a Recommendations A/B Test</a></li>
+  <li class="toc-h3"><a href="#scenario">Scenario</a></li>
+  <li class="toc-h3"><a href="#setup">Setup</a></li>
+  <li class="toc-h3"><a href="#monitor">Monitor</a></li>
+  <li class="toc-h3"><a href="#conclude">Conclude</a></li>
+  <li><a href="#related-topics">Related Topics</a></li>
+</ul>
+        </nav>
+
+        <!-- Sidebar Donation Card -->
+        <div class="donate-card">
+          <span class="donate-card-emoji">☕</span>
+          <p class="donate-card-heading">Enjoying this guide?</p>
+          <a href="https://buymeacoffee.com/YOUR_USERNAME" target="_blank" rel="noopener noreferrer" class="donate-btn donate-btn-sidebar">Buy Me a Latte</a>
+        </div>
+
+        <!-- Sidebar Ad -->
+        <div class="ad-container ad-sidebar">
+          <span class="ad-label">Advertisement</span>
+          <ins class="adsbygoogle"
+               style="display:block"
+               data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+               data-ad-slot="XXXXXXXXXX"
+               data-ad-format="auto"
+               data-full-width-responsive="true"></ins>
+          <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ---- MAIN CONTENT ---- -->
+    <main class="content" id="content">
+      <!-- Breadcrumbs -->
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <a href="/">Home</a><span class="breadcrumb-sep"> &gt; </span><span class="breadcrumb-current">Experimentation</span>
+      </nav>
+
+      <!-- Page Content (H1 + body from Markdown) -->
+      <article class="article">
+        <h1 id="experimentation-setup" tabindex="-1">Experimentation Setup</h1>
+<p>Learn how to set up and analyze A/B tests on your personalization points using Salesforce Personalization's built-in experimentation framework.</p>
+<hr>
+<h2 id="what-is-experimentation" tabindex="-1">What is Experimentation?</h2>
+<p>Experimentation in Salesforce Personalization allows you to test different decisioning strategies against each other on a personalization point. Instead of committing to a single decision configuration, you can create an experiment that splits traffic across multiple <strong>cohorts</strong> — each with its own decision setup — and measure which one performs best against a defined metric.</p>
+<p>Use experimentation to answer questions like:</p>
+<ul>
+<li>Does a rules-based recommender outperform an objective-based recommender for this product page?</li>
+<li>Does a targeted banner with a promotional message drive more add-to-cart actions than a generic hero image?</li>
+<li>What traffic allocation between two recommendation strategies yields the highest conversion rate?</li>
+</ul>
+<p>Experimentation gives you data-driven confidence before rolling out a decisioning strategy to 100% of your audience.</p>
+<div class="callout callout-note"><p><span class="callout-label">📝 Note:</span> Experimentation is a feature of Salesforce Personalization built on Data Cloud. It works alongside decisions on personalization points — you do not need a separate tool or license to run experiments.</p></div>
+<hr>
+<h2 id="prerequisites" tabindex="-1">Prerequisites</h2>
+<p>Before creating an experiment, make sure the following are in place:</p>
+<ol>
+<li>
+<p><strong>An active personalization point</strong> — The experiment is configured directly on a personalization point. You must have at least one personalization point created with a response template and profile data graph assigned. See <a href="/web-implementation/personalization-points/">Personalization Points</a> for setup steps.</p>
+</li>
+<li>
+<p><strong>Engagement signals configured</strong> — Engagement signals are named event definitions built against Data Cloud engagement DMOs (Data Model Objects). They represent meaningful user actions such as a product view, add to cart, or purchase. At least one engagement signal must exist to define experiment metrics.</p>
+</li>
+<li>
+<p><strong>Engagement signal metrics defined</strong> — Every engagement signal automatically generates a default count metric. You can also create additional metrics (such as sum or compound/ratio metrics) from the engagement signal's related objects tab. These metrics are what you select as primary and secondary metrics on your experiment.</p>
+</li>
+<li>
+<p><strong>Engagement signals built on the correct profile data graph</strong> — The engagement DMOs referenced by your signals must exist on the profile data graph selected on the personalization point where you are creating the experiment. If a metric's underlying signal references an engagement DMO that is not on the profile data graph, it will not appear for selection.</p>
+</li>
+</ol>
+<div class="callout callout-important"><p><span class="callout-label">⚠️ Important:</span> If you do not see any metrics available when creating an experiment, verify that your engagement signals are built against engagement DMOs that are included in the profile data graph assigned to the personalization point.</p></div>
+<hr>
+<h2 id="creating-an-experiment" tabindex="-1">Creating an Experiment</h2>
+<p>Follow these steps to create an experiment on a personalization point.</p>
+<h3 id="step-1-navigate-to-the-personalization-point" tabindex="-1">Step 1: Navigate to the Personalization Point</h3>
+<ol>
+<li>Open the <strong>Personalization</strong> application in Salesforce Setup.</li>
+<li>Navigate to the <strong>Personalization Points</strong> tab.</li>
+<li>Click into the personalization point where you want to add an experiment.</li>
+<li>Go to the <strong>Related</strong> tab of the personalization point detail page.</li>
+</ol>
+<div class="callout callout-note"><p><span class="callout-label">📝 Note:</span> Only one experiment can be active on a personalization point at a time. If an experiment already exists, you must archive or delete it before creating a new one.</p></div>
+<h3 id="step-2-define-metrics" tabindex="-1">Step 2: Define Metrics</h3>
+<ol>
+<li>Click <strong>New Experiment</strong>.</li>
+<li><strong>Primary Metric</strong> — Select the engagement signal metric that determines the winning cohort. This is the metric that Personalization uses to evaluate which cohort performs best. For example, select a &quot;Purchase Count&quot; metric if you want to optimize for the number of purchases.</li>
+<li><strong>Secondary Metrics</strong> — Optionally add additional metrics to track alongside the primary metric. Secondary metrics are displayed in the experiment analytics screen but are not used to determine the winner. For example, you might track &quot;Add to Cart Count&quot; or &quot;Click-Through Rate&quot; as secondary metrics while the primary metric is &quot;Revenue.&quot;</li>
+</ol>
+<div class="callout callout-tip"><p><span class="callout-label">💡 Tip:</span> Any metrics defined on engagement signals where the underlying engagement DMO is on the profile data graph of the personalization point are available for selection. If you need a metric that doesn't exist yet, navigate to the <strong>Engagement Signals</strong> tab, open the relevant signal, and create a new metric from its <strong>Related</strong> tab.</p></div>
+<h3 id="step-3-configure-targeting-rules-optional" tabindex="-1">Step 3: Configure Targeting Rules (Optional)</h3>
+<p>If you want the experiment to apply only to a specific subset of individuals, add targeting rules. The targeting rules available on experiments are the same as those available on decisions:</p>
+<ul>
+<li><strong>Profile data graph attributes</strong> — Any direct or related attribute on the profile data graph (e.g., loyalty tier, geographic region, account type)</li>
+<li><strong>Segment memberships</strong> — Target individuals who belong to (or do not belong to) specific Data Cloud segments</li>
+<li><strong>Calculated insights</strong> — Use CI values for numeric thresholds or ranges (e.g., lifetime purchase value &gt; $500)</li>
+<li><strong>Contextual rules</strong> — Rules based on context data sent in the personalization request (e.g., current page URL, device type)</li>
+</ul>
+<p>If no targeting rules are defined, all individuals who visit a page where the personalization point is requested will be eligible for the experiment.</p>
+<div class="callout callout-tip"><p><span class="callout-label">💡 Tip:</span> Up to 50 conditions can be added to targeting rules on an experiment, the same limit as decisions.</p></div>
+<h3 id="step-4-create-cohorts" tabindex="-1">Step 4: Create Cohorts</h3>
+<p>Cohorts represent the different decisioning strategies you want to test. Each cohort functions like a mini-decision with its own configuration.</p>
+<ol>
+<li><strong>Add cohorts</strong> — Create at least two cohorts (e.g., &quot;Cohort A&quot; and &quot;Cohort B&quot;).</li>
+<li><strong>Traffic allocation</strong> — Assign a percentage of traffic to each cohort. The allocations across all cohorts must total 100%. For example:
+<ul>
+<li>Cohort A: 50%</li>
+<li>Cohort B: 50%</li>
+</ul>
+</li>
+<li><strong>Configure each cohort</strong> — The configuration options mirror those of a personalization decision and are determined by the response template on the personalization point:
+<ul>
+<li>For <strong>Manual Content</strong> personalization points: Enter the personalization attribute values (text fields) for each cohort.</li>
+<li>For <strong>Recommendations</strong> personalization points: Select a recommender for each cohort. You might test a rules-based recommender in one cohort against an objective-based recommender in another.</li>
+</ul>
+</li>
+</ol>
+<div class="callout callout-important"><p><span class="callout-label">⚠️ Important:</span> Recommenders available for selection on a cohort must be configured with the same profile data graph defined on the personalization point and must return items of the DMO type specified on the response template.</p></div>
+<h3 id="step-5-add-a-control-cohort-optional" tabindex="-1">Step 5: Add a Control Cohort (Optional)</h3>
+<p>A control cohort allows you to measure the baseline performance — what happens when no personalization is applied. This is valuable for measuring true personalization lift.</p>
+<ul>
+<li>When you add a control cohort, you can configure it to <strong>fall through</strong> to be evaluated against any other decisions configured on the personalization point.</li>
+<li>This means individuals in the control cohort are not shown &quot;nothing&quot; — instead, they receive whatever the next qualifying decision would return (or no response if no other decisions exist).</li>
+</ul>
+<p>For example, if your personalization point has three decisions and you add an experiment with a control cohort that falls through, control cohort individuals will be evaluated against the existing decisions by priority, just as they would if the experiment did not exist.</p>
+<h3 id="step-6-activate-the-experiment" tabindex="-1">Step 6: Activate the Experiment</h3>
+<ol>
+<li>Review all cohort configurations, traffic allocations, and metrics.</li>
+<li>Save and activate the experiment.</li>
+<li>The experiment begins as soon as it is active — traffic will be randomly split across cohorts based on the defined allocations.</li>
+</ol>
+<hr>
+
+  <div class="ad-container ad-in-content">
+    <span class="ad-label">Advertisement</span>
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+         data-ad-slot="XXXXXXXXXX"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+<h2 id="experiment-behavior-at-runtime" tabindex="-1">Experiment Behavior at Runtime</h2>
+<p>Understanding how experiments interact with the personalization decisioning pipeline is critical for planning your testing strategy.</p>
+<h3 id="experiments-are-highest-priority" tabindex="-1">Experiments Are Highest Priority</h3>
+<p>When a personalization request is made against a personalization point, the decisioning pipeline evaluates the experiment <strong>first</strong>, before any decisions configured on the same point. An experiment is treated as the highest-priority item on a personalization point by default.</p>
+<p>The evaluation flow works as follows:</p>
+<ol>
+<li>A personalization request arrives with an individual ID and one or more personalization point IDs.</li>
+<li>The <strong>augmenting phase</strong> retrieves the individual's profile data graph from Data Cloud.</li>
+<li>The <strong>qualifying phase</strong> checks if the individual meets the experiment's targeting rules (if any).</li>
+<li>If the individual qualifies, they are randomly assigned to a cohort based on traffic allocation percentages.</li>
+<li>The <strong>personalizing phase</strong> generates the decision response based on the assigned cohort's configuration.</li>
+<li>If the individual does not qualify for the experiment (due to targeting rules), evaluation falls through to the configured decisions by priority.</li>
+</ol>
+<h3 id="traffic-impact-on-existing-decisions" tabindex="-1">Traffic Impact on Existing Decisions</h3>
+<div class="callout callout-warning"><p><span class="callout-label">🚨 Warning:</span> If you apply an experiment with no targeting rules to a personalization point that has multiple decisions configured, analytics for those underlying decisions will show a dip. This is expected — traffic is being routed through the experiment instead of the decisions. Plan your experiment timing and communicate this to stakeholders.</p></div>
+<h3 id="random-assignment" tabindex="-1">Random Assignment</h3>
+<p>Cohort assignment is random and based on the traffic allocation percentages you define. Personalization handles the randomization — you do not need to implement any client-side logic for assignment.</p>
+<hr>
+<h2 id="viewing-experiment-analytics" tabindex="-1">Viewing Experiment Analytics</h2>
+<p>Once an experiment is active and receiving traffic, you can monitor its performance through the built-in analytics dashboard.</p>
+<h3 id="accessing-analytics" tabindex="-1">Accessing Analytics</h3>
+<ol>
+<li>Navigate to the <strong>Experiments</strong> tab in the Personalization application.</li>
+<li>Find your experiment in the list view and click into the detail page.</li>
+<li>Open the <strong>Analytics</strong> tab.</li>
+</ol>
+<h3 id="what-youll-see" tabindex="-1">What You'll See</h3>
+<p>The experiment analytics dashboard displays:</p>
+<ul>
+<li><strong>Primary metric performance</strong> for each cohort — This is the metric that determines the winning cohort. You can compare cohort performance side by side.</li>
+<li><strong>Secondary metric performance</strong> — Additional metrics you configured are displayed for supplementary analysis.</li>
+<li><strong>Traffic distribution</strong> — Verify that traffic is being allocated according to your defined percentages.</li>
+<li><strong>Cohort-level breakdowns</strong> — See how each cohort is performing in terms of the defined engagement signal metrics.</li>
+</ul>
+<h3 id="data-processing-delay" tabindex="-1">Data Processing Delay</h3>
+<div class="callout callout-important"><p><span class="callout-label">⚠️ Important:</span> Experiments require up to <strong>24 hours</strong> from the time they are activated to begin processing data and displaying analytics. Do not expect to see results immediately after activation. Plan your experiment duration accordingly — short experiments (less than a few days) may not produce statistically meaningful results.</p></div>
+<hr>
+<h2 id="experiment-lifecycle-management" tabindex="-1">Experiment Lifecycle Management</h2>
+<h3 id="experiment-duration" tabindex="-1">Experiment Duration</h3>
+<p>Experiments will <strong>stop processing data after 90 days</strong>. If you need to run an experiment for longer than 90 days, you will need to archive the current experiment and create a new one.</p>
+<h3 id="ending-an-experiment" tabindex="-1">Ending an Experiment</h3>
+<p>When you are ready to conclude an experiment, you have two options:</p>
+<h4 id="option-1-archive-the-experiment" tabindex="-1">Option 1: Archive the Experiment</h4>
+<ul>
+<li>Archiving removes the experiment from the personalization point's <strong>Related</strong> tab but <strong>retains all records and data</strong>.</li>
+<li>You can access archived experiments from the <strong>Experiments</strong> tab in the Personalization application.</li>
+<li>Archived experiment data remains available for review and reporting.</li>
+<li>Archiving frees up the personalization point to accept a new experiment.</li>
+</ul>
+<h4 id="option-2-delete-the-experiment" tabindex="-1">Option 2: Delete the Experiment</h4>
+<ul>
+<li>Deleting the experiment <strong>removes it completely</strong>, including all underlying objects and data.</li>
+<li>This action is <strong>irreversible</strong>.</li>
+<li>Use this option only when you no longer need any data or records associated with the experiment.</li>
+</ul>
+<div class="callout callout-warning"><p><span class="callout-label">🚨 Warning:</span> Deleting an experiment permanently removes all associated data, including analytics. If you might need to reference the experiment's results in the future, choose <strong>Archive</strong> instead.</p></div>
+<h3 id="creating-a-new-experiment" tabindex="-1">Creating a New Experiment</h3>
+<p>To create a new experiment on a personalization point that already has an experiment:</p>
+<ol>
+<li>Either <strong>archive</strong> or <strong>delete</strong> the existing experiment.</li>
+<li>Follow the steps in <a href="#creating-an-experiment">Creating an Experiment</a> above to configure a new one.</li>
+</ol>
+<p>Only one experiment can exist on a personalization point at any given time.</p>
+<hr>
+<h2 id="best-practices-for-experimentation" tabindex="-1">Best Practices for Experimentation</h2>
+<h3 id="planning-your-experiment" tabindex="-1">Planning Your Experiment</h3>
+<ul>
+<li><strong>Start with a clear hypothesis</strong> — Define what you expect to learn before creating the experiment. For example: &quot;We believe an objective-based recommender optimizing for revenue will outperform a rules-based top-sellers recommender on the product detail page.&quot;</li>
+<li><strong>Choose meaningful metrics</strong> — Select a primary metric that directly aligns with your business goal. If you're optimizing for revenue, use a revenue-based metric, not a click count.</li>
+<li><strong>Allow sufficient runtime</strong> — Give your experiment enough time to collect statistically meaningful data. A few days of traffic may not be enough, especially for lower-traffic pages.</li>
+</ul>
+<h3 id="traffic-allocation" tabindex="-1">Traffic Allocation</h3>
+<ul>
+<li><strong>Use even splits for initial experiments</strong> — A 50/50 split between two cohorts is the simplest and most statistically sound approach for your first experiment.</li>
+<li><strong>Use a control cohort when measuring lift</strong> — A control cohort that falls through to existing decisions lets you measure the true incremental impact of your new strategy.</li>
+<li><strong>Avoid very small allocations</strong> — Allocating less than 10% to a cohort may result in insufficient data to draw conclusions within a reasonable timeframe.</li>
+</ul>
+<h3 id="managing-impact-on-existing-decisions" tabindex="-1">Managing Impact on Existing Decisions</h3>
+<ul>
+<li><strong>Communicate experiment timing</strong> — When an experiment goes live, it takes priority over all decisions on the personalization point. Inform stakeholders that decision-level analytics may temporarily dip.</li>
+<li><strong>Use targeting rules for gradual rollout</strong> — If you don't want the experiment to affect all traffic, apply targeting rules to limit the experiment to a specific audience (e.g., a geographic region or customer segment).</li>
+</ul>
+<h3 id="after-the-experiment" tabindex="-1">After the Experiment</h3>
+<ul>
+<li><strong>Roll out the winning strategy</strong> — Once you have a statistically significant winner, archive the experiment and update your decisions to reflect the winning cohort's configuration.</li>
+<li><strong>Document your findings</strong> — Record the experiment hypothesis, configuration, results, and any insights for future reference. This builds institutional knowledge about what works for your audience.</li>
+</ul>
+<hr>
+<h2 id="example-running-a-recommendations-ab-test" tabindex="-1">Example: Running a Recommendations A/B Test</h2>
+<p>Here is an end-to-end example of setting up and running an experiment to test two recommendation strategies on a product detail page.</p>
+<h3 id="scenario" tabindex="-1">Scenario</h3>
+<p>You have a personalization point called <strong>&quot;PDP Recommendations Bar&quot;</strong> that displays product recommendations on your product detail pages. Currently, it uses a rules-based &quot;Top Sellers&quot; recommender. You want to test whether an objective-based &quot;Maximize Revenue&quot; recommender would perform better.</p>
+<h3 id="setup" tabindex="-1">Setup</h3>
+<ol>
+<li>
+<p><strong>Verify prerequisites:</strong></p>
+<ul>
+<li>The personalization point &quot;PDP Recommendations Bar&quot; is active with a recommendations response template and a profile data graph assigned.</li>
+<li>Engagement signals exist for &quot;Product Browse,&quot; &quot;Add to Cart,&quot; and &quot;Purchase&quot; — all built against engagement DMOs on the profile data graph.</li>
+<li>A &quot;Purchase Revenue&quot; metric (sum of net order amount) exists on the &quot;Purchase&quot; engagement signal.</li>
+</ul>
+</li>
+<li>
+<p><strong>Create the experiment:</strong></p>
+<ul>
+<li>Navigate to the &quot;PDP Recommendations Bar&quot; personalization point → Related tab → New Experiment.</li>
+<li><strong>Primary Metric:</strong> Purchase Revenue (sum)</li>
+<li><strong>Secondary Metrics:</strong> Add to Cart Count, Product Browse Count</li>
+<li><strong>Targeting Rules:</strong> None (test across all visitors)</li>
+</ul>
+</li>
+<li>
+<p><strong>Configure cohorts:</strong></p>
+<ul>
+<li><strong>Cohort A (50%):</strong> Select the existing &quot;Top Sellers&quot; rules-based recommender.</li>
+<li><strong>Cohort B (50%):</strong> Select the new &quot;Maximize Revenue&quot; objective-based recommender.</li>
+<li><strong>Control (optional):</strong> You could add a 10% control cohort that falls through to existing decisions, adjusting Cohort A and B to 45% each.</li>
+</ul>
+</li>
+<li>
+<p><strong>Activate</strong> the experiment.</p>
+</li>
+</ol>
+<h3 id="monitor" tabindex="-1">Monitor</h3>
+<ul>
+<li>Wait at least 24 hours for analytics to begin processing.</li>
+<li>Check the <strong>Experiments</strong> tab → detail page → <strong>Analytics</strong> tab for cohort performance comparisons.</li>
+<li>Let the experiment run for at least 2–4 weeks to collect sufficient data.</li>
+</ul>
+<h3 id="conclude" tabindex="-1">Conclude</h3>
+<ul>
+<li>Once a statistically meaningful difference appears, archive the experiment.</li>
+<li>If Cohort B (&quot;Maximize Revenue&quot;) wins, update the personalization point's primary decision to use the objective-based recommender.</li>
+<li>Document the results and share with stakeholders.</li>
+</ul>
+<hr>
+<h2 id="related-topics" tabindex="-1">Related Topics</h2>
+<ul>
+<li><a href="/web-implementation/personalization-points/">Personalization Points</a> — How to create and configure personalization points</li>
+<li><a href="/web-implementation/decisions/">Decisions</a> — How to configure decisions on personalization points</li>
+<li><a href="/web-implementation/recommenders/">Recommenders</a> — Rules-based and objective-based recommender configuration</li>
+<li><a href="/web-implementation/experiments/">Experiments (Web Implementation)</a> — Experiment configuration within the web implementation context</li>
+<li><a href="/personalization-api/">Personalization API</a> — How experiments interact with the Decisioning API at runtime</li>
+</ul>
+<div class="callout callout-note"><p><span class="callout-label">📝 Note:</span> This guide is based on documentation as of March 2026. Salesforce releases updates three times per year — verify experiment features and limits against the latest <a href="https://help.salesforce.com/s/articleView?id=sf.personalization_experimentation.htm" target="_blank" rel="noopener noreferrer">Salesforce Personalization documentation</a>.</p></div>
+
+      </article>
+
+      <!-- Previous / Next Navigation -->
+      <nav class="prev-next" aria-label="Page navigation">
+        <a href="/personalization-api/" class="prev-next-btn pn-prev">
+      <span class="pn-direction">← Previous</span>
+      <span class="pn-title">Personalization API (Decisioning API)</span>
+    </a><a href="/batch-personalization/" class="prev-next-btn pn-next">
+      <span class="pn-direction">Next →</span>
+      <span class="pn-title">Batch Personalization</span>
+    </a>
+      </nav>
+
+      <!-- End-of-page Donation CTA -->
+      <div class="donate-cta">
+        <p>Found this guide helpful?</p>
+        <a href="https://buymeacoffee.com/YOUR_USERNAME" target="_blank" rel="noopener noreferrer" class="donate-btn donate-btn-cta">Buy Me a Latte ☕</a>
+      </div>
+    </main>
+  </div>
+
+  <!-- ==================== FOOTER AD ==================== -->
+  <div class="ad-container ad-footer">
+    <span class="ad-label">Advertisement</span>
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+         data-ad-slot="XXXXXXXXXX"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p class="footer-title">Salesforce Personalization Implementation Guide</p>
+      <p class="footer-subtitle">Based on documentation as of March 2026</p>
+      <p class="footer-disclaimer">This is an educational resource. Verify all information against the latest <a href="https://help.salesforce.com/" target="_blank" rel="noopener noreferrer">Salesforce documentation</a>. Salesforce releases updates three times per year.</p>
+      <p class="footer-donate">
+        <a href="https://buymeacoffee.com/YOUR_USERNAME" target="_blank" rel="noopener noreferrer">Support this project — Buy Me a Latte ☕</a>
+      </p>
+    </div>
+  </footer>
+
+  <script src="../js/main.js"></script>
+  <script src="../js/copy-code.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (typeof mermaid !== 'undefined') {
+        mermaid.initialize({ startOnLoad: false, theme: 'default' });
+        document.querySelectorAll('pre > code.language-mermaid').forEach(function(el) {
+          var pre = el.parentElement;
+          var container = document.createElement('div');
+          container.className = 'mermaid';
+          container.textContent = el.textContent;
+          pre.parentNode.replaceChild(container, pre);
+        });
+        mermaid.run();
+      }
+    });
+  </script>
+</body>
+</html>

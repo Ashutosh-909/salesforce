@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recommenders — Salesforce Personalization Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/style.css">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body>
+
+  <!-- ==================== TOP NAV BAR ==================== -->
+  <nav class="navbar" id="navbar">
+    <div class="navbar-inner">
+      <a href="../../" class="navbar-brand">Salesforce Personalization Guide</a>
+
+      <button class="hamburger" id="hamburger" aria-label="Toggle navigation" aria-expanded="false">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+      </button>
+
+      <div class="navbar-menu" id="navbar-menu">
+        <ul class="nav-list">
+          <li class="nav-item"><a href="../../" class="nav-link">Home</a></li>
+          <li class="nav-item"><a href="../../setup-permissions/" class="nav-link">Setup &amp; Permissions</a></li>
+
+          <li class="nav-item has-dropdown">
+            <a href="../../data-capturing-modeling/" class="nav-link dropdown-toggle">Data Capturing &amp; Modeling <span class="dropdown-arrow">▾</span></a>
+            <ul class="dropdown-menu">
+              <li><a href="../../data-capturing-modeling/">Overview</a></li>
+              <li><a href="../../data-capturing-modeling/web-data-capturing/">Web Data Capturing</a></li>
+              <li><a href="../../data-capturing-modeling/mobile-data-capturing/">Mobile Data Capturing</a></li>
+              <li><a href="../../data-capturing-modeling/dlo-dmo-mapping-ir/">DLO-DMO Mapping &amp; IR</a></li>
+              <li><a href="../../data-capturing-modeling/data-graphs/">Data Graphs</a></li>
+              <li><a href="../../data-capturing-modeling/calculated-insights/">Calculated Insights</a></li>
+            </ul>
+          </li>
+
+          <li class="nav-item has-dropdown">
+            <a href="../../web-implementation/" class="nav-link dropdown-toggle">Web Implementation <span class="dropdown-arrow">▾</span></a>
+            <ul class="dropdown-menu">
+              <li><a href="../../web-implementation/">Overview</a></li>
+              <li><a href="../../web-implementation/personalization-types/">Personalization Types</a></li>
+              <li><a href="../../web-implementation/recommenders/">Recommenders</a></li>
+              <li><a href="../../web-implementation/response-templates/">Response Templates</a></li>
+              <li><a href="../../web-implementation/personalization-points/">Personalization Points</a></li>
+              <li><a href="../../web-implementation/decisions/">Decisions</a></li>
+              <li><a href="../../web-implementation/experiments/">Experiments</a></li>
+              <li><a href="../../web-implementation/web-templates/">Web Templates</a></li>
+              <li><a href="../../web-implementation/web-personalization-manager/">Web Personalization Manager</a></li>
+            </ul>
+          </li>
+
+          <li class="nav-item"><a href="../../mobile-implementation/" class="nav-link">Mobile Implementation</a></li>
+          <li class="nav-item"><a href="../../personalization-api/" class="nav-link">Personalization API</a></li>
+          <li class="nav-item"><a href="../../experimentation/" class="nav-link">Experimentation</a></li>
+          <li class="nav-item"><a href="../../batch-personalization/" class="nav-link">Batch Personalization</a></li>
+        </ul>
+
+        <a href="https://buymeacoffee.com/YOUR_USERNAME" target="_blank" rel="noopener noreferrer" class="donate-btn donate-btn-nav">
+          <span class="donate-btn-label">Buy Me a Latte ☕</span>
+          <span class="donate-btn-emoji">☕</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ==================== HEADER AD ==================== -->
+  <div class="ad-container ad-header">
+    <span class="ad-label">Advertisement</span>
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+         data-ad-slot="XXXXXXXXXX"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+
+  <!-- ==================== PAGE LAYOUT ==================== -->
+  <div class="page-wrapper">
+
+    <!-- ---- SIDEBAR ---- -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-inner">
+        <nav class="toc" id="toc" aria-label="Table of Contents">
+          <h3 class="toc-title">On This Page</h3>
+          <ul>
+  <li><a href="#recommender-types-at-a-glance">Recommender Types at a Glance</a></li>
+  <li><a href="#rules-based-recommenders">Rules-Based Recommenders</a></li>
+  <li class="toc-h3"><a href="#how-they-work">How They Work</a></li>
+  <li class="toc-h3"><a href="#common-examples">Common Examples</a></li>
+  <li class="toc-h3"><a href="#key-requirements">Key Requirements</a></li>
+  <li><a href="#objective-based-recommenders">Objective-Based Recommenders</a></li>
+  <li class="toc-h3"><a href="#the-philosophy">The Philosophy</a></li>
+  <li class="toc-h3"><a href="#out-of-the-box-objectives">Out-of-the-Box Objectives</a></li>
+  <li class="toc-h3"><a href="#custom-objectives">Custom Objectives</a></li>
+  <li><a href="#engagement-signals">Engagement Signals</a></li>
+  <li class="toc-h3"><a href="#example">Example</a></li>
+  <li class="toc-h3"><a href="#where-engagement-signals-are-used">Where Engagement Signals Are Used</a></li>
+  <li class="toc-h3"><a href="#configuration-reference">Configuration Reference</a></li>
+  <li><a href="#engagement-signal-metrics">Engagement Signal Metrics</a></li>
+  <li class="toc-h3"><a href="#metric-types">Metric Types</a></li>
+  <li class="toc-h3"><a href="#how-metrics-map-to-objectives">How Metrics Map to Objectives</a></li>
+  <li class="toc-h3"><a href="#documentation">Documentation</a></li>
+  <li><a href="#key-requirements-for-objective-based-recommenders">Key Requirements for Objective-Based Recommenders</a></li>
+  <li><a href="#recommender-filters">Recommender Filters</a></li>
+  <li class="toc-h3"><a href="#1-decision-context-filters">1. Decision Context Filters</a></li>
+  <li class="toc-h3"><a href="#2-static-filters">2. Static Filters</a></li>
+  <li class="toc-h3"><a href="#3-profile-data-graph-filters">3. Profile Data Graph Filters</a></li>
+  <li class="toc-h3"><a href="#filter-best-practices">Filter Best Practices</a></li>
+  <li><a href="#recommender-training-item-updates">Recommender Training &amp; Item Updates</a></li>
+  <li class="toc-h3"><a href="#training-cycle">Training Cycle</a></li>
+  <li class="toc-h3"><a href="#how-new-items-become-recommendable">How New Items Become Recommendable</a></li>
+  <li class="toc-h3"><a href="#updates-to-existing-items">Updates to Existing Items</a></li>
+  <li><a href="#creating-a-recommender-step-by-step">Creating a Recommender — Step by Step</a></li>
+</ul>
+        </nav>
+
+        <!-- Sidebar Donation Card -->
+        <div class="donate-card">
+          <span class="donate-card-emoji">☕</span>
+          <p class="donate-card-heading">Enjoying this guide?</p>
+          <a href="https://buymeacoffee.com/YOUR_USERNAME" target="_blank" rel="noopener noreferrer" class="donate-btn donate-btn-sidebar">Buy Me a Latte</a>
+        </div>
+
+        <!-- Sidebar Ad -->
+        <div class="ad-container ad-sidebar">
+          <span class="ad-label">Advertisement</span>
+          <ins class="adsbygoogle"
+               style="display:block"
+               data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+               data-ad-slot="XXXXXXXXXX"
+               data-ad-format="auto"
+               data-full-width-responsive="true"></ins>
+          <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ---- MAIN CONTENT ---- -->
+    <main class="content" id="content">
+      <!-- Breadcrumbs -->
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <a href="/">Home</a><span class="breadcrumb-sep"> &gt; </span><a href="/web-implementation/">Web Implementation</a><span class="breadcrumb-sep"> &gt; </span><span class="breadcrumb-current">Recommenders</span>
+      </nav>
+
+      <!-- Page Content (H1 + body from Markdown) -->
+      <article class="article">
+        <h1 id="recommenders" tabindex="-1">Recommenders</h1>
+<p>Recommenders are the engines that power <strong>Recommendations</strong> personalization. They combine an understanding of a person (via a profile data graph) with an understanding of business items (via an item data graph) to determine <strong>which items</strong> should be returned in a decision response.</p>
+<p>This page covers the two recommender strategies, their supporting components (engagement signals, metrics, filters), and how recommender training works.</p>
+<div class="callout callout-note"><p><span class="callout-label">📝 Note:</span> Recommenders can be built against any item data graph configured in your Data Cloud org. See <a href="/data-capturing-modeling/data-graphs/">Data Graphs</a> for details on setting up item and profile data graphs.</p></div>
+<hr>
+<h2 id="recommender-types-at-a-glance" tabindex="-1">Recommender Types at a Glance</h2>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th></th>
+<th>Rules-Based</th>
+<th>Objective-Based</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Powered by</strong></td>
+<td>Calculated Insights (CIs)</td>
+<td>Machine Learning</td>
+</tr>
+<tr>
+<td><strong>Personalization level</strong></td>
+<td>Segment or global (same items for similar users)</td>
+<td>1:1 individual-level</td>
+</tr>
+<tr>
+<td><strong>Setup complexity</strong></td>
+<td>Lower — requires a CI</td>
+<td>Higher — requires engagement signals, metrics, and training data</td>
+</tr>
+<tr>
+<td><strong>Training</strong></td>
+<td>No ML training — uses CI sort order</td>
+<td>24-hour automated training cycle</td>
+</tr>
+<tr>
+<td><strong>Best for</strong></td>
+<td>Top sellers, most viewed, co-browse, co-buy</td>
+<td>Maximize revenue, maximize clicks, custom objectives</td>
+</tr>
+</tbody>
+</table></div>
+<hr>
+<h2 id="rules-based-recommenders" tabindex="-1">Rules-Based Recommenders</h2>
+<p>Rules-based recommenders use <strong>Data Cloud Calculated Insights</strong> to determine which items to show. There is no machine learning involved — items are selected and ranked based on the CI's computed values.</p>
+<h3 id="how-they-work" tabindex="-1">How They Work</h3>
+<p>A CI computes a metric (a date or integer value) for each item in your item data graph. The recommender uses these values to sort and select items for the decision response.</p>
+<h3 id="common-examples" tabindex="-1">Common Examples</h3>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>CI Strategy</th>
+<th>What It Returns</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Top Selling Products</strong></td>
+<td>Products with the highest total sales units</td>
+</tr>
+<tr>
+<td><strong>Most Clicked Articles</strong></td>
+<td>Articles with the highest click counts</td>
+</tr>
+<tr>
+<td><strong>Most Recently Published</strong></td>
+<td>Items sorted by publication date</td>
+</tr>
+<tr>
+<td><strong>Co-Browse</strong></td>
+<td>Items frequently browsed together with the current item</td>
+</tr>
+<tr>
+<td><strong>Co-Buy</strong></td>
+<td>Items frequently purchased together with the current item</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="key-requirements" tabindex="-1">Key Requirements</h3>
+<ul>
+<li>The CI must have <strong>at least one dimension</strong> that matches the primary key of the root DMO of your item data graph. This ensures the CI can be added to the DG definition.</li>
+<li>The CI must be <strong>added to the item data graph</strong> for it to be available to the recommender.</li>
+</ul>
+<div class="callout callout-tip"><p><span class="callout-label">💡 Tip:</span> Any business requirement that you can express as a measure on a CI — outputting a date or integer value for sorting — and that is available on your item data graph can power a rules-based recommendations decision.</p></div>
+<hr>
+<h2 id="objective-based-recommenders" tabindex="-1">Objective-Based Recommenders</h2>
+<p>Objective-based recommenders use <strong>machine learning</strong> to optimize recommendations at the 1:1 individual level based on a desired business outcome. Instead of selecting items from a pre-sorted list, the ML model learns which items are most likely to drive the configured objective for each individual person.</p>
+<h3 id="the-philosophy" tabindex="-1">The Philosophy</h3>
+<p>Traditional personalization platforms require users to choose from a list of algorithms (collaborative filtering, similar items, etc.). Salesforce Personalization flips this by letting business users focus on the <strong>outcome</strong> they want to achieve. The model handles algorithm selection internally, reducing the cognitive load required to execute a use case.</p>
+<h3 id="out-of-the-box-objectives" tabindex="-1">Out-of-the-Box Objectives</h3>
+<p>Salesforce Personalization ships with two built-in objectives:</p>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Objective</th>
+<th>Target DMO</th>
+<th>What It Optimizes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Maximize Revenue</strong></td>
+<td>Goods Product</td>
+<td>Maximizes the revenue generated from product recommendations</td>
+</tr>
+<tr>
+<td><strong>Maximize Clicks</strong></td>
+<td>Knowledge Article Version</td>
+<td>Maximizes the click-through rate on article recommendations</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="custom-objectives" tabindex="-1">Custom Objectives</h3>
+<p>Beyond the built-in options, you can configure <strong>custom objectives</strong> tailored to your business. A custom objective is composed of three parts:</p>
+<ol>
+<li><strong>Engagement Signals</strong> — Named event definitions (covered below)</li>
+<li><strong>Engagement Signal Metric</strong> — A measurable value derived from the signal (covered below)</li>
+<li><strong>Direction</strong> — Whether the model should <strong>maximize</strong> or <strong>minimize</strong> the metric</li>
+</ol>
+<hr>
+
+  <div class="ad-container ad-in-content">
+    <span class="ad-label">Advertisement</span>
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+         data-ad-slot="XXXXXXXXXX"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+<h2 id="engagement-signals" tabindex="-1">Engagement Signals</h2>
+<p>An engagement signal is a <strong>named event definition</strong> configured against a Data Cloud engagement DMO. It represents an occurrence of a row being added to that engagement DMO — optionally meeting certain filter conditions.</p>
+<h3 id="example" tabindex="-1">Example</h3>
+<p>Consider the Sales Order Product engagement DMO:</p>
+<ul>
+<li><strong>Signal: &quot;Purchase&quot;</strong> — Increments every time a new row is added (a purchase occurred)</li>
+<li><strong>Signal: &quot;Nike Purchase&quot;</strong> — Same as above, but with a filter condition: only counts purchases where the brand is &quot;Nike&quot;</li>
+</ul>
+<h3 id="where-engagement-signals-are-used" tabindex="-1">Where Engagement Signals Are Used</h3>
+<p>Engagement signals are a foundational building block used in multiple contexts:</p>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Context</th>
+<th>How Signals Are Used</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Custom Objective Recommenders</strong></td>
+<td>Signals act as the foundation for engagement signal metrics. They also serve as additional training data inputs for the ML model.</td>
+</tr>
+<tr>
+<td><strong>Automation Event-Triggered Flows</strong></td>
+<td>Trigger a Flow based on an engagement signal being recorded. Real-time automation flows are triggered off of signals defined against engagement objects on a real-time Profile Data Graph.</td>
+</tr>
+<tr>
+<td><strong>Attribution Modeling</strong></td>
+<td>Signals and their metrics power attribution analysis to measure personalization lift and effectiveness.</td>
+</tr>
+</tbody>
+</table></div>
+<div class="callout callout-important"><p><span class="callout-label">⚠️ Important:</span> When configuring an engagement signal for use in a recommender, make sure a value is defined for the <strong>item ID</strong>. This ensures the model can understand which item a person is interacting with when an engagement is logged.</p></div>
+<h3 id="configuration-reference" tabindex="-1">Configuration Reference</h3>
+<p>Detailed documentation on engagement signal configuration is available in the <a href="https://help.salesforce.com/s/articleView?id=sf.persnl_engagement_signals.htm" target="_blank" rel="noopener noreferrer">Salesforce Help: Engagement Signals</a>.</p>
+<hr>
+<h2 id="engagement-signal-metrics" tabindex="-1">Engagement Signal Metrics</h2>
+<p>Once you create an engagement signal, a <strong>default count metric</strong> is automatically generated. You can create additional metrics from the <strong>Related Objects</strong> tab of an engagement signal.</p>
+<h3 id="metric-types" tabindex="-1">Metric Types</h3>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Count</strong></td>
+<td>Counts the number of signal occurrences</td>
+<td>&quot;Count of article clicks&quot;</td>
+</tr>
+<tr>
+<td><strong>Sum/Value</strong></td>
+<td>Looks at a specific attribute on the signal to aggregate</td>
+<td>&quot;Sum of net order amount for purchases&quot;</td>
+</tr>
+<tr>
+<td><strong>Compound</strong></td>
+<td>Combines two single metrics using a Divide By function to create a ratio or rate metric</td>
+<td>&quot;Purchase conversion rate = purchases / product browses&quot;</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="how-metrics-map-to-objectives" tabindex="-1">How Metrics Map to Objectives</h3>
+<p>For a simple objective like <strong>Maximize Clicks</strong>, the default count metric works:</p>
+<ul>
+<li>Signal: &quot;Article Click&quot; → Metric: Count of article clicks → Objective: Maximize this count</li>
+</ul>
+<p>For a complex objective like <strong>Maximize Revenue</strong>, you create a value metric:</p>
+<ul>
+<li>Signal: &quot;Purchase&quot; → Metric: Sum of <code>netOrderAmount</code> → Objective: Maximize this amount</li>
+</ul>
+<p>Any metric you create from an engagement signal is usable as an objective in a recommender.</p>
+<h3 id="documentation" tabindex="-1">Documentation</h3>
+<p>Detailed documentation on engagement signal metrics and compound metrics is available in the <a href="https://help.salesforce.com/s/articleView?id=sf.persnl_engagement_signal_metrics.htm" target="_blank" rel="noopener noreferrer">Salesforce Help: Engagement Signal Metrics</a>.</p>
+<hr>
+<h2 id="key-requirements-for-objective-based-recommenders" tabindex="-1">Key Requirements for Objective-Based Recommenders</h2>
+<p>For a metric and signal to be selectable on a recommender definition, <strong>both</strong> must meet these criteria:</p>
+<ol>
+<li>
+<p><strong>Built against a DG engagement object</strong> — The signal's engagement DMO must exist on the profile data graph selected in the first step of the recommender configuration. If the engagement DMO isn't on the profile DG, the recommender has no access to the engagement data for training.</p>
+</li>
+<li>
+<p><strong>Item identifier defined</strong> — The signal must have an item identifier that maps to the ID value of the object being recommended. Without this, the model cannot correlate engagement data with specific items.</p>
+</li>
+</ol>
+<div class="callout callout-warning"><p><span class="callout-label">🚨 Warning:</span> If you are recommending products but the engagement signals don't have a product ID, the model will never know how to interpret that engagement data. Similarly, if you're recommending articles, engagement data against products (without a link to an article) won't help the model train.</p></div>
+<hr>
+<h2 id="recommender-filters" tabindex="-1">Recommender Filters</h2>
+<p>Filters refine which items are eligible to return in a decision response. When configuring a recommender, there are <strong>three types of filters</strong> you can apply:</p>
+<h3 id="1-decision-context-filters" tabindex="-1">1. Decision Context Filters</h3>
+<p>Compare attributes from the <strong>item data graph</strong> against attributes from an <strong>anchor item</strong> defined in the context object of the request.</p>
+<p><strong>Example:</strong> Only return products that match the brand of the product currently being viewed.</p>
+<div class="callout callout-note"><p><span class="callout-label">📝 Note:</span> When using the anchor ID field on the context object, the model expects the anchor ID value to correspond to an item matching the type being recommended. For example, if <code>anchorId = 123</code> and you're recommending products, the model interprets <code>123</code> as a product ID.</p></div>
+<h3 id="2-static-filters" tabindex="-1">2. Static Filters</h3>
+<p>Compare a data point from the item data graph against either:</p>
+<ul>
+<li>A <strong>manually defined value</strong> (hardcoded)</li>
+<li>A <strong>dynamic context variable</strong> using Salesforce Merge Language (SML), which is replaced by a value from the context object at run-time</li>
+</ul>
+<p><strong>Example (Basic):</strong> Only return articles where <code>topic = &quot;Mortgage Loans&quot;</code>.</p>
+<p><strong>Example (Dynamic):</strong> Only return articles where <code>category = {!category}</code> (value passed in the decision request).</p>
+<p>Advanced recommendation filters with dynamic context variables are documented in the <a href="https://help.salesforce.com/s/articleView?id=sf.persnl_recommendation_filters.htm" target="_blank" rel="noopener noreferrer">Salesforce Help: Advanced Recommendation Filters</a>.</p>
+<h3 id="3-profile-data-graph-filters" tabindex="-1">3. Profile Data Graph Filters</h3>
+<p>Compare item attributes to <strong>profile data points</strong> from the selected profile data graph.</p>
+<p><strong>Example:</strong> Exclude products where the product ID matches a product ID from the purchase engagement object on the profile DG (don't recommend items the person already bought).</p>
+<h3 id="filter-best-practices" tabindex="-1">Filter Best Practices</h3>
+<div class="callout callout-warning"><p><span class="callout-label">🚨 Warning:</span> <strong>Overly restrictive filters</strong> can result in empty decision responses. If you experience scenarios where no items are returned, review your filters to see if they are too specific or too numerous.</p></div>
+<div class="callout callout-important"><p><span class="callout-label">⚠️ Important:</span> <strong>Match filters to request context.</strong> If a recommender has filters expecting context data (like an anchor item), make sure the recommender is used in a location where that data is available. A recommender expecting an anchor item won't return results on a homepage where no anchor item exists.</p></div>
+<p>More detailed filter documentation is available in the <a href="https://help.salesforce.com/s/articleView?id=sf.persnl_recommender_filters.htm" target="_blank" rel="noopener noreferrer">Salesforce Help: Recommender Filters</a>.</p>
+<hr>
+<h2 id="recommender-training-item-updates" tabindex="-1">Recommender Training &amp; Item Updates</h2>
+<h3 id="training-cycle" tabindex="-1">Training Cycle</h3>
+<p>Objective-based recommenders train automatically on a <strong>24-hour cycle</strong>. Key facts about training:</p>
+<ul>
+<li>The training schedule is based on when the recommender was initially created — there is no single nightly job for all recommenders. Each one has an <strong>independent schedule</strong>.</li>
+<li>In order for a recommender to serve items, it must complete <strong>at least one successful training</strong>.</li>
+<li><strong>Minimum data requirement:</strong> There must be at least <strong>3 engagement rows</strong> across the referenced engagement objects for the model to train.</li>
+<li>You can track training history from the recommender detail page → <strong>Refresh History</strong> tab.</li>
+</ul>
+<h3 id="how-new-items-become-recommendable" tabindex="-1">How New Items Become Recommendable</h3>
+<p>When a recommender trains, Personalization creates an <strong>index</strong> of all items in the item data graph. This index is used for both training and run-time decisioning. For new items added to a DMO, the following must happen before they can appear in decision responses:</p>
+<h4 id="rules-based-recommenders-1" tabindex="-1">Rules-Based Recommenders</h4>
+<ol>
+<li><strong>CI Refresh</strong> — The CI must refresh after the new item enters Data Cloud. The fastest automated batch CI refresh window is <strong>1 hour</strong>.</li>
+<li><strong>Item DG Refresh</strong> — Once the CI runs, the item data graph must refresh (current fastest NRT DG refresh: <strong>30 minutes</strong>).</li>
+<li>Item is now available in decision responses.</li>
+</ol>
+<div class="callout callout-tip"><p><span class="callout-label">💡 Tip:</span> You can set a batch CI to &quot;No Schedule&quot; and use Data Cloud APIs or Flow to trigger the CI manually as soon as a new record arrives — reducing the wait time significantly.</p></div>
+<h4 id="objective-based-recommenders-1" tabindex="-1">Objective-Based Recommenders</h4>
+<ol>
+<li>Steps 1 and 2 above (CI refresh + DG refresh)</li>
+<li><strong>Recommender Training</strong> — One full training cycle must occur after the item appears in the index to generate the necessary embeddings (up to <strong>24 hours</strong>).</li>
+</ol>
+<h3 id="updates-to-existing-items" tabindex="-1">Updates to Existing Items</h3>
+<p>Updates to items already in the index are reflected much faster. Once the metadata change makes it into the item data graph, an <strong>index update job</strong> runs on a <strong>15-minute cadence</strong> to reflect the updated values.</p>
+<p><strong>Example:</strong> If a product's price changes from $50 to $45, the updated price appears in decision responses within ~15 minutes of the change reaching the item DG.</p>
+<hr>
+<h2 id="creating-a-recommender-step-by-step" tabindex="-1">Creating a Recommender — Step by Step</h2>
+<ol>
+<li>Navigate to the <strong>Personalization</strong> app in Salesforce Setup</li>
+<li>Go to <strong>Recommenders</strong> and click <strong>New Recommender</strong></li>
+<li>Select the <strong>profile data graph</strong> and <strong>item data graph</strong> to use</li>
+<li>Choose a strategy:
+<ul>
+<li><strong>Rules-Based</strong> — Select the Calculated Insight to use for ranking items</li>
+<li><strong>Objective-Based</strong> — Select the engagement signal metric and direction (maximize/minimize)</li>
+</ul>
+</li>
+<li>Optionally configure <strong>filters</strong> (decision context, static, or profile DG)</li>
+<li>Save the recommender</li>
+<li>For objective-based recommenders, wait for the first <strong>training cycle</strong> to complete (check the Refresh History tab)</li>
+</ol>
+<div class="callout callout-important"><p><span class="callout-label">⚠️ Important:</span> The profile data graph selected in step 3 determines which engagement signals and metrics are available for selection. Only signals built against engagement objects on that DG will appear.</p></div>
+<hr>
+<p><strong>Next:</strong> <a href="/web-implementation/response-templates/">Response Templates</a> — Learn how to define the shape of data returned in a decision response.</p>
+
+      </article>
+
+      <!-- Previous / Next Navigation -->
+      <nav class="prev-next" aria-label="Page navigation">
+        <a href="/web-implementation/personalization-types/" class="prev-next-btn pn-prev">
+      <span class="pn-direction">← Previous</span>
+      <span class="pn-title">Personalization Types</span>
+    </a><a href="/web-implementation/response-templates/" class="prev-next-btn pn-next">
+      <span class="pn-direction">Next →</span>
+      <span class="pn-title">Response Templates</span>
+    </a>
+      </nav>
+
+      <!-- End-of-page Donation CTA -->
+      <div class="donate-cta">
+        <p>Found this guide helpful?</p>
+        <a href="https://buymeacoffee.com/YOUR_USERNAME" target="_blank" rel="noopener noreferrer" class="donate-btn donate-btn-cta">Buy Me a Latte ☕</a>
+      </div>
+    </main>
+  </div>
+
+  <!-- ==================== FOOTER AD ==================== -->
+  <div class="ad-container ad-footer">
+    <span class="ad-label">Advertisement</span>
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+         data-ad-slot="XXXXXXXXXX"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p class="footer-title">Salesforce Personalization Implementation Guide</p>
+      <p class="footer-subtitle">Based on documentation as of March 2026</p>
+      <p class="footer-disclaimer">This is an educational resource. Verify all information against the latest <a href="https://help.salesforce.com/" target="_blank" rel="noopener noreferrer">Salesforce documentation</a>. Salesforce releases updates three times per year.</p>
+      <p class="footer-donate">
+        <a href="https://buymeacoffee.com/YOUR_USERNAME" target="_blank" rel="noopener noreferrer">Support this project — Buy Me a Latte ☕</a>
+      </p>
+    </div>
+  </footer>
+
+  <script src="../../js/main.js"></script>
+  <script src="../../js/copy-code.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (typeof mermaid !== 'undefined') {
+        mermaid.initialize({ startOnLoad: false, theme: 'default' });
+        document.querySelectorAll('pre > code.language-mermaid').forEach(function(el) {
+          var pre = el.parentElement;
+          var container = document.createElement('div');
+          container.className = 'mermaid';
+          container.textContent = el.textContent;
+          pre.parentNode.replaceChild(container, pre);
+        });
+        mermaid.run();
+      }
+    });
+  </script>
+</body>
+</html>

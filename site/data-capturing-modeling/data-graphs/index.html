@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data Graphs — Salesforce Personalization Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/style.css">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body>
+
+  <!-- ==================== TOP NAV BAR ==================== -->
+  <nav class="navbar" id="navbar">
+    <div class="navbar-inner">
+      <a href="../../" class="navbar-brand">Salesforce Personalization Guide</a>
+
+      <button class="hamburger" id="hamburger" aria-label="Toggle navigation" aria-expanded="false">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+      </button>
+
+      <div class="navbar-menu" id="navbar-menu">
+        <ul class="nav-list">
+          <li class="nav-item"><a href="../../" class="nav-link">Home</a></li>
+          <li class="nav-item"><a href="../../setup-permissions/" class="nav-link">Setup &amp; Permissions</a></li>
+
+          <li class="nav-item has-dropdown">
+            <a href="../../data-capturing-modeling/" class="nav-link dropdown-toggle">Data Capturing &amp; Modeling <span class="dropdown-arrow">▾</span></a>
+            <ul class="dropdown-menu">
+              <li><a href="../../data-capturing-modeling/">Overview</a></li>
+              <li><a href="../../data-capturing-modeling/web-data-capturing/">Web Data Capturing</a></li>
+              <li><a href="../../data-capturing-modeling/mobile-data-capturing/">Mobile Data Capturing</a></li>
+              <li><a href="../../data-capturing-modeling/dlo-dmo-mapping-ir/">DLO-DMO Mapping &amp; IR</a></li>
+              <li><a href="../../data-capturing-modeling/data-graphs/">Data Graphs</a></li>
+              <li><a href="../../data-capturing-modeling/calculated-insights/">Calculated Insights</a></li>
+            </ul>
+          </li>
+
+          <li class="nav-item has-dropdown">
+            <a href="../../web-implementation/" class="nav-link dropdown-toggle">Web Implementation <span class="dropdown-arrow">▾</span></a>
+            <ul class="dropdown-menu">
+              <li><a href="../../web-implementation/">Overview</a></li>
+              <li><a href="../../web-implementation/personalization-types/">Personalization Types</a></li>
+              <li><a href="../../web-implementation/recommenders/">Recommenders</a></li>
+              <li><a href="../../web-implementation/response-templates/">Response Templates</a></li>
+              <li><a href="../../web-implementation/personalization-points/">Personalization Points</a></li>
+              <li><a href="../../web-implementation/decisions/">Decisions</a></li>
+              <li><a href="../../web-implementation/experiments/">Experiments</a></li>
+              <li><a href="../../web-implementation/web-templates/">Web Templates</a></li>
+              <li><a href="../../web-implementation/web-personalization-manager/">Web Personalization Manager</a></li>
+            </ul>
+          </li>
+
+          <li class="nav-item"><a href="../../mobile-implementation/" class="nav-link">Mobile Implementation</a></li>
+          <li class="nav-item"><a href="../../personalization-api/" class="nav-link">Personalization API</a></li>
+          <li class="nav-item"><a href="../../experimentation/" class="nav-link">Experimentation</a></li>
+          <li class="nav-item"><a href="../../batch-personalization/" class="nav-link">Batch Personalization</a></li>
+        </ul>
+
+        <a href="https://buymeacoffee.com/YOUR_USERNAME" target="_blank" rel="noopener noreferrer" class="donate-btn donate-btn-nav">
+          <span class="donate-btn-label">Buy Me a Latte ☕</span>
+          <span class="donate-btn-emoji">☕</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ==================== HEADER AD ==================== -->
+  <div class="ad-container ad-header">
+    <span class="ad-label">Advertisement</span>
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+         data-ad-slot="XXXXXXXXXX"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+
+  <!-- ==================== PAGE LAYOUT ==================== -->
+  <div class="page-wrapper">
+
+    <!-- ---- SIDEBAR ---- -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-inner">
+        <nav class="toc" id="toc" aria-label="Table of Contents">
+          <h3 class="toc-title">On This Page</h3>
+          <ul>
+  <li><a href="#overview">Overview</a></li>
+  <li><a href="#1-profile-data-graph-real-time">1. Profile Data Graph (Real-Time)</a></li>
+  <li class="toc-h3"><a href="#understanding-the-storage-layers">Understanding the Storage Layers</a></li>
+  <li class="toc-h3"><a href="#creating-a-real-time-profile-data-graph">Creating a Real-Time Profile Data Graph</a></li>
+  <li><a href="#2-item-data-graph-standard">2. Item Data Graph (Standard)</a></li>
+  <li class="toc-h3"><a href="#creating-an-item-data-graph">Creating an Item Data Graph</a></li>
+  <li><a href="#3-data-graph-refresh-cycles">3. Data Graph Refresh Cycles</a></li>
+  <li class="toc-h3"><a href="#profile-data-graph-refresh">Profile Data Graph Refresh</a></li>
+  <li class="toc-h3"><a href="#item-data-graph-refresh">Item Data Graph Refresh</a></li>
+  <li class="toc-h3"><a href="#consumption-patterns-after-initial-dg-creation">Consumption Patterns After Initial DG Creation</a></li>
+  <li><a href="#4-viewing-data-in-the-rt-profile-data-graph">4. Viewing Data in the RT Profile Data Graph</a></li>
+  <li class="toc-h3"><a href="#method-1-data-explorer">Method 1: Data Explorer</a></li>
+  <li class="toc-h3"><a href="#method-2-data-graph-lookup-flow">Method 2: Data Graph Lookup Flow</a></li>
+  <li><a href="#summary-checklist">Summary Checklist</a></li>
+  <li><a href="#whats-next">What's Next?</a></li>
+  <li><a href="#additional-resources">Additional Resources</a></li>
+</ul>
+        </nav>
+
+        <!-- Sidebar Donation Card -->
+        <div class="donate-card">
+          <span class="donate-card-emoji">☕</span>
+          <p class="donate-card-heading">Enjoying this guide?</p>
+          <a href="https://buymeacoffee.com/YOUR_USERNAME" target="_blank" rel="noopener noreferrer" class="donate-btn donate-btn-sidebar">Buy Me a Latte</a>
+        </div>
+
+        <!-- Sidebar Ad -->
+        <div class="ad-container ad-sidebar">
+          <span class="ad-label">Advertisement</span>
+          <ins class="adsbygoogle"
+               style="display:block"
+               data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+               data-ad-slot="XXXXXXXXXX"
+               data-ad-format="auto"
+               data-full-width-responsive="true"></ins>
+          <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ---- MAIN CONTENT ---- -->
+    <main class="content" id="content">
+      <!-- Breadcrumbs -->
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <a href="/">Home</a><span class="breadcrumb-sep"> &gt; </span><a href="/data-capturing-modeling/">Data Capturing &amp; Modeling</a><span class="breadcrumb-sep"> &gt; </span><span class="breadcrumb-current">Data Graphs</span>
+      </nav>
+
+      <!-- Page Content (H1 + body from Markdown) -->
+      <article class="article">
+        <h1 id="data-graphs" tabindex="-1">Data Graphs</h1>
+<p>Data Graphs are pre-calculated views built from your Data Model Objects (DMOs). They combine structured data to create optimized, easy-to-use representations of your information that the Personalization decisioning engine accesses at run-time. This section explains how to build both Profile Data Graphs and Item Data Graphs, configure caching for real-time performance, understand refresh cycles, and debug data issues.</p>
+<div class="callout callout-note"><p><span class="callout-label">📝 Note:</span> Acronyms used in this section — <strong>DG</strong> = Data Graph, <strong>DMO</strong> = Data Model Object, <strong>RT</strong> = Real-Time, <strong>NRT</strong> = Near Real-Time, <strong>IR</strong> = Identity Resolution, <strong>CI</strong> = Calculated Insight, <strong>ML</strong> = Machine Learning.</p></div>
+<hr>
+<h2 id="overview" tabindex="-1">Overview</h2>
+<p>There are two types of data graphs critical to Salesforce Personalization:</p>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Data Graph Type</th>
+<th>Purpose</th>
+<th>Root DMO</th>
+<th>Used For</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Profile Data Graph (Real-Time)</strong></td>
+<td>Represents the unified understanding of a person</td>
+<td>Unified Individual</td>
+<td>Decision targeting, recommendation inputs, personalization eligibility evaluation</td>
+</tr>
+<tr>
+<td><strong>Item Data Graph (Standard)</strong></td>
+<td>Represents business context objects that can be recommended</td>
+<td>Business object (e.g., Goods Product, Knowledge Article)</td>
+<td>Recommendation responses, item filtering, item metadata for decision rendering</td>
+</tr>
+</tbody>
+</table></div>
+<p>Almost every part of the Personalization ecosystem relies on one or both of these data graph types. The Profile Data Graph is effectively the <strong>heartbeat of personalization</strong> — it's referenced at run-time for every personalization decision.</p>
+<hr>
+<h2 id="1-profile-data-graph-real-time" tabindex="-1">1. Profile Data Graph (Real-Time)</h2>
+<p>A Real-Time Profile Data Graph combines the unified understanding of an individual with their engagement history, segment memberships, and calculated insights. It is used by the decisioning engine to:</p>
+<ul>
+<li>Evaluate <strong>targeting rules</strong> on personalization decisions (who should see what)</li>
+<li>Provide <strong>input to ML-based recommenders</strong> (what items to recommend)</li>
+<li>Support <strong>real-time updates</strong> as users interact with your website or app</li>
+</ul>
+<h3 id="understanding-the-storage-layers" tabindex="-1">Understanding the Storage Layers</h3>
+<p>Before creating your Profile DG, it's important to understand where profiles can live. There are three layers:</p>
+<pre><button class="copy-btn" aria-label="Copy code">Copy</button><code class="language-">┌──────────────────────────────────────────────┐
+│                  Hot-Store                    │
+│  (Real-Time Layer)                           │
+│  • Profiles promoted here when an RT event   │
+│    is registered via SDK                     │
+│  • Locked from lakehouse updates during      │
+│    active session                            │
+│  • Session duration is configurable          │
+└──────────────────────────────────────────────┘
+                     ▲
+                     │ (promoted on RT event)
+┌──────────────────────────────────────────────┐
+│               Pre-Fetch Cache                │
+│  (Warm Layer)                                │
+│  • Profiles pre-loaded from lakehouse based  │
+│    on configurable lookback and record count │
+│  • Enables faster profile access at run-time │
+│  • Supports first-page personalization       │
+└──────────────────────────────────────────────┘
+                     ▲
+                     │ (pre-loaded based on activity)
+┌──────────────────────────────────────────────┐
+│                 Lakehouse                    │
+│  (Standard Layer)                            │
+│  • All profiles are stored here              │
+│  • All non-real-time data flows into the     │
+│    lakehouse                                 │
+│  • Synced to pre-fetch/hot-store on refresh  │
+└──────────────────────────────────────────────┘
+</code></pre>
+<p><strong>Key behavior:</strong></p>
+<ul>
+<li>When a user visits your website and the SDK fires an event, their profile is <strong>promoted from pre-fetch (or lakehouse) to the hot-store</strong></li>
+<li>While in the hot-store, the profile is <strong>locked from lakehouse updates</strong> until the session ends</li>
+<li>Profiles get loaded into pre-fetch when an engagement event against an engagement object on the DG definition occurs within the cache lookback window — this includes updates from <strong>any data source</strong>, not just real-time</li>
+<li>A nightly job trims the pre-fetch cache down to the configured maximum</li>
+</ul>
+<h3 id="creating-a-real-time-profile-data-graph" tabindex="-1">Creating a Real-Time Profile Data Graph</h3>
+<h4 id="step-1-configure-dg-settings" tabindex="-1">Step 1: Configure DG Settings</h4>
+<p>When creating a new Profile Data Graph, you'll encounter several critical configuration options:</p>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Description</th>
+<th>Recommendation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Cache Duration</strong></td>
+<td>How recently a user must have been active to be eligible for pre-fetch caching. Determines the lookback window for the initial cache load.</td>
+<td>Set based on your typical visitor return frequency (e.g., 30 days).</td>
+</tr>
+<tr>
+<td><strong>Max # of Records</strong></td>
+<td>Maximum number of profiles to hold in the pre-fetch cache layer. Respected on initial cache load; can be exceeded during the day and is trimmed nightly.</td>
+<td>Start with a value that covers your typical monthly active users. Monitor and adjust.</td>
+</tr>
+<tr>
+<td><strong>Session End</strong></td>
+<td>How long a profile remains active in the hot-store. While in the hot-store, lakehouse updates are blocked.</td>
+<td>Set based on your typical session duration (e.g., 30 minutes).</td>
+</tr>
+<tr>
+<td><strong>Disable Record Caching</strong></td>
+<td>Controls whether the pre-fetch cache is used.</td>
+<td><strong>Must be OFF</strong> (disabled) for real-time web personalization. If enabled, every request falls back to the lakehouse, effectively treating everyone as anonymous.</td>
+</tr>
+<tr>
+<td><strong>Real-Time Data Ingestion</strong></td>
+<td>Whether DMO updates via the Ingestion API are pushed to the DG in real time.</td>
+<td>Enable if you use the Ingestion API for real-time data updates beyond the Web/Mobile SDK.</td>
+</tr>
+</tbody>
+</table></div>
+<div class="callout callout-warning"><p><span class="callout-label">🚨 Warning:</span> The &quot;Disable Record Caching&quot; setting is <strong>ON by default</strong>. You <strong>must turn it OFF</strong> for real-time web personalization. If left on, every personalization request will route to the lakehouse, resulting in increased latency and users being treated as anonymous on initial page load.</p></div>
+<h4 id="step-2-select-the-root-dmo" tabindex="-1">Step 2: Select the Root DMO</h4>
+<ol>
+<li>Set the root DMO to the <strong>Unified Individual</strong> object created by your Identity Resolution ruleset (see <a href="/data-capturing-modeling/dlo-dmo-mapping-ir/">DLO-DMO Mapping &amp; IR</a>).</li>
+<li>On the right-hand pane, <strong>select the fields</strong> from the Unified Individual that you want available on the DG.</li>
+</ol>
+<p>Using the Unified Individual as the root ensures personalization has access to the unified view of each person for cross-channel decisioning.</p>
+<div class="callout callout-important"><p><span class="callout-label">⚠️ Important:</span> Once you select a field and save the DG, you <strong>cannot remove</strong> that field from the DG definition. You can always add more fields later. Be intentional about field selection but don't worry about perfection — you can expand over time.</p></div>
+<h4 id="step-3-add-segment-memberships" tabindex="-1">Step 3: Add Segment Memberships</h4>
+<p>If segments are built against the root DMO of your DG, the <strong>Segment Memberships</strong> object becomes available for selection. Adding it enables:</p>
+<ul>
+<li>Using segment memberships in <strong>personalization decision targeting</strong> (e.g., &quot;Show this decision only to members of the 'High-Value Customers' segment&quot;)</li>
+<li>Using segment memberships in <strong>recommendation filters</strong> (e.g., &quot;Exclude items already purchased by 'Repeat Buyers' segment&quot;)</li>
+</ul>
+<h4 id="step-4-add-related-engagement-objects" tabindex="-1">Step 4: Add Related Engagement Objects</h4>
+<p>Related objects are DMOs that have a relationship to the root DMO. For personalization recommenders, it is <strong>critical</strong> that you add engagement objects as related objects to your Profile DG. These engagement objects capture an individual's interactions with business objects and are the underlying fuel for ML-based recommendation strategies.</p>
+<p>Common engagement objects to add:</p>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Engagement Object</th>
+<th>What It Captures</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Product Browse Engagement</td>
+<td>Product views (page visits to product detail pages)</td>
+</tr>
+<tr>
+<td>Shopping Cart Engagement</td>
+<td>Add-to-cart actions</td>
+</tr>
+<tr>
+<td>Shopping Cart Product Engagement</td>
+<td>Product-level cart details (product, quantity, price)</td>
+</tr>
+<tr>
+<td>Product Order Engagement</td>
+<td>Purchases</td>
+</tr>
+<tr>
+<td>Knowledge Article Engagement</td>
+<td>Article views and interactions</td>
+</tr>
+</tbody>
+</table></div>
+<div class="callout callout-important"><p><span class="callout-label">⚠️ Important:</span> If you plan to use recommendation-type personalization, you <strong>must</strong> add the relevant engagement objects to your Profile DG. Without them, the recommender cannot access the engagement data it needs for training and run-time decisioning.</p></div>
+<h4 id="step-5-add-calculated-insights" tabindex="-1">Step 5: Add Calculated Insights</h4>
+<p>Calculated Insights (CIs) written against the root DMO of the DG are available for selection. Adding CIs to the Profile DG enables:</p>
+<ul>
+<li>Using CI values in <strong>personalization decision targeting</strong> (e.g., &quot;Show this decision only if the customer's lifetime purchase count &gt; 5&quot;)</li>
+<li>Using CI values in <strong>recommendation filters</strong></li>
+</ul>
+<p>See <a href="/data-capturing-modeling/calculated-insights/">Calculated Insights</a> for details on creating CIs.</p>
+<h4 id="step-6-select-fields-and-apply-filters" tabindex="-1">Step 6: Select Fields and Apply Filters</h4>
+<ul>
+<li><strong>Select fields:</strong> For every object added to the DG (root DMO, related objects, CIs), select the specific fields you want available. Only selected fields are accessible for targeting, filtering, and decision responses.</li>
+<li><strong>Apply filters (optional):</strong> Filters can be applied to DG objects to limit the number of engagement events stored within a DMO on the DG. This can help manage DG size.</li>
+</ul>
+<div class="callout callout-note"><p><span class="callout-label">📝 Note:</span> For more details on DG limits and considerations, see the <a href="https://help.salesforce.com/s/articleView?id=sf.c360_a_data_graphs.htm" target="_blank" rel="noopener noreferrer">Data Graphs documentation</a>.</p></div>
+<hr>
+<h2 id="2-item-data-graph-standard" tabindex="-1">2. Item Data Graph (Standard)</h2>
+<p>Item Data Graphs represent business context data — the things you want to recommend. Products, articles, offers, events — anything modeled as an Item DG becomes <strong>recommendable</strong> by Salesforce Personalization's decisioning service.</p>
+<div class="callout callout-tip"><p><span class="callout-label">💡 Tip:</span> Item Data Graphs are <strong>not required</strong> for simpler personalization use cases like infobars, pop-ups, and manual content banners. To deliver value early in your implementation, deploy Manual Content use cases while you continue building out Item Data Graphs. See <a href="/web-implementation/personalization-types/">Personalization Types</a> for more on Manual Content vs. Recommendations.</p></div>
+<h3 id="creating-an-item-data-graph" tabindex="-1">Creating an Item Data Graph</h3>
+<p>Item Data Graphs should be configured as <strong>Standard Data Graphs</strong> (not real-time).</p>
+<h4 id="step-1-select-the-root-dmo" tabindex="-1">Step 1: Select the Root DMO</h4>
+<p>The root DMO is your primary business object:</p>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>If You're Recommending...</th>
+<th>Root DMO</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Products</td>
+<td>Goods Product</td>
+</tr>
+<tr>
+<td>Articles</td>
+<td>Knowledge Article Version</td>
+</tr>
+<tr>
+<td>Offers</td>
+<td>Custom offer DMO</td>
+</tr>
+<tr>
+<td>Events</td>
+<td>Custom event DMO</td>
+</tr>
+</tbody>
+</table></div>
+<p>When Personalization delivers a recommendation, it returns data from the <strong>root DMO</strong> of the Item DG. Only attributes selected on the right pane of the DG configuration screen are eligible for use in:</p>
+<ul>
+<li><strong>Recommendation filters</strong> — determining which items can be recommended</li>
+<li><strong>Decision responses</strong> — the data returned to the requesting application for rendering</li>
+</ul>
+<div class="callout callout-important"><p><span class="callout-label">⚠️ Important:</span> Make sure any attribute necessary for <strong>rendering the decision response</strong> (like image URL, product name, price, product page URL) is defined on the <strong>root DMO</strong> and selected as a field. Personalization can only return attributes from the root DMO of the Item DG in decision responses.</p></div>
+<h4 id="step-2-add-related-objects" tabindex="-1">Step 2: Add Related Objects</h4>
+<p>Add DMOs that have a relationship to the root DMO. Related objects are primarily used in <strong>recommendation filters</strong> to determine item eligibility. For example:</p>
+<ul>
+<li>A Category DMO related to Goods Product lets you filter recommendations by product category</li>
+<li>A Brand DMO related to Goods Product lets you filter by brand</li>
+</ul>
+<h4 id="step-3-add-calculated-insights" tabindex="-1">Step 3: Add Calculated Insights</h4>
+<p>CIs defined on the Item DG serve two purposes:</p>
+<ol>
+<li>
+<p><strong>Rules-Based Recommender Strategies:</strong> Any CI on an Item DG can power a rules-based recommendations strategy. Examples include:</p>
+<ul>
+<li><strong>Top sellers</strong> — CI counting total purchases per product</li>
+<li><strong>Most viewed</strong> — CI counting total product views per product</li>
+<li><strong>Co-browse</strong> — CI identifying products frequently viewed together</li>
+<li><strong>Co-buy</strong> — CI identifying products frequently purchased together</li>
+</ul>
+</li>
+<li>
+<p><strong>Recommendation Filters:</strong> CIs on an Item DG can be used to restrict which items are eligible for recommendation (e.g., only recommend items with a view count above a threshold).</p>
+</li>
+</ol>
+<p>See <a href="/data-capturing-modeling/calculated-insights/">Calculated Insights</a> for details on creating CIs for recommenders.</p>
+<div class="callout callout-note"><p><span class="callout-label">📝 Note:</span> When creating CIs for use in a recommender, ensure that at least one of the CI's dimensions is the <strong>primary key of the root DMO</strong> of your Item DG. This ensures the CI can be added to the DG definition.</p></div>
+<hr>
+
+  <div class="ad-container ad-in-content">
+    <span class="ad-label">Advertisement</span>
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+         data-ad-slot="XXXXXXXXXX"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+<h2 id="3-data-graph-refresh-cycles" tabindex="-1">3. Data Graph Refresh Cycles</h2>
+<p>Understanding when data updates reach your data graphs is important for knowing when personalization decisions reflect the latest information.</p>
+<h3 id="profile-data-graph-refresh" tabindex="-1">Profile Data Graph Refresh</h3>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>When Updates Appear</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Real-time events</strong> (Web/Mobile SDK)</td>
+<td>Immediately — events are processed in the RT layer and pushed to the hot-store profile</td>
+</tr>
+<tr>
+<td><strong>Lakehouse data updates</strong> (non-RT sources, batch ingestion)</td>
+<td>After the next DG refresh cycle. Recommended: <strong>30-minute refresh cadence</strong> (default for RT DGs).</td>
+</tr>
+<tr>
+<td><strong>Profile in hot-store + lakehouse update</strong></td>
+<td>Lakehouse updates are <strong>blocked</strong> until the profile exits the hot-store (session ends). After session end, the next DG refresh merges lakehouse data.</td>
+</tr>
+<tr>
+<td><strong>Segment membership changes</strong></td>
+<td>After the segment recalculates <strong>AND</strong> the next DG refresh occurs. If a segment runs every 4 hours, the membership change appears after the segment update + the next 30-min DG refresh.</td>
+</tr>
+<tr>
+<td><strong>Calculated insight updates</strong></td>
+<td>Same as segment memberships — CI batch job must complete, then DG refresh must occur.</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="item-data-graph-refresh" tabindex="-1">Item Data Graph Refresh</h3>
+<p>Item Data Graphs follow the standard DG refresh cadence (typically 30 minutes for NRT). When item metadata changes (e.g., a product price update):</p>
+<ol>
+<li>The change flows into the DMO</li>
+<li>On the next DG refresh, the Item DG reflects the updated value</li>
+<li>For items already in the recommender index, an <strong>incremental index update</strong> runs every <strong>15 minutes</strong> to sync changes</li>
+</ol>
+<h3 id="consumption-patterns-after-initial-dg-creation" tabindex="-1">Consumption Patterns After Initial DG Creation</h3>
+<p>When you first create your Profile DG, expect the following pattern:</p>
+<ol>
+<li><strong>Initial pre-fetch load:</strong> A job runs to populate the cache with all profiles that have had engagement activity within the cache duration lookback window (e.g., last 30 days).</li>
+<li><strong>Continued cache growth:</strong> As new visitors arrive via your website, anonymous profiles are added to the cache. Profile consumption (unique profiles per month) will climb.</li>
+<li><strong>Stabilization:</strong> Eventually, profiles aging out of the cache (no activity within the lookback window) will balance against new profiles being added. The initial upward trend in cached profiles is <strong>not</strong> indicative of a perpetual increase.</li>
+</ol>
+<hr>
+<h2 id="4-viewing-data-in-the-rt-profile-data-graph" tabindex="-1">4. Viewing Data in the RT Profile Data Graph</h2>
+<p>When debugging real-time events, it's helpful to view the data currently stored in the Profile DG.</p>
+<h3 id="method-1-data-explorer" tabindex="-1">Method 1: Data Explorer</h3>
+<ol>
+<li>In Data Cloud, navigate to <strong>Data Explorer</strong>.</li>
+<li>Select the <strong>Profile Data Graph</strong> object.</li>
+<li>Search for a specific individual.</li>
+<li>View the JSON representation of their profile.</li>
+<li>Toggle the <strong>Real-Time View</strong> to <strong>On</strong> to see the hot-store version of the profile. Toggle it <strong>Off</strong> to see the lakehouse (NRT) version.</li>
+</ol>
+<div class="callout callout-tip"><p><span class="callout-label">💡 Tip:</span> When debugging RT events, make sure you have the Real-Time View set to &quot;On&quot;. Otherwise you'll be looking at the lakehouse version, which may not reflect the latest real-time interactions.</p></div>
+<h3 id="method-2-data-graph-lookup-flow" tabindex="-1">Method 2: Data Graph Lookup Flow</h3>
+<p>If you don't know the Unified Individual ID, you can create a flow to look up DG data by other identifiers:</p>
+<ol>
+<li>Create an <strong>auto-triggered flow</strong> with the developer name <code>LookupDataGraph</code>.</li>
+<li>Add three <strong>input parameters</strong> (exact API names required):
+<ul>
+<li><code>DataGraphAPIName</code> (String)</li>
+<li><code>DataspaceAPIName</code> (String)</li>
+<li><code>LookupKey</code> (String)</li>
+</ul>
+</li>
+<li>Add one <strong>output parameter</strong>:
+<ul>
+<li><code>OutputDataGraph</code> (String)</li>
+</ul>
+</li>
+<li>Add a single action invoking the <strong>&quot;Data Cloud Get Data Graph By Lookup&quot;</strong> invocable action.</li>
+<li>Map the three input parameters to the corresponding action parameters.</li>
+<li>Assign the action output to the <code>OutputDataGraph</code> variable.</li>
+</ol>
+<p><strong>Lookup Key Format:</strong></p>
+<pre><button class="copy-btn" aria-label="Copy code">Copy</button><code class="language-">&lt;DMORelationshipName&gt;.SourceRecordId__c=&lt;IdValue&gt;
+</code></pre>
+<p>Replace <code>&lt;DMORelationshipName&gt;</code> with the relationship name of the DMO you're looking up and <code>&lt;IdValue&gt;</code> with the actual identifier value.</p>
+<p>To test the flow, enter different ID values for the lookup key and run in <strong>debug mode</strong>.</p>
+<hr>
+<h2 id="summary-checklist" tabindex="-1">Summary Checklist</h2>
+<ul>
+<li>[ ] <strong>Profile Data Graph created</strong> — Real-time type, rooted on Unified Individual</li>
+<li>[ ] <strong>Record caching enabled</strong> — &quot;Disable Record Caching&quot; is OFF; cache duration, max records, and session end configured</li>
+<li>[ ] <strong>Engagement objects added</strong> — Product Browse, Shopping Cart, Product Order, and other relevant engagement DMOs added as related objects</li>
+<li>[ ] <strong>Segment memberships added</strong> <em>(if applicable)</em> — Available if segments are built against the root DMO</li>
+<li>[ ] <strong>Calculated insights added</strong> <em>(if applicable)</em> — CIs built against the root DMO, selected on the DG</li>
+<li>[ ] <strong>Fields selected</strong> — All attributes needed for targeting, filtering, and ML input are selected on each object</li>
+<li>[ ] <strong>Item Data Graph created</strong> <em>(if using recommendations)</em> — Standard type, rooted on the business object DMO (e.g., Goods Product)</li>
+<li>[ ] <strong>Item DG fields selected</strong> — All attributes needed for rendering decision responses (name, image, price, URL) are selected on the root DMO</li>
+<li>[ ] <strong>Refresh cadence set</strong> — 30-minute refresh for RT Profile DG (should be default)</li>
+<li>[ ] <strong>DG data validated</strong> — Confirmed in Data Explorer that profiles and items appear correctly</li>
+</ul>
+<hr>
+<h2 id="whats-next" tabindex="-1">What's Next?</h2>
+<p>With your Data Graphs in place, you may want to add Calculated Insights for rules-based recommendations and advanced targeting. Head to the next section to learn how.</p>
+<p><strong><a href="/data-capturing-modeling/dlo-dmo-mapping-ir/">← Previous: DLO-DMO Mapping &amp; Identity Resolution</a></strong> | <strong><a href="/data-capturing-modeling/calculated-insights/">Next: Calculated Insights →</a></strong></p>
+<hr>
+<h2 id="additional-resources" tabindex="-1">Additional Resources</h2>
+<ul>
+<li><a href="https://help.salesforce.com/s/articleView?id=sf.c360_a_data_graphs.htm" target="_blank" rel="noopener noreferrer">Salesforce Help: Data Graphs</a></li>
+<li><a href="https://help.salesforce.com/s/articleView?id=sf.c360_a_rt_data_graphs.htm" target="_blank" rel="noopener noreferrer">Salesforce Help: Real-Time Data Graphs</a></li>
+<li><a href="https://help.salesforce.com/s/articleView?id=sf.c360_a_data_graphs.htm" target="_blank" rel="noopener noreferrer">Salesforce Help: Data Graph Limits</a></li>
+</ul>
+
+      </article>
+
+      <!-- Previous / Next Navigation -->
+      <nav class="prev-next" aria-label="Page navigation">
+        <a href="/data-capturing-modeling/dlo-dmo-mapping-ir/" class="prev-next-btn pn-prev">
+      <span class="pn-direction">← Previous</span>
+      <span class="pn-title">DLO-DMO Mapping &amp; Identity Resolution</span>
+    </a><a href="/data-capturing-modeling/calculated-insights/" class="prev-next-btn pn-next">
+      <span class="pn-direction">Next →</span>
+      <span class="pn-title">Calculated Insights</span>
+    </a>
+      </nav>
+
+      <!-- End-of-page Donation CTA -->
+      <div class="donate-cta">
+        <p>Found this guide helpful?</p>
+        <a href="https://buymeacoffee.com/YOUR_USERNAME" target="_blank" rel="noopener noreferrer" class="donate-btn donate-btn-cta">Buy Me a Latte ☕</a>
+      </div>
+    </main>
+  </div>
+
+  <!-- ==================== FOOTER AD ==================== -->
+  <div class="ad-container ad-footer">
+    <span class="ad-label">Advertisement</span>
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+         data-ad-slot="XXXXXXXXXX"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p class="footer-title">Salesforce Personalization Implementation Guide</p>
+      <p class="footer-subtitle">Based on documentation as of March 2026</p>
+      <p class="footer-disclaimer">This is an educational resource. Verify all information against the latest <a href="https://help.salesforce.com/" target="_blank" rel="noopener noreferrer">Salesforce documentation</a>. Salesforce releases updates three times per year.</p>
+      <p class="footer-donate">
+        <a href="https://buymeacoffee.com/YOUR_USERNAME" target="_blank" rel="noopener noreferrer">Support this project — Buy Me a Latte ☕</a>
+      </p>
+    </div>
+  </footer>
+
+  <script src="../../js/main.js"></script>
+  <script src="../../js/copy-code.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (typeof mermaid !== 'undefined') {
+        mermaid.initialize({ startOnLoad: false, theme: 'default' });
+        document.querySelectorAll('pre > code.language-mermaid').forEach(function(el) {
+          var pre = el.parentElement;
+          var container = document.createElement('div');
+          container.className = 'mermaid';
+          container.textContent = el.textContent;
+          pre.parentNode.replaceChild(container, pre);
+        });
+        mermaid.run();
+      }
+    });
+  </script>
+</body>
+</html>
