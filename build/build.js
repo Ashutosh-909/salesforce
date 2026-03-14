@@ -668,6 +668,16 @@ function build() {
   console.log(`  Pages: ${PAGES.length}`);
   console.log(`  Output: ${SITE_DIR}\n`);
 
+  // Copy static assets (favicon, etc.)
+  const assetsDir = path.join(SITE_DIR, 'assets');
+  fs.mkdirSync(assetsDir, { recursive: true });
+  const buildAssets = path.join(BUILD_DIR, 'assets');
+  if (fs.existsSync(buildAssets)) {
+    for (const file of fs.readdirSync(buildAssets)) {
+      fs.copyFileSync(path.join(buildAssets, file), path.join(assetsDir, file));
+    }
+  }
+
   for (let i = 0; i < PAGES.length; i++) {
     const page = PAGES[i];
 
